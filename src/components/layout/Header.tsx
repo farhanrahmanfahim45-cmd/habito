@@ -1,5 +1,5 @@
 import { NavLink, Link } from "react-router-dom";
-import { Bookmark, Scale, UserRound, Compass, LogOut } from "lucide-react";
+import { Bookmark, Scale, UserRound, Compass, LogOut, MessagesSquare } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { useHabito } from "@/hooks/useHabito";
 import { useAuth } from "@/hooks/useAuth";
@@ -59,7 +59,7 @@ function RoleSwitch() {
 }
 
 export function Header() {
-  const { savedIds, compareIds, role } = useHabito();
+  const { savedIds, compareIds, role, unreadMessages } = useHabito();
   const nav = role === "owner" ? OWNER_NAV : SEEKER_NAV;
 
   return (
@@ -98,6 +98,9 @@ export function Header() {
               <IconLink to="/explore" label="Browse" icon={Compass} />
             </div>
           )}
+          <div className="hidden md:block">
+            <IconLink to="/messages" label="Messages" count={unreadMessages} icon={MessagesSquare} />
+          </div>
           <AccountControls />
           <RoleSwitch />
         </div>

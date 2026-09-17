@@ -1,11 +1,11 @@
 import { NavLink } from "react-router-dom";
-import { Compass, Search, Bookmark, LayoutGrid, Plus, UserRound } from "lucide-react";
+import { Compass, Search, Bookmark, LayoutGrid, Plus, UserRound, MessagesSquare } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { useHabito } from "@/hooks/useHabito";
 
 /** Thumb-reachable, and it changes with the role — owners don't need a shortlist. */
 export function MobileNav() {
-  const { savedIds, role } = useHabito();
+  const { savedIds, role, unreadMessages } = useHabito();
 
   const items =
     role === "owner"
@@ -20,7 +20,7 @@ export function MobileNav() {
           { to: "/explore", label: "Explore", icon: LayoutGrid, end: false },
           { to: "/search", label: "Search", icon: Search, end: false },
           { to: "/saved", label: "Saved", icon: Bookmark, end: false, count: savedIds.length },
-          { to: "/account", label: "Profile", icon: UserRound, end: false },
+          { to: "/messages", label: "Chats", icon: MessagesSquare, end: false, count: unreadMessages },
         ];
 
   return (

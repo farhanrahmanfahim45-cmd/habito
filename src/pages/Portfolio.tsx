@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import {
-  Plus, ChevronDown, Building2, Inbox, CircleCheck, Wrench, CircleDot, TrendingUp, Eye,
+  Plus, ChevronDown, Building2, Inbox, CircleCheck, Wrench, CircleDot, TrendingUp, Eye, MessagesSquare,
 } from "lucide-react";
 import { useHabito } from "@/hooks/useHabito";
 import { db, usingDatabase } from "@/lib/api";
@@ -228,8 +228,20 @@ export default function Portfolio() {
         </ul>
 
         {/* Inquiries */}
-        <h2 className="mt-10 font-display text-xl font-bold text-ink">Inquiries</h2>
-        <p className="mt-1 text-sm text-muted">Each one arrives with the sender's budget and move-in date.</p>
+        <div className="mt-10 flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <h2 className="font-display text-xl font-bold text-ink">Inquiries</h2>
+            <p className="mt-1 text-sm text-muted">
+              Each one arrives with the sender's budget and move-in date.
+            </p>
+          </div>
+          <Link to="/messages">
+            <Button variant="secondary" size="sm">
+              <MessagesSquare size={15} aria-hidden />
+              Open messages
+            </Button>
+          </Link>
+        </div>
 
         <div className="mt-3">
           {ownInquiries.length === 0 ? (
@@ -241,9 +253,9 @@ export default function Portfolio() {
               <p className="mt-1.5 max-w-xs text-sm text-muted">
                 Switch to seeker mode, open one of your spaces and send an inquiry — it lands here.
               </p>
-              <Link to="/search" className="mt-4">
+              <Link to="/messages" className="mt-4">
                 <Button variant="secondary" size="sm">
-                  Browse as a seeker
+                  Open messages
                 </Button>
               </Link>
             </div>

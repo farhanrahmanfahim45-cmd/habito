@@ -54,9 +54,25 @@ the API directly rather than using the interface.
 - [ ] Remove the environment variables and restart → the app still browses,
       and the sign-up page says accounts aren't available
 
+## D2 — Messaging (Stage 2)
+
+With both accounts signed in, side by side:
+
+- [ ] As the renter, send an inquiry on the owner's listing
+- [ ] Click "Open conversation" — the thread opens with your message in it
+- [ ] The owner sees an unread badge on Messages within a few seconds
+- [ ] The owner opens the thread and replies
+- [ ] The renter sees the reply arrive without refreshing
+- [ ] The renter's sent messages show two ticks once the owner has read them
+- [ ] Both sides survive a refresh — **persists**
+- [ ] Signed out, `/messages` redirects to sign-in
+- [ ] Neither account can see a thread they aren't part of
+
+If replies take up to twenty seconds to appear, live delivery is off and the
+polling fallback is doing the work. Run `supabase/migrations/0002_realtime.sql`
+to switch it on.
+
 ## Known gaps at this stage
 
-Messaging threads, bookings, payments, reviews, maintenance requests and the
-admin panel have database tables but no interface yet. The inquiry button
-writes a real conversation and message row — that's the foundation Stage 2
-builds the thread view on.
+Bookings, payments, reviews, maintenance requests and the admin panel have
+database tables but no interface yet. Messaging is done.

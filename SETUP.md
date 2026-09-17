@@ -33,6 +33,11 @@ In the dashboard, open **SQL Editor → New query**, paste the whole of
 This creates every table, the row-level security policies, and the trigger that
 gives each new sign-up a profile.
 
+### Turn on live messages
+
+Run `supabase/migrations/0002_realtime.sql` as a third query. Without it
+messages still arrive, but on a twenty-second poll rather than instantly.
+
 ### Load the seed listings
 
 Open another query, paste `supabase/seed.sql`, and run it. That's 96 owners,

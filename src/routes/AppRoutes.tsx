@@ -12,6 +12,7 @@ import ListSpace from "@/pages/ListSpace";
 import Requests from "@/pages/Requests";
 import Profile from "@/pages/Profile";
 import Auth from "@/pages/Auth";
+import Messages from "@/pages/Messages";
 import NotFound from "@/pages/NotFound";
 
 export function AppRoutes() {
@@ -35,6 +36,22 @@ export function AppRoutes() {
         element={
           <Guard allow={["renter", "owner", "admin"]}>
             <Saved />
+          </Guard>
+        }
+      />
+      <Route
+        path="/messages"
+        element={
+          <Guard allow={["renter", "owner", "admin"]}>
+            <Messages />
+          </Guard>
+        }
+      />
+      <Route
+        path="/messages/:id"
+        element={
+          <Guard allow={["renter", "owner", "admin"]}>
+            <Messages />
           </Guard>
         }
       />

@@ -1,9 +1,12 @@
+import type { RealtimeChannel } from "@supabase/supabase-js";
 import { client, toOwner, toProperty, toSpace, propertyInsert, spaceInsert, spacePatch } from "@/lib/supabase";
 import type { ProfileRow, PropertyRow, SpaceRow } from "@/lib/supabase";
 import type { Repository } from "./types";
 import type {
+  Conversation,
   Inquiry,
   InquiryStatus,
+  Message,
   Owner,
   Property,
   Space,
@@ -18,6 +21,9 @@ import type {
  * database rather than by checks in this file. If a signed-out visitor calls a
  * write, Postgres rejects it — the frontend cannot grant itself permission.
  */
+
+/** Makes each realtime channel name unique across the app's subscribers. */
+let channelSeq = 0;
 
 const SPACE_COLUMNS = "*";
 const PROPERTY_COLUMNS = "*";
@@ -337,6 +343,178 @@ export const supabaseRepository: Repository = {
     if (error) fail("Could not post the request", error);
     return { ...input, id: (data as { id: string }).id, createdAt: (data as { created_at: string }).created_at };
   },
+
+  /* ── Messaging ────────────────────────────────────────────────────── */
+
+  async conversations(): Promise<Conversation[]> {
+    const userId = await currentUserId();
+    if (!userId) return [];
+
+    // Row-level security already limits this to threads you belong to, so
+    // there is no need to filter by user here.
+    const { data, error } = await client()
+      .from("conversations")
+      .select(`
+        id, space_id, renter_id, owner_id, last_message_at,
+        spaces ( id, name, images, properties ( area ) ),
+        renter:profiles!conversations_renter_id_fkey ( id, name, avatar_tone ),
+        owner:profiles!conversations_owner_id_fkey ( id, name, avatar_tone ),
+        messages ( id, body, sender_id, read_at, created_at )
+      `)
+      .order("last_message_at", { ascending: false });
+
+    if (error) fail("Could not load your messages", error);
+
+    return (data ?? []).map((row) => {
+      const c = row as unknown as {
+        id: string;
+        space_id: string | null;
+        renter_id: string;
+        owner_id: string;
+        last_message_at: string;
+        spaces: { name: string; images: Array<{ url: string }>; properties: { area: string } | null } | null;
+        renter: { id: string; name: string; avatar_tone: string } | null;
+        owner: { id: string; name: string; avatar_tone: string } | null;
+        messages: Array<{ id: string; body: string; sender_id: string; read_at: string | null; created_at: string }>;
+      };
+
+      const youAreOwner = c.owner_id === userId;
+      const other = youAreOwner ? c.renter : c.owner;
+      const ordered = [...c.messages].sort((a, b) => a.created_at.localeCompare(b.created_at));
+      const last = ordered[ordered.length - 1];
+
+      return {
+        id: c.id,
+        spaceId: c.space_id,
+        spaceName: c.spaces?.name ?? "A space",
+        spaceImage: c.spaces?.images?.[0]?.url ?? null,
+        propertyArea: c.spaces?.properties?.area ?? null,
+        counterpartId: other?.id ?? "",
+        counterpartName: other?.name ?? "Habito user",
+        counterpartTone: other?.avatar_tone ?? "aqua",
+        youAreOwner,
+        lastMessage: last?.body ?? "",
+        lastMessageAt: last?.created_at ?? c.last_message_at,
+        unread: ordered.filter((m) => m.sender_id !== userId && !m.read_at).length,
+      };
+    });
+  },
+
+  async messages(conversationId: string): Promise<Message[]> {
+    const userId = await currentUserId();
+
+    const { data, error } = await client()
+      .from("messages")
+      .select("*")
+      .eq("conversation_id", conversationId)
+      .order("created_at", { ascending: true });
+
+    if (error) fail("Could not load the conversation", error);
+
+    return (data ?? []).map((row) => {
+      const m = row as { id: string; sender_id: string; body: string; created_at: string; read_at: string | null };
+      return {
+        id: m.id,
+        conversationId,
+        senderId: m.sender_id,
+        body: m.body,
+        sentAt: m.created_at,
+        readAt: m.read_at,
+        mine: m.sender_id === userId,
+      };
+    });
+  },
+
+  async sendMessage(conversationId: string, body: string): Promise<Message> {
+    const userId = await requireUser("send a message");
+
+    const { data, error } = await client()
+      .from("messages")
+      .insert({ conversation_id: conversationId, sender_id: userId, body })
+      .select()
+      .single();
+
+    if (error) fail("Could not send your message", error);
+
+    // Keeps the conversation list ordered by recency.
+    await client()
+      .from("conversations")
+      .update({ last_message_at: new Date().toISOString() })
+      .eq("id", conversationId);
+
+    const m = data as { id: string; created_at: string };
+    return { id: m.id, conversationId, senderId: userId, body, sentAt: m.created_at, readAt: null, mine: true };
+  },
+
+  async markRead(conversationId: string): Promise<void> {
+    const userId = await currentUserId();
+    if (!userId) return;
+
+    await client()
+      .from("messages")
+      .update({ read_at: new Date().toISOString() })
+      .eq("conversation_id", conversationId)
+      .neq("sender_id", userId)
+      .is("read_at", null);
+  },
+
+  async openConversation(spaceId: string): Promise<string> {
+    const userId = await requireUser("start a conversation");
+
+    const { data: space, error: spaceError } = await client()
+      .from("spaces")
+      .select("id, properties!inner(owner_id)")
+      .eq("id", spaceId)
+      .single();
+
+    if (spaceError) fail("Could not find that space", spaceError);
+    const ownerId = (space as unknown as { properties: { owner_id: string } }).properties.owner_id;
+
+    if (ownerId === userId) throw new Error("That's your own listing.");
+
+    const { data, error } = await client()
+      .from("conversations")
+      .upsert(
+        { space_id: spaceId, renter_id: userId, owner_id: ownerId, last_message_at: new Date().toISOString() },
+        { onConflict: "space_id,renter_id,owner_id" },
+      )
+      .select("id")
+      .single();
+
+    if (error) fail("Could not open the conversation", error);
+    return (data as { id: string }).id;
+  },
+
+  subscribeToMessages(onChange: () => void): () => void {
+    // Several parts of the app subscribe at once — the unread badge, the
+    // conversation list, the open thread. Asking for the same channel name
+    // twice returns the already-subscribed instance, which then refuses new
+    // callbacks, so every subscriber gets its own channel.
+    const name = `habito-messages-${++channelSeq}`;
+
+    // A poll keeps messages arriving even if realtime isn't enabled on the
+    // tables or the socket drops. Set up first so it survives a live failure.
+    const poll = window.setInterval(onChange, 20000);
+
+    let channel: RealtimeChannel | null = null;
+    try {
+      channel = client()
+        .channel(name)
+        .on("postgres_changes", { event: "*", schema: "public", table: "messages" }, () => onChange())
+        .on("postgres_changes", { event: "*", schema: "public", table: "conversations" }, () => onChange())
+        .subscribe();
+    } catch (error) {
+      // Live updates are a convenience, never a requirement. Falling back to
+      // the poll is far better than taking the page down.
+      console.warn("Habito: live updates unavailable, polling instead.", error);
+    }
+
+    return () => {
+      window.clearInterval(poll);
+      if (channel) void client().removeChannel(channel);
+    };
+  },
+
 
   /* ── Maintenance ──────────────────────────────────────────────────────── */
 

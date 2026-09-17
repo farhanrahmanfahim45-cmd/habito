@@ -278,6 +278,37 @@ export interface Inquiry {
 
 export type DemoRole = "seeker" | "owner";
 
+/* ── Messaging ────────────────────────────────────────────────────── */
+
+export interface Message {
+  id: string;
+  conversationId: string;
+  senderId: string;
+  body: string;
+  sentAt: string;
+  readAt: string | null;
+  /** True when the signed-in account sent it. */
+  mine: boolean;
+}
+
+/** A thread, summarised for the conversation list. */
+export interface Conversation {
+  id: string;
+  spaceId: string | null;
+  spaceName: string;
+  spaceImage: string | null;
+  propertyArea: string | null;
+  /** The person on the other end, whichever side you're on. */
+  counterpartId: string;
+  counterpartName: string;
+  counterpartTone: string;
+  /** Whether you are the owner in this thread. */
+  youAreOwner: boolean;
+  lastMessage: string;
+  lastMessageAt: string;
+  unread: number;
+}
+
 /* ── Labels ───────────────────────────────────────────────────────── */
 
 export const CATEGORY_LABEL: Record<SpaceCategory, string> = {

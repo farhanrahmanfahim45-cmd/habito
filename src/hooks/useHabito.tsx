@@ -40,6 +40,9 @@ interface HabitoState {
 
   requests: SpaceRequest[];
   addRequest: (input: Omit<SpaceRequest, "id" | "createdAt">) => Promise<void>;
+
+  /** Total unread messages across every thread, for the navigation badge. */
+  unreadMessages: number;
 }
 
 const Ctx = createContext<HabitoState | null>(null);
@@ -61,6 +64,7 @@ export function HabitoProvider({ children }: { children: ReactNode }) {
   const [requirements, setRequirementsState] = useState<SearchRequirements>(DEFAULT_REQUIREMENTS);
   const [hasStatedNeeds, setHasStated] = useState(false);
   const [compareIds, setCompareIds] = useState<string[]>([]);
+  const [unreadMessages, setUnreadMessages] = useState(0);
 
   const refresh = useCallback(async () => {
     const [l, s, i, r] = await Promise.all([db.listings(), db.saved(), db.inquiries(), db.requests()]);
@@ -77,6 +81,30 @@ export function HabitoProvider({ children }: { children: ReactNode }) {
     if (usingDatabase && !authReady) return;
     void refresh();
   }, [refresh, authReady, account?.id]);
+
+  // Keep the unread badge current wherever the person is in the app.
+  useEffect(() => {
+    if (usingDatabase && !account) {
+      setUnreadMessages(0);
+      return;
+    }
+
+    const count = async () => {
+      try {
+        const threads = await db.conversations();
+        setUnreadMessages(threads.reduce((sum, c) => sum + c.unread, 0));
+      } catch {
+        setUnreadMessages(0);
+      }
+    };
+
+    void count();
+    try {
+      return db.subscribeToMessages(() => void count());
+    } catch {
+      return undefined;
+    }
+  }, [account]);
 
   const setRequirements = useCallback((r: SearchRequirements) => {
     setRequirementsState(r);
@@ -138,8 +166,9 @@ export function HabitoProvider({ children }: { children: ReactNode }) {
       sendInquiry,
       requests,
       addRequest,
+      unreadMessages,
     }),
-    [ready, listings, refresh, role, setRole, ownerId, requirements, setRequirements, hasStatedNeeds, savedIds, toggleSaved, compareIds, toggleCompare, inquiries, sendInquiry, requests, addRequest],
+    [ready, listings, refresh, role, setRole, ownerId, requirements, setRequirements, hasStatedNeeds, savedIds, toggleSaved, compareIds, toggleCompare, inquiries, sendInquiry, requests, addRequest, unreadMessages],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

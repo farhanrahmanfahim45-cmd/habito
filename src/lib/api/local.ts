@@ -1,8 +1,14 @@
 import seed from "@/data/seed.json";
 import type { Repository } from "./types";
+
+/** Listeners for in-tab changes, so the thread view updates as you send. */
+const localListeners = new Set<() => void>();
+const notifyLocalChange = () => localListeners.forEach((fn) => fn());
 import type {
+  Conversation,
   Inquiry,
   InquiryStatus,
+  Message,
   Owner,
   Property,
   Space,
@@ -37,7 +43,18 @@ interface Database {
   inquiries: Inquiry[];
   requests: SpaceRequest[];
   savedIds: string[];
+  threads: LocalThread[];
 }
+
+/** Local stand-in for conversations + messages. */
+interface LocalThread {
+  id: string;
+  spaceId: string;
+  messages: Array<{ id: string; senderId: string; body: string; sentAt: string; readAt: string | null }>;
+}
+
+/** The person you are when there is no sign-in. */
+const LOCAL_USER_ID = "LOCAL-USER";
 
 /** The signed-in owner in demo mode — the portfolio you can actually edit. */
 export const DEMO_OWNER_ID = "OW-001";
@@ -52,6 +69,7 @@ function freshDatabase(): Database {
     inquiries: [],
     requests: [],
     savedIds: [],
+    threads: [],
   };
 }
 
@@ -75,6 +93,7 @@ function read(): Database {
       merged.inquiries = parsed.inquiries ?? [];
       merged.requests = parsed.requests ?? [];
       merged.savedIds = (parsed.savedIds ?? []).filter((id) => merged.spaces.some((s) => s.id === id));
+      merged.threads = parsed.threads ?? [];
       write(merged);
       return merged;
     }
@@ -220,6 +239,20 @@ export const localRepository: Repository = {
     };
     data.inquiries = [inquiry, ...data.inquiries];
 
+    // Mirror the database: an inquiry is the first message of a thread.
+    let thread = data.threads.find((t) => t.spaceId === input.spaceId);
+    if (!thread) {
+      thread = { id: `CONV-${Date.now()}`, spaceId: input.spaceId, messages: [] };
+      data.threads.push(thread);
+    }
+    thread.messages.push({
+      id: `MSG-${Date.now()}`,
+      senderId: LOCAL_USER_ID,
+      body: input.message,
+      sentAt: new Date().toISOString(),
+      readAt: null,
+    });
+
     const index = data.spaces.findIndex((s) => s.id === input.spaceId);
     if (index !== -1) {
       data.spaces[index] = { ...data.spaces[index], inquiryCount: data.spaces[index].inquiryCount + 1 };
@@ -253,6 +286,108 @@ export const localRepository: Repository = {
     data.requests = [request, ...data.requests];
     write(data);
     return settle(request);
+  },
+
+  /* ── Messaging ──────────────────────────────────────────────────── */
+
+  async conversations(): Promise<Conversation[]> {
+    const data = read();
+
+    return settle(
+      data.threads
+        .map((thread) => {
+          const space = data.spaces.find((s) => s.id === thread.spaceId);
+          const property = space ? data.properties.find((p) => p.id === space.propertyId) : undefined;
+          const owner = property ? data.owners.find((o) => o.id === property.ownerId) : undefined;
+          const last = thread.messages[thread.messages.length - 1];
+
+          return {
+            id: thread.id,
+            spaceId: thread.spaceId,
+            spaceName: space?.name ?? "A space",
+            spaceImage: space?.images[0]?.url ?? null,
+            propertyArea: property?.area ?? null,
+            counterpartId: owner?.id ?? "",
+            counterpartName: owner?.name ?? "Owner",
+            counterpartTone: owner?.avatarTone ?? "aqua",
+            youAreOwner: false,
+            lastMessage: last?.body ?? "",
+            lastMessageAt: last?.sentAt ?? new Date().toISOString(),
+            unread: thread.messages.filter((m) => m.senderId !== LOCAL_USER_ID && !m.readAt).length,
+          };
+        })
+        .sort((a, b) => b.lastMessageAt.localeCompare(a.lastMessageAt)),
+    );
+  },
+
+  async messages(conversationId: string): Promise<Message[]> {
+    const thread = read().threads.find((t) => t.id === conversationId);
+    if (!thread) return settle([]);
+
+    return settle(
+      thread.messages.map((m) => ({
+        id: m.id,
+        conversationId,
+        senderId: m.senderId,
+        body: m.body,
+        sentAt: m.sentAt,
+        readAt: m.readAt,
+        mine: m.senderId === LOCAL_USER_ID,
+      })),
+    );
+  },
+
+  async sendMessage(conversationId: string, body: string): Promise<Message> {
+    const data = read();
+    const thread = data.threads.find((t) => t.id === conversationId);
+    if (!thread) throw new Error("That conversation no longer exists.");
+
+    const message = {
+      id: `MSG-${Date.now()}`,
+      senderId: LOCAL_USER_ID,
+      body,
+      sentAt: new Date().toISOString(),
+      readAt: null,
+    };
+
+    thread.messages.push(message);
+    write(data);
+    notifyLocalChange();
+
+    return settle({ ...message, conversationId, mine: true });
+  },
+
+  async markRead(conversationId: string): Promise<void> {
+    const data = read();
+    const thread = data.threads.find((t) => t.id === conversationId);
+    if (!thread) return settle(undefined);
+
+    const now = new Date().toISOString();
+    for (const m of thread.messages) {
+      if (m.senderId !== LOCAL_USER_ID && !m.readAt) m.readAt = now;
+    }
+
+    write(data);
+    return settle(undefined);
+  },
+
+  async openConversation(spaceId: string): Promise<string> {
+    const data = read();
+    const existing = data.threads.find((t) => t.spaceId === spaceId);
+    if (existing) return settle(existing.id);
+
+    const thread: LocalThread = { id: `CONV-${Date.now()}`, spaceId, messages: [] };
+    data.threads.push(thread);
+    write(data);
+
+    return settle(thread.id);
+  },
+
+  subscribeToMessages(onChange: () => void): () => void {
+    // Nothing else can write to this browser's store, so the only changes
+    // worth reporting are the ones this tab makes.
+    localListeners.add(onChange);
+    return () => localListeners.delete(onChange);
   },
 
   /* ── Maintenance ────────────────────────────────────────────────── */

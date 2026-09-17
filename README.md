@@ -95,7 +95,8 @@ Manrope for everything else.
 - **Stage 1 (done)** — Postgres schema for every entity, row-level security,
   real authentication with roles, guarded routes, and listings, favourites,
   portfolio and inquiries moved onto the database.
-- **Stage 2** — messaging: conversation list, threads, unread counts.
+- **Stage 2 (done)** — messaging: conversation list, threads tied to a space,
+  read receipts, unread badges, live delivery with a polling fallback.
 - **Stage 3** — bookings: the request → accept → confirm → complete machine,
   with availability enforced.
 - **Stage 4** — payments against a sandbox gateway, then rent records and receipts.
@@ -106,4 +107,4 @@ rather than migrating data.
 
 ## Not built yet
 
-Map view, photo upload, and everything from Stage 2 onward.
+Map view, photo upload, and everything from Stage 3 onward.

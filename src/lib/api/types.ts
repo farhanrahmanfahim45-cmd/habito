@@ -1,6 +1,8 @@
 import type {
+  Conversation,
   Inquiry,
   InquiryStatus,
+  Message,
   Owner,
   Property,
   Space,
@@ -34,6 +36,20 @@ export interface Repository {
   inquiries(): Promise<Inquiry[]>;
   createInquiry(input: Omit<Inquiry, "id" | "sentAt" | "status">): Promise<Inquiry>;
   setInquiryStatus(inquiryId: string, status: InquiryStatus): Promise<void>;
+
+  /* Messaging */
+  conversations(): Promise<Conversation[]>;
+  messages(conversationId: string): Promise<Message[]>;
+  sendMessage(conversationId: string, body: string): Promise<Message>;
+  markRead(conversationId: string): Promise<void>;
+  /** Finds or creates the thread between this user and a space's owner. */
+  openConversation(spaceId: string): Promise<string>;
+  /**
+   * Calls back when anything in the user's threads changes. Returns an
+   * unsubscribe function. Live where the backend supports it, polled where
+   * it doesn't.
+   */
+  subscribeToMessages(onChange: () => void): () => void;
 
   requests(): Promise<SpaceRequest[]>;
   createRequest(input: Omit<SpaceRequest, "id" | "createdAt">): Promise<SpaceRequest>;

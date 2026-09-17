@@ -9,6 +9,7 @@ const COLUMNS = [
       { to: "/search", label: "Search" },
       { to: "/find", label: "Find my space" },
       { to: "/saved", label: "Saved" },
+      { to: "/messages", label: "Messages" },
     ],
   },
   {

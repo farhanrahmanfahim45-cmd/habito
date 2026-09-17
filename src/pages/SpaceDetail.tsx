@@ -5,6 +5,7 @@ import {
 } from "lucide-react";
 import { useHabito } from "@/hooks/useHabito";
 import { db } from "@/lib/api";
+import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
 import { MatchRing } from "@/components/space/MatchRing";
@@ -561,21 +562,46 @@ function InquiryModal({
   onSend: ReturnType<typeof useHabito>["sendInquiry"];
   requirements: ReturnType<typeof useHabito>["requirements"];
 }) {
+  const navigate = useNavigate();
+  const { account, configured } = useAuth();
   const [name, setName] = useState("");
   const [message, setMessage] = useState("Hi, I'm interested in this space. Is it still available?");
   const [moveIn, setMoveIn] = useState(requirements.moveInDate);
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (account?.name) setName(account.name);
+  }, [account]);
 
   const send = async () => {
-    await onSend({
-      spaceId: listing.space.id,
-      name: name.trim() || "Habito user",
-      message,
-      moveInDate: moveIn,
-      budgetMin: requirements.budgetMin,
-      budgetMax: requirements.budgetMax,
-    });
-    setSent(true);
+    setSending(true);
+    setError(null);
+    try {
+      await onSend({
+        spaceId: listing.space.id,
+        name: name.trim() || account?.name || "Habito user",
+        message,
+        moveInDate: moveIn,
+        budgetMin: requirements.budgetMin,
+        budgetMax: requirements.budgetMax,
+      });
+      setSent(true);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Your inquiry didn't send.");
+    } finally {
+      setSending(false);
+    }
+  };
+
+  const openThread = async () => {
+    try {
+      const id = await db.openConversation(listing.space.id);
+      navigate(`/messages/${id}`);
+    } catch {
+      navigate("/messages");
+    }
   };
 
   const close = () => {
@@ -590,16 +616,25 @@ function InquiryModal({
       title={sent ? "Inquiry sent" : "Send an inquiry"}
       footer={
         sent ? (
-          <Button fullWidth onClick={close}>
-            Done
-          </Button>
+          <div className="flex gap-2">
+            <Button variant="secondary" fullWidth onClick={close}>
+              Done
+            </Button>
+            <Button fullWidth onClick={() => void openThread()}>
+              Open conversation
+            </Button>
+          </div>
         ) : (
           <div className="flex gap-2">
             <Button variant="secondary" fullWidth onClick={close}>
               Cancel
             </Button>
-            <Button fullWidth onClick={() => void send()} disabled={message.trim().length === 0}>
-              Send
+            <Button
+              fullWidth
+              onClick={() => void send()}
+              disabled={sending || message.trim().length === 0}
+            >
+              {sending ? "Sending…" : "Send"}
             </Button>
           </div>
         )
@@ -608,12 +643,8 @@ function InquiryModal({
       {sent ? (
         <div className="space-y-3">
           <p className="text-sm leading-relaxed text-ink-soft">
-            {listing.owner.name} now has your message, budget and move-in date. Switch to owner mode
-            and open My spaces to watch it arrive in the inbox.
-          </p>
-          <p className="rounded-xl bg-ivory-deep p-3 text-xs leading-relaxed text-muted">
-            Nothing is delivered to a real person. This is a prototype interaction stored on your
-            own device.
+            {listing.owner.name} now has your message, budget and move-in date. Replies arrive in
+            Messages, and you'll see a badge when one lands.
           </p>
         </div>
       ) : (
@@ -655,6 +686,18 @@ function InquiryModal({
               className="h-11 w-full rounded-xl bg-ivory px-3 text-[0.9375rem] ring-1 ring-hairline-strong focus:outline-none focus:ring-2 focus:ring-aqua-600"
             />
           </Field>
+
+          {error && <p className="rounded-xl bg-danger-100 p-3 text-sm text-danger-600">{error}</p>}
+
+          {configured && !account && (
+            <p className="rounded-xl bg-warn-100 p-3 text-sm leading-relaxed text-warn-700">
+              You'll need to{" "}
+              <Link to="/signin" className="font-semibold underline">
+                sign in
+              </Link>{" "}
+              before an owner can reply to you.
+            </p>
+          )}
 
           <div>
             <p className="mb-2 text-sm font-medium text-ink-soft">Sent with your inquiry</p>
