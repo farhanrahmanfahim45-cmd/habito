@@ -13,6 +13,7 @@ import Requests from "@/pages/Requests";
 import Profile from "@/pages/Profile";
 import Auth from "@/pages/Auth";
 import Messages from "@/pages/Messages";
+import Settings from "@/pages/Settings";
 import NotFound from "@/pages/NotFound";
 
 export function AppRoutes() {
@@ -65,10 +66,11 @@ export function AppRoutes() {
       />
 
       {/* Owner only */}
+      {/* Owner tools need an account, not a separate kind of account. */}
       <Route
         path="/portfolio"
         element={
-          <Guard allow={["owner", "admin"]}>
+          <Guard allow={["renter", "owner", "admin"]}>
             <Portfolio />
           </Guard>
         }
@@ -76,8 +78,33 @@ export function AppRoutes() {
       <Route
         path="/list"
         element={
-          <Guard allow={["owner", "admin"]}>
+          <Guard allow={["renter", "owner", "admin"]}>
             <ListSpace />
+          </Guard>
+        }
+      />
+      {/* Same component, editing an existing space. */}
+      <Route
+        path="/list/:id"
+        element={
+          <Guard allow={["renter", "owner", "admin"]}>
+            <ListSpace />
+          </Guard>
+        }
+      />
+      <Route
+        path="/space/:id/edit"
+        element={
+          <Guard allow={["renter", "owner", "admin"]}>
+            <ListSpace />
+          </Guard>
+        }
+      />
+      <Route
+        path="/settings"
+        element={
+          <Guard allow={["renter", "owner", "admin"]}>
+            <Settings />
           </Guard>
         }
       />

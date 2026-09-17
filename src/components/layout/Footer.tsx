@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Wordmark } from "./Header";
+import { LanguageToggle } from "@/components/ui/LanguageToggle";
 
 const COLUMNS = [
   {
@@ -29,6 +30,9 @@ export function Footer() {
       <div className="container-page grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-4">
         <div className="lg:col-span-2">
           <Wordmark className="text-base" />
+          <div className="mt-4 sm:hidden">
+            <LanguageToggle />
+          </div>
           <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted">
             Habito makes every kind of usable space discoverable — homes, rooms, shops, offices,
             storage, parking and land, across Bangladesh.

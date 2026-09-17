@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
 import { Bookmark, Scale } from "lucide-react";
 import type { SpaceListing } from "@/types/space";
-import { SPACE_TYPE_LABEL } from "@/types/space";
+
 import { money, moneyCompact, lastUpdatedShort, isStale } from "@/lib/format";
 import { CATEGORY_STYLE } from "@/data/catalog";
 import { cn } from "@/lib/cn";
+import { useI18n } from "@/i18n";
 import { MatchPill } from "./MatchRing";
 import { TrustBadge, AvailabilityBadge } from "./badges";
 
@@ -72,6 +73,7 @@ export function SpaceCard({
   onToggleCompare?: (id: string) => void;
   size?: "default" | "large" | "compact";
 }) {
+  const { t } = useI18n();
   const { space, property } = listing;
   const cat = CATEGORY_STYLE[space.category];
   const cover = space.images[0];
@@ -106,7 +108,9 @@ export function SpaceCard({
           {matchScore !== undefined ? (
             <MatchPill score={matchScore} />
           ) : (
-            <span className={cn("rounded-full px-2.5 py-1 text-xs font-semibold", cat.chip)}>{cat.label}</span>
+            <span className={cn("rounded-full px-2.5 py-1 text-xs font-semibold", cat.chip)}>
+              {t(`category.${space.category}` as never)}
+            </span>
           )}
 
           <div className="flex gap-1.5">
@@ -141,7 +145,9 @@ export function SpaceCard({
         <div className="absolute inset-x-3.5 bottom-3">
           <p className="font-display text-xl font-bold leading-none text-white tnum">
             {isSale ? money(space.cost.price) : moneyCompact(space.cost.price)}
-            <span className="ml-1 text-sm font-medium text-white/75">{isSale ? "" : "/month"}</span>
+            <span className="ml-1 text-sm font-medium text-white/75">
+              {isSale ? "" : t("transaction.perMonth")}
+            </span>
           </p>
           <h3 className="mt-1 truncate font-semibold text-white">
             <Link to={`/space/${space.id}`} className="after:absolute after:inset-0 focus:outline-none">
@@ -154,16 +160,20 @@ export function SpaceCard({
         </div>
 
         <span className="pointer-events-none absolute bottom-3 right-3.5 rounded bg-ink/55 px-1.5 py-0.5 text-[0.6rem] font-semibold uppercase tracking-wide text-white/90">
-          Demo
+          {t("misc.demo")}
         </span>
       </div>
 
       <div className="flex flex-1 flex-col gap-2 p-3.5">
         <div className="flex flex-wrap items-center gap-1.5">
           <span className={cn("rounded px-1.5 py-0.5 text-xs font-semibold", cat.chip)}>
-            {SPACE_TYPE_LABEL[space.spaceType]}
+            {t(`type.${space.spaceType}` as never)}
           </span>
-          {isSale && <span className="rounded bg-ink px-1.5 py-0.5 text-xs font-semibold text-ivory">For sale</span>}
+          {isSale && (
+            <span className="rounded bg-ink px-1.5 py-0.5 text-xs font-semibold text-ivory">
+              {t("transaction.forSale")}
+            </span>
+          )}
           <AvailabilityBadge availability={space.availability} />
         </div>
 
@@ -172,10 +182,10 @@ export function SpaceCard({
         {space.transaction === "rent" &&
           (space.cost.estimatedMonthly ? (
             <p className="text-[0.8125rem] text-muted tnum">
-              About {money(space.cost.estimatedMonthly)} a month all in
+              {t("misc.aboutAllIn", { price: money(space.cost.estimatedMonthly) })}
             </p>
           ) : (
-            <p className="text-[0.8125rem] font-medium text-warn-700">Full cost not listed</p>
+            <p className="text-[0.8125rem] font-medium text-warn-700">{t("misc.fullCostNotListed")}</p>
           ))}
 
         <div className="mt-auto flex items-center gap-2 border-t border-hairline pt-2.5">

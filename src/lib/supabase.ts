@@ -45,6 +45,8 @@ export interface ProfileRow {
   avatar_url: string | null;
   avatar_tone: string;
   role: "renter" | "owner" | "admin";
+  can_own: boolean;
+  language: "en" | "bn";
   verification: "unverified" | "pending" | "verified";
   bio: string | null;
   preferred_areas: string[];
@@ -92,6 +94,11 @@ export interface SpaceRow {
   advance_months: number | null;
   attributes: Record<string, unknown>;
   amenities: string[];
+  family_allowed: boolean;
+  bachelor_allowed: boolean;
+  student_friendly: boolean;
+  gender_pref: "any" | "male" | "female";
+  max_occupants: number | null;
   availability: AvailabilityStatus;
   available_from: string;
   availability_note: string | null;
@@ -161,6 +168,7 @@ export function toSpace(row: SpaceRow): Space {
     id: row.id,
     propertyId: row.property_id,
     name: row.name,
+    status: row.status,
     category: row.category,
     spaceType: row.space_type as SpaceType,
     transaction: row.transaction,
@@ -175,6 +183,13 @@ export function toSpace(row: SpaceRow): Space {
     },
     attributes: row.attributes as Space["attributes"],
     amenities: row.amenities as Space["amenities"],
+    rules: {
+      familyAllowed: row.family_allowed ?? true,
+      bachelorAllowed: row.bachelor_allowed ?? true,
+      studentFriendly: row.student_friendly ?? true,
+      genderPreference: row.gender_pref ?? "any",
+      maxOccupants: row.max_occupants,
+    },
     availability: {
       status: row.availability,
       availableFrom: row.available_from,
@@ -223,7 +238,7 @@ export function spaceInsert(input: Omit<Space, "id" | "views" | "inquiryCount" |
     category: input.category,
     space_type: input.spaceType,
     transaction: input.transaction,
-    status: "published" as const,
+    status: input.status ?? ("published" as const),
     price: input.cost.price,
     service_charge: input.cost.serviceCharge,
     utilities: input.cost.utilities,
@@ -231,6 +246,11 @@ export function spaceInsert(input: Omit<Space, "id" | "views" | "inquiryCount" |
     advance_months: input.cost.advanceMonths,
     attributes: input.attributes,
     amenities: input.amenities,
+    family_allowed: input.rules.familyAllowed,
+    bachelor_allowed: input.rules.bachelorAllowed,
+    student_friendly: input.rules.studentFriendly,
+    gender_pref: input.rules.genderPreference,
+    max_occupants: input.rules.maxOccupants,
     availability: input.availability.status,
     available_from: input.availability.availableFrom,
     availability_note: input.availability.note ?? null,
@@ -242,11 +262,20 @@ export function spaceInsert(input: Omit<Space, "id" | "views" | "inquiryCount" |
 export function spacePatch(patch: Partial<Space>) {
   const row: Record<string, unknown> = {};
   if (patch.name !== undefined) row.name = patch.name;
+  if (patch.status !== undefined) row.status = patch.status;
   if (patch.description !== undefined) row.description = patch.description;
   if (patch.amenities !== undefined) row.amenities = patch.amenities;
+  if (patch.rules) {
+    row.family_allowed = patch.rules.familyAllowed;
+    row.bachelor_allowed = patch.rules.bachelorAllowed;
+    row.student_friendly = patch.rules.studentFriendly;
+    row.gender_pref = patch.rules.genderPreference;
+    row.max_occupants = patch.rules.maxOccupants;
+  }
   if (patch.attributes !== undefined) row.attributes = patch.attributes;
   if (patch.images !== undefined) row.images = patch.images;
   if (patch.transaction !== undefined) row.transaction = patch.transaction;
+  if (patch.status !== undefined) row.status = patch.status;
 
   if (patch.cost) {
     row.price = patch.cost.price;

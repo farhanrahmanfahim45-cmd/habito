@@ -43,6 +43,9 @@ interface HabitoState {
 
   /** Total unread messages across every thread, for the navigation badge. */
   unreadMessages: number;
+
+  /** Whether this account may use owner tools at all. */
+  canOwn: boolean;
 }
 
 const Ctx = createContext<HabitoState | null>(null);
@@ -55,11 +58,12 @@ export function HabitoProvider({ children }: { children: ReactNode }) {
   const [inquiries, setInquiries] = useState<Inquiry[]>([]);
   const [requests, setRequests] = useState<SpaceRequest[]>([]);
 
-  // Without a database the role is a demo switch. With one it follows the
-  // account, because the database decides what an account may actually do.
-  const [demoRole, setDemoRole] = useState<DemoRole>("seeker");
-  const role: DemoRole = usingDatabase ? (account?.role === "owner" ? "owner" : "seeker") : demoRole;
-  const setRole = usingDatabase ? () => {} : setDemoRole;
+  // One account can be both sides. The mode is which hat you are wearing now;
+  // what you are permitted to do is still decided by the database.
+  const [mode, setMode] = useState<DemoRole>("seeker");
+  const canOwn = usingDatabase ? (account?.canOwn ?? false) : true;
+  const role: DemoRole = mode === "owner" && canOwn ? "owner" : "seeker";
+  const setRole = setMode;
   const ownerId = account?.id ?? DEMO_OWNER_ID;
   const [requirements, setRequirementsState] = useState<SearchRequirements>(DEFAULT_REQUIREMENTS);
   const [hasStatedNeeds, setHasStated] = useState(false);
@@ -81,6 +85,11 @@ export function HabitoProvider({ children }: { children: ReactNode }) {
     if (usingDatabase && !authReady) return;
     void refresh();
   }, [refresh, authReady, account?.id]);
+
+  // If owner tools aren't available, never sit in owner mode.
+  useEffect(() => {
+    if (!canOwn && mode === "owner") setMode("seeker");
+  }, [canOwn, mode]);
 
   // Keep the unread badge current wherever the person is in the app.
   useEffect(() => {
@@ -167,8 +176,9 @@ export function HabitoProvider({ children }: { children: ReactNode }) {
       requests,
       addRequest,
       unreadMessages,
+      canOwn,
     }),
-    [ready, listings, refresh, role, setRole, ownerId, requirements, setRequirements, hasStatedNeeds, savedIds, toggleSaved, compareIds, toggleCompare, inquiries, sendInquiry, requests, addRequest, unreadMessages],
+    [ready, listings, refresh, role, setRole, ownerId, requirements, setRequirements, hasStatedNeeds, savedIds, toggleSaved, compareIds, toggleCompare, inquiries, sendInquiry, requests, addRequest, unreadMessages, canOwn],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

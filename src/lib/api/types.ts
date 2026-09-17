@@ -23,6 +23,8 @@ export interface Repository {
   listing(spaceId: string): Promise<SpaceListing | null>;
   properties(ownerId?: string): Promise<Property[]>;
   spacesOfProperty(propertyId: string): Promise<Space[]>;
+  /** One space by id, including archived ones, so the owner can edit it. */
+  space(spaceId: string): Promise<Space | null>;
   owner(ownerId: string): Promise<Owner | null>;
 
   createProperty(input: Omit<Property, "id" | "createdAt" | "synthetic">): Promise<Property>;

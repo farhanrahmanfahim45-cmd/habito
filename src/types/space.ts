@@ -161,10 +161,29 @@ export interface AvailabilityDetail {
   availableUnits?: number;
 }
 
+export type GenderPreference = "any" | "male" | "female";
+
+/**
+ * Who a living space is open to. "Bachelor allowed" is the single most-used
+ * filter in Dhaka to-let posts, so it belongs in the model rather than buried
+ * in a description. Ignored for business, storage, parking and land.
+ */
+export interface OccupancyRules {
+  familyAllowed: boolean;
+  bachelorAllowed: boolean;
+  studentFriendly: boolean;
+  genderPreference: GenderPreference;
+  maxOccupants: number | null;
+}
+
+export type ListingStatus = "draft" | "published" | "archived";
+
 export interface Space {
   id: string;
   propertyId: string;
   name: string;
+  /** Archived spaces leave search but keep their conversations. */
+  status: ListingStatus;
   category: SpaceCategory;
   spaceType: SpaceType;
   transaction: TransactionType;
@@ -172,6 +191,7 @@ export interface Space {
   cost: CostBreakdown;
   attributes: SpaceAttributes;
   amenities: AmenityKey[];
+  rules: OccupancyRules;
   availability: AvailabilityDetail;
 
   images: SpaceImage[];
@@ -245,6 +265,8 @@ export interface SearchRequirements {
   minSizeSqft: number | null;
   moveInDate: string;
   amenities: AmenityKey[];
+  /** Who is moving in, so listings that exclude them can be filtered out. */
+  occupancy: "any" | "family" | "bachelor" | "student";
 }
 
 /* ── Demand side ──────────────────────────────────────────────────── */

@@ -94,6 +94,20 @@ function read(): Database {
       merged.requests = parsed.requests ?? [];
       merged.savedIds = (parsed.savedIds ?? []).filter((id) => merged.spaces.some((s) => s.id === id));
       merged.threads = parsed.threads ?? [];
+      // Spaces created before occupancy rules existed default to open.
+      for (const space of merged.spaces) {
+        if (!space.status) space.status = "published";
+        if (!space.status) space.status = "published";
+        if (!space.rules) {
+          space.rules = {
+            familyAllowed: true,
+            bachelorAllowed: true,
+            studentFriendly: true,
+            genderPreference: "any",
+            maxOccupants: null,
+          };
+        }
+      }
       write(merged);
       return merged;
     }
@@ -143,7 +157,12 @@ export const localRepository: Repository = {
 
   async listings(): Promise<SpaceListing[]> {
     const data = read();
-    return settle(data.spaces.map((s) => join(data, s)).filter((x): x is SpaceListing => x !== null));
+    return settle(
+      data.spaces
+        .filter((s) => s.status !== "archived")
+        .map((s) => join(data, s))
+        .filter((x): x is SpaceListing => x !== null),
+    );
   },
 
   async listing(spaceId: string): Promise<SpaceListing | null> {
@@ -160,6 +179,10 @@ export const localRepository: Repository = {
   async spacesOfProperty(propertyId: string): Promise<Space[]> {
     const data = read();
     return settle(data.spaces.filter((s) => s.propertyId === propertyId));
+  },
+
+  async space(spaceId: string): Promise<Space | null> {
+    return settle(read().spaces.find((s) => s.id === spaceId) ?? null);
   },
 
   async owner(ownerId: string): Promise<Owner | null> {
@@ -184,7 +207,13 @@ export const localRepository: Repository = {
 
   async createSpace(input: Omit<Space, "id" | "views" | "inquiryCount" | "synthetic">): Promise<Space> {
     const data = read();
-    const space: Space = { ...input, id: nextId("SP", data.spaces), views: 0, inquiryCount: 0, synthetic: false };
+    const space: Space = {
+      ...input,
+      id: nextId("SP", data.spaces),
+      views: 0,
+      inquiryCount: 0,
+      synthetic: false,
+    };
     data.spaces = [space, ...data.spaces];
     write(data);
     return settle(space);

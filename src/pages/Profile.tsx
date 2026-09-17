@@ -11,6 +11,9 @@ import { money, longDate } from "@/lib/format";
 import { CATEGORY_LABEL } from "@/types/space";
 import type { Owner } from "@/types/space";
 import { cn } from "@/lib/cn";
+import { useI18n } from "@/i18n";
+import { LanguageToggle } from "@/components/ui/LanguageToggle";
+import { Store } from "lucide-react";
 
 const inputClass =
   "h-11 w-full rounded-xl bg-ivory px-3 text-[0.9375rem] text-ink ring-1 ring-hairline-strong focus:outline-none focus:ring-2 focus:ring-aqua-600";
@@ -24,7 +27,9 @@ const VERIFICATION_COPY = {
 export default function Profile() {
   const { role, ownerId, savedIds, compareIds, inquiries, requests, requirements, hasStatedNeeds, refresh } =
     useHabito();
-  const { account, configured, updateProfile } = useAuth();
+  const { account, configured, updateProfile, enableOwnerTools } = useAuth();
+  const { t } = useI18n();
+  const [enabling, setEnabling] = useState(false);
   const { notify } = useToast();
 
   const [owner, setOwner] = useState<Owner | null>(null);
@@ -64,6 +69,18 @@ export default function Profile() {
       notify(e instanceof Error ? e.message : "Could not reset");
     } finally {
       setResetting(false);
+    }
+  };
+
+  const turnOnOwner = async () => {
+    setEnabling(true);
+    try {
+      await enableOwnerTools();
+      notify(t("mode.enabled"));
+    } catch (e) {
+      notify(e instanceof Error ? e.message : "Could not switch that on");
+    } finally {
+      setEnabling(false);
     }
   };
 
@@ -150,8 +167,31 @@ export default function Profile() {
           )}
         </section>
 
+        {/* Language */}
         <section className="rounded-card bg-surface p-6 ring-1 ring-hairline">
-          <h2 className="font-display text-lg font-bold text-ink">What you're looking for</h2>
+          <h2 className="font-display text-lg font-bold text-ink">{t("account.language")}</h2>
+          <p className="mt-1 text-sm leading-relaxed text-muted">{t("account.languageBody")}</p>
+          <div className="mt-4">
+            <LanguageToggle />
+          </div>
+        </section>
+
+        {/* Owner tools opt-in */}
+        {account && !account.canOwn && (
+          <section className="rounded-card bg-surface p-6 ring-1 ring-hairline">
+            <h2 className="flex items-center gap-2 font-display text-lg font-bold text-ink">
+              <Store size={17} className="text-coral" aria-hidden />
+              {t("mode.enableOwner")}
+            </h2>
+            <p className="mt-1.5 text-sm leading-relaxed text-muted">{t("mode.enableOwnerBody")}</p>
+            <Button size="sm" className="mt-4" disabled={enabling} onClick={() => void turnOnOwner()}>
+              {enabling ? t("auth.working") : t("mode.switchToOwner")}
+            </Button>
+          </section>
+        )}
+
+        <section className="rounded-card bg-surface p-6 ring-1 ring-hairline">
+          <h2 className="font-display text-lg font-bold text-ink">{t("account.lookingFor")}</h2>
           {hasStatedNeeds ? (
             <dl className="mt-4 space-y-2 text-sm">
               <Row

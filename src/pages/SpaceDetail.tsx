@@ -1,13 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
-  ArrowLeft, Bookmark, Scale, MapPin, Check, Minus, X, Building2, Flag, ChevronRight,
+  ArrowLeft, Bookmark, Scale, MapPin, Check, Minus, X, Building2, Flag, ChevronRight, Pencil,
 } from "lucide-react";
 import { useHabito } from "@/hooks/useHabito";
 import { db } from "@/lib/api";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
+import { Coachmark } from "@/components/ui/Coachmark";
 import { MatchRing } from "@/components/space/MatchRing";
 import { TrustBadge, AvailabilityBadge } from "@/components/space/badges";
 import { keySpec } from "@/components/space/SpaceCard";
@@ -17,12 +18,15 @@ import { money, longDate, lastUpdatedLabel, isStale, availabilityLine } from "@/
 import { SPACE_TYPE_LABEL } from "@/types/space";
 import type { MatchFactor, Space, SpaceListing } from "@/types/space";
 import { cn } from "@/lib/cn";
+import { useI18n } from "@/i18n";
 
 export default function SpaceDetail() {
   const { id = "" } = useParams();
   const navigate = useNavigate();
   const { listings, ready, requirements, hasStatedNeeds, isSaved, toggleSaved, isComparing, toggleCompare, sendInquiry } =
     useHabito();
+  const { account } = useAuth();
+  const { t } = useI18n();
 
   const [active, setActive] = useState(0);
   const [lightbox, setLightbox] = useState(false);
@@ -54,6 +58,8 @@ export default function SpaceDetail() {
   }
 
   const { space, property, owner } = listing;
+  // Your own listing shouldn't invite you to enquire about it.
+  const isMine = Boolean(account && property.ownerId === account.id);
   const match = hasStatedNeeds ? scoreListing(listing, requirements) : null;
   const saved = isSaved(space.id);
   const comparing = isComparing(space.id);
@@ -108,7 +114,9 @@ export default function SpaceDetail() {
         </div>
 
         <p className="mt-2 text-xs text-muted">
-          Illustrative demo images. These are not photographs of a real space.
+          {space.synthetic
+            ? "Illustrative demo images. These are not photographs of a real space."
+            : "Photographs provided by the owner."}
         </p>
       </div>
 
@@ -169,6 +177,26 @@ export default function SpaceDetail() {
                     </li>
                   );
                 })}
+              </ul>
+            </Section>
+          )}
+
+          {space.category === "living" && space.rules && (
+            <Section title="Who this is for">
+              <ul className="flex flex-wrap gap-2">
+                <RuleChip ok={space.rules.familyAllowed} yes="Families welcome" no="Not for families" />
+                <RuleChip ok={space.rules.bachelorAllowed} yes="Bachelors welcome" no="No bachelors" />
+                {space.rules.studentFriendly && <RuleChip ok yes="Student friendly" no="" />}
+                {space.rules.genderPreference !== "any" && (
+                  <RuleChip
+                    ok
+                    yes={space.rules.genderPreference === "male" ? "Men only" : "Women only"}
+                    no=""
+                  />
+                )}
+                {space.rules.maxOccupants && (
+                  <RuleChip ok yes={`Up to ${space.rules.maxOccupants} people`} no="" />
+                )}
               </ul>
             </Section>
           )}
@@ -301,9 +329,17 @@ export default function SpaceDetail() {
                       </span>
                     </div>
                   ) : (
-                    <p className="rounded-xl bg-warn-100 px-3 py-2 text-xs leading-relaxed text-warn-700">
-                      This owner hasn't listed every cost, so a monthly total can't be shown.
-                    </p>
+                    <>
+                      <p className="rounded-xl bg-warn-100 px-3 py-2 text-xs leading-relaxed text-warn-700">
+                        This owner hasn't listed every cost, so a monthly total can't be shown.
+                      </p>
+                      <Coachmark
+                        id="cost"
+                        titleKey="coach.costTitle"
+                        bodyKey="coach.costBody"
+                        className="mt-3"
+                      />
+                    </>
                   )}
                 </div>
 
@@ -324,9 +360,18 @@ export default function SpaceDetail() {
             )}
 
             <div className="mt-5 hidden gap-2 md:flex md:flex-col">
-              <Button fullWidth onClick={() => setInquiryOpen(true)}>
-                Send inquiry
-              </Button>
+              {isMine ? (
+                <Link to={`/space/${space.id}/edit`}>
+                  <Button fullWidth variant="secondary">
+                    <Pencil size={15} aria-hidden />
+                    {t("edit.action")}
+                  </Button>
+                </Link>
+              ) : (
+                <Button fullWidth onClick={() => setInquiryOpen(true)}>
+                  {t("action.sendInquiry")}
+                </Button>
+              )}
               <div className="grid grid-cols-2 gap-2">
                 <Button variant="secondary" onClick={() => void toggleSaved(space.id)}>
                   <Bookmark size={15} className={cn(saved && "fill-aqua-600 text-aqua-600")} aria-hidden />
@@ -359,9 +404,18 @@ export default function SpaceDetail() {
           <Button variant="secondary" size="sm" onClick={() => void toggleSaved(space.id)} aria-label="Save">
             <Bookmark size={16} className={cn(saved && "fill-aqua-600 text-aqua-600")} aria-hidden />
           </Button>
-          <Button size="sm" onClick={() => setInquiryOpen(true)}>
-            Send inquiry
-          </Button>
+          {isMine ? (
+            <Link to={`/space/${space.id}/edit`}>
+              <Button size="sm" variant="secondary">
+                <Pencil size={15} aria-hidden />
+                {t("edit.action")}
+              </Button>
+            </Link>
+          ) : (
+            <Button size="sm" onClick={() => setInquiryOpen(true)}>
+              {t("action.sendInquiry")}
+            </Button>
+          )}
         </div>
       </div>
 
@@ -385,6 +439,21 @@ export default function SpaceDetail() {
 }
 
 /* ── Pieces ───────────────────────────────────────────────────────── */
+
+/** Occupancy rules read as plain statements, green for yes and muted for no. */
+function RuleChip({ ok, yes, no }: { ok: boolean; yes: string; no: string }) {
+  return (
+    <li
+      className={cn(
+        "inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium",
+        ok ? "bg-ok-100 text-ok-600" : "bg-ivory-deep text-muted",
+      )}
+    >
+      {ok ? <Check size={14} aria-hidden /> : <X size={14} aria-hidden />}
+      {ok ? yes : no}
+    </li>
+  );
+}
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (

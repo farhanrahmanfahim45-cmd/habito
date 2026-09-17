@@ -1,25 +1,28 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import {
-  Plus, ChevronDown, Building2, Inbox, CircleCheck, Wrench, CircleDot, TrendingUp, Eye, MessagesSquare,
+  Plus, ChevronDown, Building2, Inbox, CircleCheck, Wrench, CircleDot, TrendingUp, Eye, MessagesSquare, Pencil,
 } from "lucide-react";
 import { useHabito } from "@/hooks/useHabito";
-import { db, usingDatabase } from "@/lib/api";
+import { db } from "@/lib/api";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Button } from "@/components/ui/Button";
+import { Coachmark } from "@/components/ui/Coachmark";
 import { AvailabilityBadge, TrustBadge } from "@/components/space/badges";
 import { CATEGORY_STYLE } from "@/data/catalog";
 import { money, moneyCompact, lastUpdatedShort, isStale, longDate } from "@/lib/format";
 import { SPACE_TYPE_LABEL, AVAILABILITY_LABEL } from "@/types/space";
 import type { AvailabilityStatus, Inquiry, Property, Space } from "@/types/space";
 import { cn } from "@/lib/cn";
+import { useI18n } from "@/i18n";
 
 /**
  * The portfolio is the centre of the owner story: one owner, several
  * properties, many kinds of space inside each — all visible at once.
  */
 export default function Portfolio() {
-  const { role, setRole, ownerId, inquiries, refresh, listings } = useHabito();
+  const { t } = useI18n();
+  const { ownerId, inquiries, refresh, listings } = useHabito();
   const [properties, setProperties] = useState<Property[]>([]);
   const [spaces, setSpaces] = useState<Space[]>([]);
   const [open, setOpen] = useState<string[]>([]);
@@ -87,15 +90,6 @@ export default function Portfolio() {
       />
 
       <div className="container-page py-8 md:py-10">
-        {role !== "owner" && !usingDatabase && (
-          <div className="mb-6 flex flex-wrap items-center gap-3 rounded-card bg-aqua-50 p-4 text-sm text-aqua-700 ring-1 ring-aqua-200">
-            <span>You're browsing as a seeker. Switch to owner mode to follow the supply side.</span>
-            <Button size="sm" onClick={() => setRole("owner")}>
-              Switch to owner
-            </Button>
-          </div>
-        )}
-
         <dl className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
           <Stat icon={Building2} label="Properties" value={String(properties.length)} />
           <Stat icon={CircleCheck} label="Available" value={String(stats.available)} tone="ok" />
@@ -117,7 +111,33 @@ export default function Portfolio() {
         )}
 
         {/* Hierarchy */}
+        <Coachmark
+          id="property"
+          titleKey="coach.propertyTitle"
+          bodyKey="coach.propertyBody"
+          className="mt-6"
+        />
+
         <h2 className="mt-10 font-display text-xl font-bold text-ink">Properties</h2>
+
+        {properties.length === 0 && (
+          <div className="mt-3 flex flex-col items-center rounded-card bg-surface px-6 py-12 text-center ring-1 ring-hairline">
+            <span className="mb-3 flex size-11 items-center justify-center rounded-full bg-aqua-100 text-aqua-700">
+              <Building2 size={20} aria-hidden />
+            </span>
+            <h3 className="font-display font-bold text-ink">You haven't added a property yet.</h3>
+            <p className="mt-1.5 max-w-sm text-sm leading-relaxed text-muted">
+              A property is the building, house or plot. Inside it you add the spaces people
+              actually rent — flats, a shop, the garage.
+            </p>
+            <Link to="/list" className="mt-4">
+              <Button size="sm">
+                <Plus size={15} aria-hidden />
+                Add your first space
+              </Button>
+            </Link>
+          </div>
+        )}
 
         <ul className="mt-3 space-y-3">
           {properties.map((property) => {
@@ -178,6 +198,16 @@ export default function Portfolio() {
                             <Link to={`/space/${s.id}`} className="font-semibold text-ink hover:text-aqua-700">
                               {s.name}
                             </Link>
+                            {s.status === "archived" && (
+                              <span className="ml-2 rounded-full bg-ivory-deep px-2 py-0.5 text-[0.65rem] font-semibold text-muted">
+                                {t("edit.archive")}
+                              </span>
+                            )}
+                            {s.status === "archived" && (
+                              <span className="ml-2 rounded-full bg-ivory-deep px-2 py-0.5 text-[0.65rem] font-semibold text-muted">
+                                Archived
+                              </span>
+                            )}
                             <p className="text-xs text-muted">
                               {SPACE_TYPE_LABEL[s.spaceType]} · {money(s.cost.price)}
                               {s.transaction === "rent" ? "/mo" : " sale"}
@@ -201,6 +231,13 @@ export default function Portfolio() {
                           >
                             {lastUpdatedShort(s.lastUpdated)}
                           </span>
+
+                          <Link to={`/list/${s.id}`} className="shrink-0">
+                            <Button size="sm" variant="secondary">
+                              <Pencil size={14} aria-hidden />
+                              <span className="hidden sm:inline">{t("edit.editSpace")}</span>
+                            </Button>
+                          </Link>
 
                           <label className="shrink-0">
                             <span className="sr-only">Availability for {s.name}</span>

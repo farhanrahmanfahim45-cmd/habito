@@ -4264,7 +4264,15 @@
    "lastUpdated": "2026-09-14",
    "views": 167,
    "inquiryCount": 18,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0229",
@@ -4326,7 +4334,15 @@
    "lastUpdated": "2026-08-04",
    "views": 221,
    "inquiryCount": 22,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": false,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0230",
@@ -4395,7 +4411,15 @@
    "lastUpdated": "2026-09-05",
    "views": 268,
    "inquiryCount": 21,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0231",
@@ -4458,7 +4482,15 @@
    "lastUpdated": "2026-09-04",
    "views": 126,
    "inquiryCount": 26,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0232",
@@ -4530,7 +4562,15 @@
    "lastUpdated": "2026-09-01",
    "views": 157,
    "inquiryCount": 20,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0233",
@@ -4600,7 +4640,15 @@
    "lastUpdated": "2026-08-23",
    "views": 160,
    "inquiryCount": 5,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": 3
+   },
+   "status": "published"
   },
   {
    "id": "SP-0234",
@@ -4664,7 +4712,15 @@
    "lastUpdated": "2026-09-13",
    "views": 179,
    "inquiryCount": 22,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": 2
+   },
+   "status": "published"
   },
   {
    "id": "SP-0235",
@@ -4722,7 +4778,15 @@
    "lastUpdated": "2026-09-12",
    "views": 11,
    "inquiryCount": 15,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0236",
@@ -4788,7 +4852,15 @@
    "lastUpdated": "2026-08-10",
    "views": 116,
    "inquiryCount": 27,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": false,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0237",
@@ -4843,7 +4915,15 @@
    "lastUpdated": "2026-08-07",
    "views": 222,
    "inquiryCount": 8,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0001",
@@ -4897,7 +4977,15 @@
    "lastUpdated": "2026-08-14",
    "views": 126,
    "inquiryCount": 29,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0002",
@@ -4953,7 +5041,15 @@
    "lastUpdated": "2026-08-22",
    "views": 214,
    "inquiryCount": 26,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": false,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0003",
@@ -5024,7 +5120,15 @@
    "lastUpdated": "2026-08-18",
    "views": 18,
    "inquiryCount": 1,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0004",
@@ -5083,7 +5187,15 @@
    "lastUpdated": "2026-08-19",
    "views": 172,
    "inquiryCount": 22,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0005",
@@ -5147,7 +5259,15 @@
    "lastUpdated": "2026-08-03",
    "views": 198,
    "inquiryCount": 2,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0006",
@@ -5217,7 +5337,15 @@
    "lastUpdated": "2026-09-14",
    "views": 236,
    "inquiryCount": 16,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0007",
@@ -5276,7 +5404,15 @@
    "lastUpdated": "2026-09-14",
    "views": 104,
    "inquiryCount": 17,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "female",
+    "maxOccupants": 4
+   },
+   "status": "published"
   },
   {
    "id": "SP-0008",
@@ -5334,7 +5470,15 @@
    "lastUpdated": "2026-09-14",
    "views": 73,
    "inquiryCount": 24,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0009",
@@ -5401,7 +5545,15 @@
    "lastUpdated": "2026-09-11",
    "views": 14,
    "inquiryCount": 17,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0010",
@@ -5474,7 +5626,15 @@
    "lastUpdated": "2026-07-27",
    "views": 271,
    "inquiryCount": 10,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": false,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0011",
@@ -5532,7 +5692,15 @@
    "lastUpdated": "2026-08-27",
    "views": 16,
    "inquiryCount": 19,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": false,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0012",
@@ -5606,7 +5774,15 @@
    "lastUpdated": "2026-09-14",
    "views": 16,
    "inquiryCount": 23,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0013",
@@ -5671,7 +5847,15 @@
    "lastUpdated": "2026-08-10",
    "views": 187,
    "inquiryCount": 29,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0014",
@@ -5728,7 +5912,15 @@
    "lastUpdated": "2026-09-11",
    "views": 155,
    "inquiryCount": 32,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0015",
@@ -5787,7 +5979,15 @@
    "lastUpdated": "2026-09-03",
    "views": 267,
    "inquiryCount": 14,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0016",
@@ -5854,7 +6054,15 @@
    "lastUpdated": "2026-08-29",
    "views": 79,
    "inquiryCount": 1,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0017",
@@ -5918,7 +6126,15 @@
    "lastUpdated": "2026-09-03",
    "views": 169,
    "inquiryCount": 25,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": true,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0018",
@@ -5977,7 +6193,15 @@
    "lastUpdated": "2026-08-25",
    "views": 126,
    "inquiryCount": 11,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0019",
@@ -6039,7 +6263,15 @@
    "lastUpdated": "2026-09-08",
    "views": 232,
    "inquiryCount": 11,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0020",
@@ -6111,7 +6343,15 @@
    "lastUpdated": "2026-09-11",
    "views": 108,
    "inquiryCount": 18,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0021",
@@ -6180,7 +6420,15 @@
    "lastUpdated": "2026-08-17",
    "views": 12,
    "inquiryCount": 24,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": false,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0022",
@@ -6251,7 +6499,15 @@
    "lastUpdated": "2026-09-14",
    "views": 24,
    "inquiryCount": 31,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0023",
@@ -6322,7 +6578,15 @@
    "lastUpdated": "2026-08-16",
    "views": 176,
    "inquiryCount": 31,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": true,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0024",
@@ -6388,7 +6652,15 @@
    "lastUpdated": "2026-09-11",
    "views": 13,
    "inquiryCount": 27,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0025",
@@ -6459,7 +6731,15 @@
    "lastUpdated": "2026-07-30",
    "views": 8,
    "inquiryCount": 17,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "male",
+    "maxOccupants": 4
+   },
+   "status": "published"
   },
   {
    "id": "SP-0026",
@@ -6519,7 +6799,15 @@
    "lastUpdated": "2026-09-04",
    "views": 34,
    "inquiryCount": 4,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0027",
@@ -6578,7 +6866,15 @@
    "lastUpdated": "2026-08-23",
    "views": 46,
    "inquiryCount": 18,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0028",
@@ -6649,7 +6945,15 @@
    "lastUpdated": "2026-09-10",
    "views": 27,
    "inquiryCount": 23,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0029",
@@ -6719,7 +7023,15 @@
    "lastUpdated": "2026-08-04",
    "views": 261,
    "inquiryCount": 22,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": 3
+   },
+   "status": "published"
   },
   {
    "id": "SP-0030",
@@ -6783,7 +7095,15 @@
    "lastUpdated": "2026-09-04",
    "views": 221,
    "inquiryCount": 27,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0031",
@@ -6857,7 +7177,15 @@
    "lastUpdated": "2026-08-17",
    "views": 82,
    "inquiryCount": 7,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": false,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0032",
@@ -6929,7 +7257,15 @@
    "lastUpdated": "2026-08-07",
    "views": 187,
    "inquiryCount": 21,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": false,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0033",
@@ -6990,7 +7326,15 @@
    "lastUpdated": "2026-08-31",
    "views": 42,
    "inquiryCount": 18,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": false,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0034",
@@ -7058,7 +7402,15 @@
    "lastUpdated": "2026-09-14",
    "views": 278,
    "inquiryCount": 2,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0035",
@@ -7126,7 +7478,15 @@
    "lastUpdated": "2026-09-14",
    "views": 235,
    "inquiryCount": 15,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": false,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0036",
@@ -7190,7 +7550,15 @@
    "lastUpdated": "2026-09-12",
    "views": 21,
    "inquiryCount": 17,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": 3
+   },
+   "status": "published"
   },
   {
    "id": "SP-0037",
@@ -7250,7 +7618,15 @@
    "lastUpdated": "2026-09-07",
    "views": 103,
    "inquiryCount": 9,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0038",
@@ -7320,7 +7696,15 @@
    "lastUpdated": "2026-08-08",
    "views": 116,
    "inquiryCount": 15,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": 2
+   },
+   "status": "published"
   },
   {
    "id": "SP-0039",
@@ -7389,7 +7773,15 @@
    "lastUpdated": "2026-08-20",
    "views": 154,
    "inquiryCount": 21,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0040",
@@ -7447,7 +7839,15 @@
    "lastUpdated": "2026-08-05",
    "views": 119,
    "inquiryCount": 19,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0041",
@@ -7508,7 +7908,15 @@
    "lastUpdated": "2026-09-04",
    "views": 10,
    "inquiryCount": 26,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": false,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0042",
@@ -7579,7 +7987,15 @@
    "lastUpdated": "2026-09-13",
    "views": 41,
    "inquiryCount": 30,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": false,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0043",
@@ -7635,7 +8051,15 @@
    "lastUpdated": "2026-09-08",
    "views": 152,
    "inquiryCount": 2,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": false,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0044",
@@ -7707,7 +8131,15 @@
    "lastUpdated": "2026-09-13",
    "views": 126,
    "inquiryCount": 11,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": true,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0045",
@@ -7770,7 +8202,15 @@
    "lastUpdated": "2026-08-10",
    "views": 135,
    "inquiryCount": 14,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": false,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0046",
@@ -7838,7 +8278,15 @@
    "lastUpdated": "2026-09-12",
    "views": 23,
    "inquiryCount": 25,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0047",
@@ -7894,7 +8342,15 @@
    "lastUpdated": "2026-09-07",
    "views": 33,
    "inquiryCount": 10,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0048",
@@ -7958,7 +8414,15 @@
    "lastUpdated": "2026-08-15",
    "views": 9,
    "inquiryCount": 30,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "male",
+    "maxOccupants": 3
+   },
+   "status": "published"
   },
   {
    "id": "SP-0049",
@@ -8021,7 +8485,15 @@
    "lastUpdated": "2026-08-28",
    "views": 268,
    "inquiryCount": 21,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0050",
@@ -8083,7 +8555,15 @@
    "lastUpdated": "2026-09-12",
    "views": 267,
    "inquiryCount": 18,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": 3
+   },
+   "status": "published"
   },
   {
    "id": "SP-0051",
@@ -8153,7 +8633,15 @@
    "lastUpdated": "2026-09-14",
    "views": 276,
    "inquiryCount": 10,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "female",
+    "maxOccupants": 3
+   },
+   "status": "published"
   },
   {
    "id": "SP-0052",
@@ -8216,7 +8704,15 @@
    "lastUpdated": "2026-09-09",
    "views": 214,
    "inquiryCount": 3,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0053",
@@ -8288,7 +8784,15 @@
    "lastUpdated": "2026-08-23",
    "views": 12,
    "inquiryCount": 21,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0054",
@@ -8353,7 +8857,15 @@
    "lastUpdated": "2026-09-14",
    "views": 274,
    "inquiryCount": 12,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": false,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0055",
@@ -8414,7 +8926,15 @@
    "lastUpdated": "2026-09-02",
    "views": 95,
    "inquiryCount": 11,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0056",
@@ -8477,7 +8997,15 @@
    "lastUpdated": "2026-09-14",
    "views": 68,
    "inquiryCount": 9,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "male",
+    "maxOccupants": 2
+   },
+   "status": "published"
   },
   {
    "id": "SP-0057",
@@ -8536,7 +9064,15 @@
    "lastUpdated": "2026-08-23",
    "views": 212,
    "inquiryCount": 21,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0058",
@@ -8594,7 +9130,15 @@
    "lastUpdated": "2026-09-12",
    "views": 243,
    "inquiryCount": 22,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0059",
@@ -8657,7 +9201,15 @@
    "lastUpdated": "2026-08-10",
    "views": 58,
    "inquiryCount": 19,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0060",
@@ -8727,7 +9279,15 @@
    "lastUpdated": "2026-09-01",
    "views": 160,
    "inquiryCount": 8,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0061",
@@ -8786,7 +9346,15 @@
    "lastUpdated": "2026-08-19",
    "views": 138,
    "inquiryCount": 2,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0062",
@@ -8849,7 +9417,15 @@
    "lastUpdated": "2026-09-12",
    "views": 214,
    "inquiryCount": 26,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0063",
@@ -8919,7 +9495,15 @@
    "lastUpdated": "2026-08-02",
    "views": 41,
    "inquiryCount": 18,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0064",
@@ -8984,7 +9568,15 @@
    "lastUpdated": "2026-09-05",
    "views": 199,
    "inquiryCount": 6,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0065",
@@ -9042,7 +9634,15 @@
    "lastUpdated": "2026-09-14",
    "views": 206,
    "inquiryCount": 8,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0066",
@@ -9114,7 +9714,15 @@
    "lastUpdated": "2026-09-14",
    "views": 141,
    "inquiryCount": 11,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0067",
@@ -9186,7 +9794,15 @@
    "lastUpdated": "2026-08-30",
    "views": 224,
    "inquiryCount": 11,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "female",
+    "maxOccupants": 4
+   },
+   "status": "published"
   },
   {
    "id": "SP-0068",
@@ -9252,7 +9868,15 @@
    "lastUpdated": "2026-09-06",
    "views": 223,
    "inquiryCount": 25,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0069",
@@ -9309,7 +9933,15 @@
    "lastUpdated": "2026-09-14",
    "views": 77,
    "inquiryCount": 14,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0070",
@@ -9364,7 +9996,15 @@
    "lastUpdated": "2026-09-14",
    "views": 146,
    "inquiryCount": 11,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0071",
@@ -9430,7 +10070,15 @@
    "lastUpdated": "2026-08-27",
    "views": 181,
    "inquiryCount": 28,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0072",
@@ -9489,7 +10137,15 @@
    "lastUpdated": "2026-09-14",
    "views": 132,
    "inquiryCount": 5,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0073",
@@ -9546,7 +10202,15 @@
    "lastUpdated": "2026-09-04",
    "views": 228,
    "inquiryCount": 24,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0074",
@@ -9610,7 +10274,15 @@
    "lastUpdated": "2026-08-16",
    "views": 257,
    "inquiryCount": 29,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": false,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0075",
@@ -9676,7 +10348,15 @@
    "lastUpdated": "2026-09-13",
    "views": 194,
    "inquiryCount": 23,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": false,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0076",
@@ -9740,7 +10420,15 @@
    "lastUpdated": "2026-09-14",
    "views": 94,
    "inquiryCount": 24,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": 3
+   },
+   "status": "published"
   },
   {
    "id": "SP-0077",
@@ -9810,7 +10498,15 @@
    "lastUpdated": "2026-07-31",
    "views": 66,
    "inquiryCount": 19,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": false,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0078",
@@ -9881,7 +10577,15 @@
    "lastUpdated": "2026-08-11",
    "views": 65,
    "inquiryCount": 15,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0079",
@@ -9937,7 +10641,15 @@
    "lastUpdated": "2026-09-07",
    "views": 243,
    "inquiryCount": 1,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": 3
+   },
+   "status": "published"
   },
   {
    "id": "SP-0080",
@@ -10008,7 +10720,15 @@
    "lastUpdated": "2026-08-23",
    "views": 268,
    "inquiryCount": 1,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": true,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0081",
@@ -10077,7 +10797,15 @@
    "lastUpdated": "2026-09-02",
    "views": 274,
    "inquiryCount": 20,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0082",
@@ -10148,7 +10876,15 @@
    "lastUpdated": "2026-08-26",
    "views": 101,
    "inquiryCount": 14,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": 4
+   },
+   "status": "published"
   },
   {
    "id": "SP-0083",
@@ -10210,7 +10946,15 @@
    "lastUpdated": "2026-08-19",
    "views": 40,
    "inquiryCount": 23,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0084",
@@ -10269,7 +11013,15 @@
    "lastUpdated": "2026-08-15",
    "views": 172,
    "inquiryCount": 11,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0085",
@@ -10329,7 +11081,15 @@
    "lastUpdated": "2026-08-24",
    "views": 147,
    "inquiryCount": 26,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0086",
@@ -10399,7 +11159,15 @@
    "lastUpdated": "2026-08-12",
    "views": 84,
    "inquiryCount": 9,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "male",
+    "maxOccupants": 2
+   },
+   "status": "published"
   },
   {
    "id": "SP-0087",
@@ -10464,7 +11232,15 @@
    "lastUpdated": "2026-09-09",
    "views": 21,
    "inquiryCount": 4,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": false,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0088",
@@ -10526,7 +11302,15 @@
    "lastUpdated": "2026-09-14",
    "views": 222,
    "inquiryCount": 1,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": false,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0089",
@@ -10596,7 +11380,15 @@
    "lastUpdated": "2026-08-15",
    "views": 173,
    "inquiryCount": 30,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0090",
@@ -10654,7 +11446,15 @@
    "lastUpdated": "2026-08-01",
    "views": 223,
    "inquiryCount": 24,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": true,
+    "studentFriendly": false,
+    "genderPreference": "male",
+    "maxOccupants": 2
+   },
+   "status": "published"
   },
   {
    "id": "SP-0091",
@@ -10711,7 +11511,15 @@
    "lastUpdated": "2026-09-10",
    "views": 228,
    "inquiryCount": 25,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "female",
+    "maxOccupants": 3
+   },
+   "status": "published"
   },
   {
    "id": "SP-0092",
@@ -10772,7 +11580,15 @@
    "lastUpdated": "2026-08-10",
    "views": 211,
    "inquiryCount": 19,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": 4
+   },
+   "status": "published"
   },
   {
    "id": "SP-0093",
@@ -10840,7 +11656,15 @@
    "lastUpdated": "2026-09-02",
    "views": 204,
    "inquiryCount": 20,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": 4
+   },
+   "status": "published"
   },
   {
    "id": "SP-0094",
@@ -10896,7 +11720,15 @@
    "lastUpdated": "2026-09-08",
    "views": 187,
    "inquiryCount": 26,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": false,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0095",
@@ -10958,7 +11790,15 @@
    "lastUpdated": "2026-08-28",
    "views": 192,
    "inquiryCount": 6,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0096",
@@ -11013,7 +11853,15 @@
    "lastUpdated": "2026-08-25",
    "views": 192,
    "inquiryCount": 18,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": 3
+   },
+   "status": "published"
   },
   {
    "id": "SP-0097",
@@ -11084,7 +11932,15 @@
    "lastUpdated": "2026-08-18",
    "views": 177,
    "inquiryCount": 29,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": false,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0098",
@@ -11146,7 +12002,15 @@
    "lastUpdated": "2026-08-28",
    "views": 259,
    "inquiryCount": 20,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "female",
+    "maxOccupants": 4
+   },
+   "status": "published"
   },
   {
    "id": "SP-0099",
@@ -11207,7 +12071,15 @@
    "lastUpdated": "2026-08-22",
    "views": 64,
    "inquiryCount": 23,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0100",
@@ -11276,7 +12148,15 @@
    "lastUpdated": "2026-09-10",
    "views": 159,
    "inquiryCount": 22,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0101",
@@ -11346,7 +12226,15 @@
    "lastUpdated": "2026-08-25",
    "views": 41,
    "inquiryCount": 16,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0102",
@@ -11417,7 +12305,15 @@
    "lastUpdated": "2026-09-14",
    "views": 280,
    "inquiryCount": 17,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": false,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0103",
@@ -11475,7 +12371,15 @@
    "lastUpdated": "2026-08-07",
    "views": 274,
    "inquiryCount": 6,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0104",
@@ -11532,7 +12436,15 @@
    "lastUpdated": "2026-09-13",
    "views": 218,
    "inquiryCount": 19,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": 2
+   },
+   "status": "published"
   },
   {
    "id": "SP-0105",
@@ -11590,7 +12502,15 @@
    "lastUpdated": "2026-09-01",
    "views": 192,
    "inquiryCount": 1,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0106",
@@ -11653,7 +12573,15 @@
    "lastUpdated": "2026-09-13",
    "views": 57,
    "inquiryCount": 9,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "male",
+    "maxOccupants": 3
+   },
+   "status": "published"
   },
   {
    "id": "SP-0107",
@@ -11709,7 +12637,15 @@
    "lastUpdated": "2026-07-28",
    "views": 95,
    "inquiryCount": 24,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0108",
@@ -11777,7 +12713,15 @@
    "lastUpdated": "2026-09-12",
    "views": 77,
    "inquiryCount": 12,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0109",
@@ -11844,7 +12788,15 @@
    "lastUpdated": "2026-09-03",
    "views": 187,
    "inquiryCount": 19,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0110",
@@ -11914,7 +12866,15 @@
    "lastUpdated": "2026-08-08",
    "views": 189,
    "inquiryCount": 24,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0111",
@@ -11973,7 +12933,15 @@
    "lastUpdated": "2026-08-14",
    "views": 228,
    "inquiryCount": 21,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": false,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0112",
@@ -12044,7 +13012,15 @@
    "lastUpdated": "2026-09-13",
    "views": 76,
    "inquiryCount": 14,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": 2
+   },
+   "status": "published"
   },
   {
    "id": "SP-0113",
@@ -12109,7 +13085,15 @@
    "lastUpdated": "2026-08-08",
    "views": 125,
    "inquiryCount": 11,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "male",
+    "maxOccupants": 2
+   },
+   "status": "published"
   },
   {
    "id": "SP-0114",
@@ -12165,7 +13149,15 @@
    "lastUpdated": "2026-08-21",
    "views": 61,
    "inquiryCount": 18,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": 3
+   },
+   "status": "published"
   },
   {
    "id": "SP-0115",
@@ -12229,7 +13221,15 @@
    "lastUpdated": "2026-08-16",
    "views": 203,
    "inquiryCount": 27,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0116",
@@ -12301,7 +13301,15 @@
    "lastUpdated": "2026-08-29",
    "views": 18,
    "inquiryCount": 0,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0117",
@@ -12367,7 +13375,15 @@
    "lastUpdated": "2026-08-29",
    "views": 13,
    "inquiryCount": 8,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0118",
@@ -12424,7 +13440,15 @@
    "lastUpdated": "2026-08-05",
    "views": 39,
    "inquiryCount": 21,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "male",
+    "maxOccupants": 2
+   },
+   "status": "published"
   },
   {
    "id": "SP-0119",
@@ -12486,7 +13510,15 @@
    "lastUpdated": "2026-08-10",
    "views": 180,
    "inquiryCount": 15,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": 4
+   },
+   "status": "published"
   },
   {
    "id": "SP-0120",
@@ -12553,7 +13585,15 @@
    "lastUpdated": "2026-09-07",
    "views": 175,
    "inquiryCount": 0,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0121",
@@ -12619,7 +13659,15 @@
    "lastUpdated": "2026-09-14",
    "views": 252,
    "inquiryCount": 11,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0122",
@@ -12674,7 +13722,15 @@
    "lastUpdated": "2026-08-14",
    "views": 52,
    "inquiryCount": 17,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0123",
@@ -12740,7 +13796,15 @@
    "lastUpdated": "2026-08-20",
    "views": 199,
    "inquiryCount": 25,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0124",
@@ -12805,7 +13869,15 @@
    "lastUpdated": "2026-09-12",
    "views": 205,
    "inquiryCount": 1,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0125",
@@ -12865,7 +13937,15 @@
    "lastUpdated": "2026-09-02",
    "views": 265,
    "inquiryCount": 14,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0126",
@@ -12922,7 +14002,15 @@
    "lastUpdated": "2026-09-11",
    "views": 108,
    "inquiryCount": 1,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": false,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0127",
@@ -12979,7 +14067,15 @@
    "lastUpdated": "2026-09-12",
    "views": 244,
    "inquiryCount": 12,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": false,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0128",
@@ -13042,7 +14138,15 @@
    "lastUpdated": "2026-09-14",
    "views": 53,
    "inquiryCount": 10,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0129",
@@ -13109,7 +14213,15 @@
    "lastUpdated": "2026-09-02",
    "views": 46,
    "inquiryCount": 18,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0130",
@@ -13164,7 +14276,15 @@
    "lastUpdated": "2026-08-09",
    "views": 263,
    "inquiryCount": 2,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0131",
@@ -13224,7 +14344,15 @@
    "lastUpdated": "2026-09-14",
    "views": 203,
    "inquiryCount": 32,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": 3
+   },
+   "status": "published"
   },
   {
    "id": "SP-0132",
@@ -13288,7 +14416,15 @@
    "lastUpdated": "2026-08-02",
    "views": 111,
    "inquiryCount": 13,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": false,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0133",
@@ -13346,7 +14482,15 @@
    "lastUpdated": "2026-09-11",
    "views": 45,
    "inquiryCount": 10,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "male",
+    "maxOccupants": 2
+   },
+   "status": "published"
   },
   {
    "id": "SP-0134",
@@ -13405,7 +14549,15 @@
    "lastUpdated": "2026-08-12",
    "views": 94,
    "inquiryCount": 26,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0135",
@@ -13460,7 +14612,15 @@
    "lastUpdated": "2026-09-05",
    "views": 165,
    "inquiryCount": 15,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0136",
@@ -13531,7 +14691,15 @@
    "lastUpdated": "2026-08-14",
    "views": 43,
    "inquiryCount": 6,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": false,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0137",
@@ -13591,7 +14759,15 @@
    "lastUpdated": "2026-08-21",
    "views": 44,
    "inquiryCount": 8,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0138",
@@ -13646,7 +14822,15 @@
    "lastUpdated": "2026-09-02",
    "views": 65,
    "inquiryCount": 0,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": 4
+   },
+   "status": "published"
   },
   {
    "id": "SP-0139",
@@ -13714,7 +14898,15 @@
    "lastUpdated": "2026-08-16",
    "views": 48,
    "inquiryCount": 15,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": true,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": 3
+   },
+   "status": "published"
   },
   {
    "id": "SP-0140",
@@ -13771,7 +14963,15 @@
    "lastUpdated": "2026-08-06",
    "views": 142,
    "inquiryCount": 11,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "female",
+    "maxOccupants": 3
+   },
+   "status": "published"
   },
   {
    "id": "SP-0141",
@@ -13842,7 +15042,15 @@
    "lastUpdated": "2026-08-29",
    "views": 82,
    "inquiryCount": 28,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": false,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0142",
@@ -13910,7 +15118,15 @@
    "lastUpdated": "2026-08-19",
    "views": 102,
    "inquiryCount": 7,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0143",
@@ -13968,7 +15184,15 @@
    "lastUpdated": "2026-08-08",
    "views": 259,
    "inquiryCount": 4,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": false,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0144",
@@ -14027,7 +15251,15 @@
    "lastUpdated": "2026-08-17",
    "views": 98,
    "inquiryCount": 0,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": false,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0145",
@@ -14084,7 +15316,15 @@
    "lastUpdated": "2026-09-13",
    "views": 99,
    "inquiryCount": 1,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": 4
+   },
+   "status": "published"
   },
   {
    "id": "SP-0146",
@@ -14142,7 +15382,15 @@
    "lastUpdated": "2026-08-04",
    "views": 245,
    "inquiryCount": 14,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0147",
@@ -14204,7 +15452,15 @@
    "lastUpdated": "2026-08-28",
    "views": 112,
    "inquiryCount": 24,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": false,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0148",
@@ -14266,7 +15522,15 @@
    "lastUpdated": "2026-09-14",
    "views": 221,
    "inquiryCount": 27,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": 4
+   },
+   "status": "published"
   },
   {
    "id": "SP-0149",
@@ -14324,7 +15588,15 @@
    "lastUpdated": "2026-08-27",
    "views": 11,
    "inquiryCount": 27,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": true,
+    "studentFriendly": false,
+    "genderPreference": "male",
+    "maxOccupants": 4
+   },
+   "status": "published"
   },
   {
    "id": "SP-0150",
@@ -14383,7 +15655,15 @@
    "lastUpdated": "2026-09-12",
    "views": 204,
    "inquiryCount": 5,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0151",
@@ -14449,7 +15729,15 @@
    "lastUpdated": "2026-09-02",
    "views": 12,
    "inquiryCount": 32,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": false,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0152",
@@ -14510,7 +15798,15 @@
    "lastUpdated": "2026-08-13",
    "views": 229,
    "inquiryCount": 18,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": false,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0153",
@@ -14565,7 +15861,15 @@
    "lastUpdated": "2026-09-09",
    "views": 254,
    "inquiryCount": 23,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0154",
@@ -14624,7 +15928,15 @@
    "lastUpdated": "2026-09-11",
    "views": 251,
    "inquiryCount": 13,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0155",
@@ -14689,7 +16001,15 @@
    "lastUpdated": "2026-08-14",
    "views": 82,
    "inquiryCount": 8,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0156",
@@ -14748,7 +16068,15 @@
    "lastUpdated": "2026-08-05",
    "views": 46,
    "inquiryCount": 18,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0157",
@@ -14818,7 +16146,15 @@
    "lastUpdated": "2026-09-05",
    "views": 50,
    "inquiryCount": 0,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": 2
+   },
+   "status": "published"
   },
   {
    "id": "SP-0158",
@@ -14874,7 +16210,15 @@
    "lastUpdated": "2026-09-11",
    "views": 272,
    "inquiryCount": 5,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0159",
@@ -14933,7 +16277,15 @@
    "lastUpdated": "2026-09-14",
    "views": 126,
    "inquiryCount": 13,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0160",
@@ -14990,7 +16342,15 @@
    "lastUpdated": "2026-08-05",
    "views": 254,
    "inquiryCount": 27,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": 4
+   },
+   "status": "published"
   },
   {
    "id": "SP-0161",
@@ -15047,7 +16407,15 @@
    "lastUpdated": "2026-09-14",
    "views": 12,
    "inquiryCount": 5,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "female",
+    "maxOccupants": 3
+   },
+   "status": "published"
   },
   {
    "id": "SP-0162",
@@ -15109,7 +16477,15 @@
    "lastUpdated": "2026-08-27",
    "views": 12,
    "inquiryCount": 4,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": false,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0163",
@@ -15176,7 +16552,15 @@
    "lastUpdated": "2026-08-14",
    "views": 275,
    "inquiryCount": 3,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0164",
@@ -15235,7 +16619,15 @@
    "lastUpdated": "2026-09-01",
    "views": 132,
    "inquiryCount": 14,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "male",
+    "maxOccupants": 3
+   },
+   "status": "published"
   },
   {
    "id": "SP-0165",
@@ -15299,7 +16691,15 @@
    "lastUpdated": "2026-09-14",
    "views": 197,
    "inquiryCount": 27,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": false,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0166",
@@ -15356,7 +16756,15 @@
    "lastUpdated": "2026-08-21",
    "views": 187,
    "inquiryCount": 13,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0167",
@@ -15419,7 +16827,15 @@
    "lastUpdated": "2026-08-29",
    "views": 100,
    "inquiryCount": 7,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0168",
@@ -15474,7 +16890,15 @@
    "lastUpdated": "2026-09-09",
    "views": 85,
    "inquiryCount": 8,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0169",
@@ -15535,7 +16959,15 @@
    "lastUpdated": "2026-08-29",
    "views": 71,
    "inquiryCount": 5,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0170",
@@ -15591,7 +17023,15 @@
    "lastUpdated": "2026-09-07",
    "views": 115,
    "inquiryCount": 17,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0171",
@@ -15646,7 +17086,15 @@
    "lastUpdated": "2026-09-13",
    "views": 260,
    "inquiryCount": 15,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0172",
@@ -15703,7 +17151,15 @@
    "lastUpdated": "2026-09-09",
    "views": 237,
    "inquiryCount": 3,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0173",
@@ -15766,7 +17222,15 @@
    "lastUpdated": "2026-09-05",
    "views": 39,
    "inquiryCount": 2,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "female",
+    "maxOccupants": 3
+   },
+   "status": "published"
   },
   {
    "id": "SP-0174",
@@ -15832,7 +17296,15 @@
    "lastUpdated": "2026-08-31",
    "views": 226,
    "inquiryCount": 1,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": false,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0175",
@@ -15898,7 +17370,15 @@
    "lastUpdated": "2026-09-14",
    "views": 38,
    "inquiryCount": 22,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0176",
@@ -15963,7 +17443,15 @@
    "lastUpdated": "2026-09-01",
    "views": 100,
    "inquiryCount": 1,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0177",
@@ -16032,7 +17520,15 @@
    "lastUpdated": "2026-09-01",
    "views": 234,
    "inquiryCount": 1,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": false,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0178",
@@ -16095,7 +17591,15 @@
    "lastUpdated": "2026-09-11",
    "views": 255,
    "inquiryCount": 31,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0179",
@@ -16154,7 +17658,15 @@
    "lastUpdated": "2026-08-06",
    "views": 18,
    "inquiryCount": 24,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": false,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0180",
@@ -16216,7 +17728,15 @@
    "lastUpdated": "2026-09-07",
    "views": 108,
    "inquiryCount": 31,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0181",
@@ -16290,7 +17810,15 @@
    "lastUpdated": "2026-08-26",
    "views": 195,
    "inquiryCount": 29,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": false,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0182",
@@ -16354,7 +17882,15 @@
    "lastUpdated": "2026-08-15",
    "views": 7,
    "inquiryCount": 19,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0183",
@@ -16421,7 +17957,15 @@
    "lastUpdated": "2026-09-14",
    "views": 194,
    "inquiryCount": 0,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0184",
@@ -16478,7 +18022,15 @@
    "lastUpdated": "2026-09-05",
    "views": 100,
    "inquiryCount": 9,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0185",
@@ -16537,7 +18089,15 @@
    "lastUpdated": "2026-09-13",
    "views": 279,
    "inquiryCount": 32,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0186",
@@ -16606,7 +18166,15 @@
    "lastUpdated": "2026-09-14",
    "views": 258,
    "inquiryCount": 11,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "male",
+    "maxOccupants": 4
+   },
+   "status": "published"
   },
   {
    "id": "SP-0187",
@@ -16676,7 +18244,15 @@
    "lastUpdated": "2026-09-13",
    "views": 127,
    "inquiryCount": 22,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0188",
@@ -16733,7 +18309,15 @@
    "lastUpdated": "2026-08-13",
    "views": 97,
    "inquiryCount": 3,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": false,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0189",
@@ -16796,7 +18380,15 @@
    "lastUpdated": "2026-09-14",
    "views": 280,
    "inquiryCount": 32,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0190",
@@ -16870,7 +18462,15 @@
    "lastUpdated": "2026-09-13",
    "views": 263,
    "inquiryCount": 30,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0191",
@@ -16938,7 +18538,15 @@
    "lastUpdated": "2026-08-19",
    "views": 131,
    "inquiryCount": 0,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": true,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": 2
+   },
+   "status": "published"
   },
   {
    "id": "SP-0192",
@@ -16999,7 +18607,15 @@
    "lastUpdated": "2026-09-04",
    "views": 237,
    "inquiryCount": 15,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0193",
@@ -17059,7 +18675,15 @@
    "lastUpdated": "2026-09-10",
    "views": 162,
    "inquiryCount": 30,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0194",
@@ -17123,7 +18747,15 @@
    "lastUpdated": "2026-09-14",
    "views": 195,
    "inquiryCount": 32,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0195",
@@ -17192,7 +18824,15 @@
    "lastUpdated": "2026-09-14",
    "views": 279,
    "inquiryCount": 5,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0196",
@@ -17249,7 +18889,15 @@
    "lastUpdated": "2026-09-14",
    "views": 85,
    "inquiryCount": 22,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": false,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0197",
@@ -17312,7 +18960,15 @@
    "lastUpdated": "2026-09-14",
    "views": 149,
    "inquiryCount": 13,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0198",
@@ -17370,7 +19026,15 @@
    "lastUpdated": "2026-09-05",
    "views": 48,
    "inquiryCount": 31,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0199",
@@ -17441,7 +19105,15 @@
    "lastUpdated": "2026-09-12",
    "views": 257,
    "inquiryCount": 31,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0200",
@@ -17509,7 +19181,15 @@
    "lastUpdated": "2026-09-07",
    "views": 136,
    "inquiryCount": 31,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": true,
+    "studentFriendly": false,
+    "genderPreference": "female",
+    "maxOccupants": 2
+   },
+   "status": "published"
   },
   {
    "id": "SP-0201",
@@ -17579,7 +19259,15 @@
    "lastUpdated": "2026-08-19",
    "views": 244,
    "inquiryCount": 16,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0202",
@@ -17649,7 +19337,15 @@
    "lastUpdated": "2026-09-05",
    "views": 152,
    "inquiryCount": 0,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0203",
@@ -17709,7 +19405,15 @@
    "lastUpdated": "2026-08-17",
    "views": 133,
    "inquiryCount": 6,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": false,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0204",
@@ -17767,7 +19471,15 @@
    "lastUpdated": "2026-08-03",
    "views": 186,
    "inquiryCount": 4,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": true,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0205",
@@ -17827,7 +19539,15 @@
    "lastUpdated": "2026-09-12",
    "views": 200,
    "inquiryCount": 2,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": false,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0206",
@@ -17898,7 +19618,15 @@
    "lastUpdated": "2026-08-01",
    "views": 68,
    "inquiryCount": 3,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0207",
@@ -17971,7 +19699,15 @@
    "lastUpdated": "2026-08-25",
    "views": 278,
    "inquiryCount": 17,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": false,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0208",
@@ -18040,7 +19776,15 @@
    "lastUpdated": "2026-08-08",
    "views": 8,
    "inquiryCount": 17,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0209",
@@ -18100,7 +19844,15 @@
    "lastUpdated": "2026-09-04",
    "views": 34,
    "inquiryCount": 4,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": true,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0210",
@@ -18159,7 +19911,15 @@
    "lastUpdated": "2026-08-23",
    "views": 46,
    "inquiryCount": 18,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0211",
@@ -18230,7 +19990,15 @@
    "lastUpdated": "2026-09-10",
    "views": 27,
    "inquiryCount": 23,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0212",
@@ -18300,7 +20068,15 @@
    "lastUpdated": "2026-08-04",
    "views": 261,
    "inquiryCount": 22,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": true,
+    "studentFriendly": false,
+    "genderPreference": "male",
+    "maxOccupants": 2
+   },
+   "status": "published"
   },
   {
    "id": "SP-0213",
@@ -18364,7 +20140,15 @@
    "lastUpdated": "2026-09-04",
    "views": 221,
    "inquiryCount": 27,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": true,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0214",
@@ -18438,7 +20222,15 @@
    "lastUpdated": "2026-08-17",
    "views": 82,
    "inquiryCount": 7,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0215",
@@ -18510,7 +20302,15 @@
    "lastUpdated": "2026-08-07",
    "views": 187,
    "inquiryCount": 21,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": false,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0216",
@@ -18571,7 +20371,15 @@
    "lastUpdated": "2026-08-31",
    "views": 42,
    "inquiryCount": 18,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0217",
@@ -18639,7 +20447,15 @@
    "lastUpdated": "2026-09-14",
    "views": 278,
    "inquiryCount": 2,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0218",
@@ -18707,7 +20523,15 @@
    "lastUpdated": "2026-09-14",
    "views": 235,
    "inquiryCount": 15,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0219",
@@ -18771,7 +20595,15 @@
    "lastUpdated": "2026-09-12",
    "views": 21,
    "inquiryCount": 17,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": true,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": 4
+   },
+   "status": "published"
   },
   {
    "id": "SP-0220",
@@ -18831,7 +20663,15 @@
    "lastUpdated": "2026-09-07",
    "views": 103,
    "inquiryCount": 9,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0221",
@@ -18901,7 +20741,15 @@
    "lastUpdated": "2026-08-08",
    "views": 116,
    "inquiryCount": 15,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": false,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": 2
+   },
+   "status": "published"
   },
   {
    "id": "SP-0222",
@@ -18970,7 +20818,15 @@
    "lastUpdated": "2026-08-20",
    "views": 154,
    "inquiryCount": 21,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0223",
@@ -19028,7 +20884,15 @@
    "lastUpdated": "2026-08-05",
    "views": 119,
    "inquiryCount": 19,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0224",
@@ -19089,7 +20953,15 @@
    "lastUpdated": "2026-09-04",
    "views": 10,
    "inquiryCount": 26,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": true,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0225",
@@ -19160,7 +21032,15 @@
    "lastUpdated": "2026-09-13",
    "views": 41,
    "inquiryCount": 30,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": false,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0226",
@@ -19216,7 +21096,15 @@
    "lastUpdated": "2026-09-08",
    "views": 152,
    "inquiryCount": 2,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": false,
+    "studentFriendly": false,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   },
   {
    "id": "SP-0227",
@@ -19288,7 +21176,15 @@
    "lastUpdated": "2026-09-13",
    "views": 126,
    "inquiryCount": 11,
-   "synthetic": true
+   "synthetic": true,
+   "rules": {
+    "familyAllowed": true,
+    "bachelorAllowed": false,
+    "studentFriendly": true,
+    "genderPreference": "any",
+    "maxOccupants": null
+   },
+   "status": "published"
   }
  ]
 }

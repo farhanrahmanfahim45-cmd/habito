@@ -97,10 +97,18 @@ Manrope for everything else.
   portfolio and inquiries moved onto the database.
 - **Stage 2 (done)** — messaging: conversation list, threads tied to a space,
   read receipts, unread badges, live delivery with a polling fallback.
-- **Stage 3** — bookings: the request → accept → confirm → complete machine,
-  with availability enforced.
-- **Stage 4** — payments against a sandbox gateway, then rent records and receipts.
-- **Stage 5** — admin panel, reports, reviews, maintenance requests.
+- **Stage 4 (done)** — one account and one navigation for both sides, editing
+  and archiving a listed space, a Settings page, and a Bangla register pass.
+- **Stage 3 (done)** — one account for both sides, Bangla interface with proper
+  Bengali typefaces and numerals, owner photo upload with client-side
+  compression, and occupancy rules (bachelor / family / student / gender) back
+  in the model and in search.
+- **Stage 4.5 (done)** — first-run onboarding (language, intent, area, all
+  skippable) and in-context coachmarks instead of a walkthrough.
+- **Stage 5** — bookings: request → accept → confirm → complete, availability
+  enforced, phone revealed on acceptance.
+- **Stage 6** — payments against a sandbox gateway, then rent records and receipts.
+- **Stage 7** — admin panel, reports, reviews, maintenance requests.
 
 The schema already holds tables for all of it, so later stages add behaviour
 rather than migrating data.

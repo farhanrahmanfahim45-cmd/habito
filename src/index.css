@@ -7,8 +7,11 @@
    and they appear small.
    ───────────────────────────────────────────────────────────── */
 @theme {
-  --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
-  --font-sans: "Manrope", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  /* Latin faces. The Bengali pair is swapped in below — Bricolage and Manrope
+     carry no Bengali glyphs, so without this the whole layout falls back to a
+     system font the moment someone switches language. */
+  --font-display: "Bricolage Grotesque", "Baloo Da 2", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Manrope", "Hind Siliguri", ui-sans-serif, system-ui, -apple-system, sans-serif;
 
   --color-ivory: #f7f5f0;
   --color-ivory-deep: #efece4;
@@ -72,6 +75,29 @@
   }
 
   .tnum { font-variant-numeric: tabular-nums; }
+
+  /* Bengali runs taller and needs more line height; it also sets roughly
+     15–20% longer than the same English string, so headings get a touch less
+     tracking to keep them on the same number of lines. */
+  html[data-lang="bn"] {
+    --font-display: "Baloo Da 2", "Hind Siliguri", ui-sans-serif, sans-serif;
+    --font-sans: "Hind Siliguri", ui-sans-serif, system-ui, sans-serif;
+  }
+
+  html[data-lang="bn"] body {
+    line-height: 1.7;
+  }
+
+  html[data-lang="bn"] h1,
+  html[data-lang="bn"] h2,
+  html[data-lang="bn"] h3,
+  html[data-lang="bn"] .display {
+    letter-spacing: 0;
+    line-height: 1.25;
+  }
+
+  /* Bengali digits have no tabular set worth using; keep them proportional. */
+  html[data-lang="bn"] .tnum { font-variant-numeric: normal; }
 }
 
 @layer utilities {

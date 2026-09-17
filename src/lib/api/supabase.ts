@@ -93,6 +93,8 @@ export const supabaseRepository: Repository = {
   },
 
   async spacesOfProperty(propertyId: string): Promise<Space[]> {
+    // No status filter: the portfolio shows archived spaces too, which is the
+    // only place they should still be visible.
     const { data, error } = await client()
       .from("spaces")
       .select(SPACE_COLUMNS)
@@ -101,6 +103,17 @@ export const supabaseRepository: Repository = {
 
     if (error) fail("Could not load spaces", error);
     return (data as SpaceRow[]).map(toSpace);
+  },
+
+  async space(spaceId: string): Promise<Space | null> {
+    const { data, error } = await client()
+      .from("spaces")
+      .select(SPACE_COLUMNS)
+      .eq("id", spaceId)
+      .maybeSingle();
+
+    if (error) fail("Could not load that space", error);
+    return data ? toSpace(data as SpaceRow) : null;
   },
 
   async owner(ownerId: string): Promise<Owner | null> {

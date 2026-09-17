@@ -12,6 +12,8 @@ export interface Account {
   email: string | null;
   phone: string | null;
   role: AccountRole;
+  /** Whether owner tools are switched on. Everyone may rent. */
+  canOwn: boolean;
   verification: "unverified" | "pending" | "verified";
   avatarTone: string;
   suspended: boolean;
@@ -35,6 +37,8 @@ interface AuthState {
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
   updateProfile: (patch: Partial<Pick<Account, "name" | "phone">>) => Promise<void>;
+  /** Switches owner tools on for an existing account. */
+  enableOwnerTools: () => Promise<void>;
   refreshAccount: () => Promise<void>;
 }
 
@@ -47,6 +51,7 @@ function toAccount(row: ProfileRow): Account {
     email: row.email,
     phone: row.phone,
     role: row.role,
+    canOwn: row.can_own ?? row.role === "owner",
     verification: row.verification,
     avatarTone: row.avatar_tone,
     suspended: row.suspended,
@@ -138,6 +143,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [account],
   );
 
+  const enableOwnerTools = useCallback(async () => {
+    if (!supabase || !account) return;
+    const { data, error } = await supabase
+      .from("profiles")
+      .update({ can_own: true })
+      .eq("id", account.id)
+      .select()
+      .single();
+
+    if (error) throw new Error(error.message);
+    setAccount(toAccount(data as ProfileRow));
+  }, [account]);
+
   const refreshAccount = useCallback(async () => {
     if (session?.user) await loadProfile(session.user.id);
   }, [session, loadProfile]);
@@ -153,9 +171,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       signOut,
       resetPassword,
       updateProfile,
+      enableOwnerTools,
       refreshAccount,
     }),
-    [ready, session, account, signUp, signIn, signOut, resetPassword, updateProfile, refreshAccount],
+    [ready, session, account, signUp, signIn, signOut, resetPassword, updateProfile, enableOwnerTools, refreshAccount],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

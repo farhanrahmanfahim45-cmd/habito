@@ -5,14 +5,16 @@ import { useHabito } from "@/hooks/useHabito";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { SpaceCard } from "@/components/space/SpaceCard";
 import { SpaceCardSkeleton } from "@/components/ui/Skeleton";
+import { Coachmark } from "@/components/ui/Coachmark";
 import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
-import { scoreAll, nearbyAlternatives } from "@/lib/matching";
+import { scoreAll, nearbyAlternatives, acceptsOccupancy } from "@/lib/matching";
 import { money, isStale, moneyCompact } from "@/lib/format";
 import { CATEGORY_STYLE, AMENITIES, AMENITY_KEYS } from "@/data/catalog";
 import { AREAS } from "@/data/areas";
 import { trustLevel } from "@/components/space/badges";
 import { cn } from "@/lib/cn";
+import { useI18n } from "@/i18n";
 import type { AmenityKey, Geography, SpaceCategory } from "@/types/space";
 
 type SortKey = "best-match" | "price-low" | "price-high" | "recent" | "size";
@@ -35,6 +37,7 @@ interface Filters {
   verifiedOnly: boolean;
   fullCostOnly: boolean;
   amenities: AmenityKey[];
+  occupancy: "any" | "family" | "bachelor" | "student";
 }
 
 const PRICE_CEILING = 150000;
@@ -49,6 +52,7 @@ const DEFAULTS: Filters = {
   verifiedOnly: false,
   fullCostOnly: false,
   amenities: [],
+  occupancy: "any",
 };
 
 export default function Search() {
@@ -86,6 +90,8 @@ export default function Search() {
       if (filters.verifiedOnly && trustLevel(space.verification) !== "verified") return false;
       if (filters.fullCostOnly && space.cost.estimatedMonthly === null) return false;
       if (filters.amenities.some((a) => !space.amenities.includes(a))) return false;
+      // A place that won't take you shouldn't appear at all, scored or not.
+      if (!acceptsOccupancy(l, filters.occupancy)) return false;
       return true;
     });
 
@@ -186,6 +192,14 @@ export default function Search() {
               <NothingYet onReset={() => setFilters(DEFAULTS)} />
             ) : (
               <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+                {hasStatedNeeds && (
+                  <Coachmark
+                    id="match"
+                    titleKey="coach.matchTitle"
+                    bodyKey="coach.matchBody"
+                    className="sm:col-span-2 xl:col-span-3"
+                  />
+                )}
                 {results.map((l) => (
                   <SpaceCard
                     key={l.space.id}
@@ -290,10 +304,12 @@ function countActive(f: Filters): number {
   if (f.freshOnly) n++;
   if (f.verifiedOnly) n++;
   if (f.fullCostOnly) n++;
+  if (f.occupancy !== "any") n++;
   return n + f.amenities.length;
 }
 
 function FilterPanel({ filters, onChange }: { filters: Filters; onChange: (f: Filters) => void }) {
+  const { t } = useI18n();
   const set = <K extends keyof Filters>(k: K, v: Filters[K]) => onChange({ ...filters, [k]: v });
 
   return (
@@ -360,6 +376,25 @@ function FilterPanel({ filters, onChange }: { filters: Filters; onChange: (f: Fi
           className="w-full accent-aqua-600"
         />
         <p className="mt-1 text-xs text-muted">Sale listings aren't filtered by this.</p>
+      </Group>
+
+      <Group label={t("filter.whoCanLive")}>
+        <div className="flex flex-wrap gap-1.5">
+          {([
+            { key: "any", label: t("filter.all") },
+            { key: "family", label: t("filter.familyAllowed") },
+            { key: "bachelor", label: t("filter.bachelorAllowed") },
+            { key: "student", label: t("filter.studentFriendly") },
+          ] as const).map((option) => (
+            <Pill
+              key={option.key}
+              active={filters.occupancy === option.key}
+              onClick={() => set("occupancy", option.key)}
+            >
+              {option.label}
+            </Pill>
+          ))}
+        </div>
       </Group>
 
       <Group label="Show only">

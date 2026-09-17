@@ -1,29 +1,47 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { ArrowLeft, ArrowRight, Check, Plus } from "lucide-react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { ArrowLeft, ArrowRight, Check, Plus, Archive, Trash2, Undo2 } from "lucide-react";
 import { useHabito } from "@/hooks/useHabito";
 import { db } from "@/lib/api";
 import { PageHeader } from "@/components/layout/PageHeader";
+import { Modal } from "@/components/ui/Modal";
+import { useToast } from "@/components/ui/Toast";
 import { Button } from "@/components/ui/Button";
 import { CATEGORY_STYLE, TYPES_BY_CATEGORY, AMENITIES, AMENITIES_BY_CATEGORY } from "@/data/catalog";
 import { AREAS } from "@/data/areas";
 import { SPACE_TYPE_LABEL, CATEGORY_OF_TYPE } from "@/types/space";
 import type {
-  AmenityKey, AvailabilityStatus, Property, SpaceAttributes, SpaceCategory, SpaceType, TransactionType,
+  AmenityKey, AvailabilityStatus, GenderPreference, ListingStatus, OccupancyRules, Property,
+  Space, SpaceAttributes, SpaceCategory, SpaceImage, SpaceType, TransactionType,
 } from "@/types/space";
+import { PhotoUploader } from "@/components/space/PhotoUploader";
 import { money } from "@/lib/format";
 import { cn } from "@/lib/cn";
+import { useI18n } from "@/i18n";
 
 const CATEGORIES = Object.keys(CATEGORY_STYLE) as SpaceCategory[];
-const STEPS = ["What", "Where", "Details", "Included", "Price", "Review"];
+const STEPS = ["What", "Where", "Details", "Included", "Photos", "Price", "Review"];
 
 /**
  * Guided listing flow. The Details step asks different questions per category —
  * a garage is never asked how many bedrooms it has.
  */
+/**
+ * One form, two jobs. Editing is the same six steps with the answers already
+ * filled in, so an owner correcting a price doesn't meet a different screen.
+ */
 export default function ListSpace() {
   const navigate = useNavigate();
-  const { refresh, setRole, ownerId } = useHabito();
+  const { id: editingId } = useParams();
+  const { t } = useI18n();
+  const { notify } = useToast();
+  const { refresh, ownerId } = useHabito();
+
+  const editing = Boolean(editingId);
+  const [existing, setExisting] = useState<Space | null>(null);
+  const [loaded, setLoaded] = useState(!editingId);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [working, setWorking] = useState(false);
 
   const [step, setStep] = useState(0);
   const [properties, setProperties] = useState<Property[]>([]);
@@ -38,6 +56,16 @@ export default function ListSpace() {
   const [name, setName] = useState("");
   const [attrs, setAttrs] = useState<SpaceAttributes>({});
   const [amenities, setAmenities] = useState<AmenityKey[]>([]);
+  const [rules, setRules] = useState<OccupancyRules>({
+    familyAllowed: true,
+    bachelorAllowed: true,
+    studentFriendly: true,
+    genderPreference: "any",
+    maxOccupants: null,
+  });
+  const [photos, setPhotos] = useState<SpaceImage[]>([]);
+  // Photos are filed under this id before the space row exists.
+  const [draftId] = useState(() => crypto.randomUUID());
   const [price, setPrice] = useState(12000);
   const [serviceCharge, setServiceCharge] = useState<number | "">("");
   const [utilities, setUtilities] = useState<number | "">("");
@@ -45,6 +73,34 @@ export default function ListSpace() {
   const [availableFrom, setAvailableFrom] = useState(new Date().toISOString().slice(0, 10));
 
   const category = CATEGORY_OF_TYPE[spaceType];
+
+  // Fetched by id rather than taken from the browsing list, because an
+  // archived space is deliberately absent from that list.
+  useEffect(() => {
+    if (!editingId) return;
+
+    void db.space(editingId).then((space) => {
+      if (space) {
+        setExisting(space);
+        setSpaceType(space.spaceType);
+        setTransaction(space.transaction);
+        setPropertyId(space.propertyId);
+        setName(space.name);
+        setAttrs(space.attributes);
+        setAmenities(space.amenities);
+        if (space.rules) setRules(space.rules);
+        // Seed illustrations aren't the owner's photos, so don't present them
+        // as something they uploaded.
+        setPhotos(space.synthetic ? [] : space.images);
+        setPrice(space.cost.price);
+        setServiceCharge(space.cost.serviceCharge ?? "");
+        setUtilities(space.cost.utilities ?? "");
+        setStatus(space.availability.status);
+        setAvailableFrom(space.availability.availableFrom);
+      }
+      setLoaded(true);
+    });
+  }, [editingId]);
 
   useEffect(() => {
     void db.properties(ownerId).then((p) => {
@@ -55,12 +111,63 @@ export default function ListSpace() {
   }, [ownerId]);
 
   useEffect(() => {
+    // Only when starting fresh — on an edit this would erase what's there.
+    if (editing) return;
     setAttrs({});
     setAmenities([]);
-  }, [category]);
+  }, [category, editing]);
 
   const setAttr = <K extends keyof SpaceAttributes>(k: K, v: SpaceAttributes[K]) =>
     setAttrs((a) => ({ ...a, [k]: v }));
+
+  const setListingStatus = async (next: ListingStatus) => {
+    if (!existing) return;
+    setWorking(true);
+    await db.updateSpace(existing.id, { status: next });
+    await refresh();
+    setWorking(false);
+    notify(next === "archived" ? t("edit.archived") : t("edit.restored"));
+    navigate("/portfolio");
+  };
+
+  const destroy = async () => {
+    if (!existing) return;
+    setWorking(true);
+    await db.deleteSpace(existing.id);
+    await refresh();
+    setWorking(false);
+    notify(t("edit.deleted"));
+    navigate("/portfolio");
+  };
+
+  const saveEdit = async () => {
+    if (!existing) return;
+    setSaving(true);
+
+    const disclosed = serviceCharge !== "" && utilities !== "";
+    await db.updateSpace(existing.id, {
+      name: name.trim() || SPACE_TYPE_LABEL[spaceType],
+      transaction,
+      cost: {
+        price,
+        serviceCharge: serviceCharge === "" ? null : Number(serviceCharge),
+        utilities: utilities === "" ? null : Number(utilities),
+        securityDeposit: existing.cost.securityDeposit,
+        advanceMonths: existing.cost.advanceMonths,
+        estimatedMonthly: disclosed ? price + Number(serviceCharge) + Number(utilities) : null,
+      },
+      attributes: attrs,
+      amenities,
+      rules,
+      availability: { ...existing.availability, status, availableFrom },
+      images: photos.length ? photos : existing.images,
+    });
+
+    await refresh();
+    setSaving(false);
+    notify(t("edit.saved"));
+    navigate(`/space/${existing.id}`);
+  };
 
   const publish = async () => {
     setSaving(true);
@@ -103,37 +210,86 @@ export default function ListSpace() {
       },
       attributes: attrs,
       amenities,
+      rules,
       availability: { status, availableFrom },
-      images: [0, 1].map((i) => ({
-        url: `/photos/${category}-${(i % 2) + 1}.svg`,
-        label: label[i],
-        alt: `Illustrative placeholder image for ${name || SPACE_TYPE_LABEL[spaceType]}`,
-        demo: true as const,
-      })),
+      // Real photographs where the owner gave them; illustration otherwise, so
+      // a listing never looks photographed when it isn't.
+      images: photos.length
+        ? photos
+        : [0, 1].map((i) => ({
+            url: `/photos/${category}-${(i % 2) + 1}.svg`,
+            label: label[i],
+            alt: `Illustrative placeholder image for ${name || SPACE_TYPE_LABEL[spaceType]}`,
+            demo: true as const,
+          })),
       description:
         `${SPACE_TYPE_LABEL[spaceType]} in ${neighborhood.trim() || area}. Added through the Habito listing flow.`,
       verification: { demo: true, owner: "identity-submitted", space: "documents-submitted" },
+      status: "published",
       lastUpdated: new Date().toISOString().slice(0, 10),
     });
 
     await refresh();
-    setRole("owner");
     setSaving(false);
     navigate(`/space/${created.id}`);
   };
 
   const canAdvance = () => {
     if (step === 1) return propertyId !== "" && (propertyId !== "__new" || newPropertyName.trim().length > 1);
-    if (step === 4) return price > 0;
+    if (step === 5) return price > 0;
     return true;
   };
+
+  if (!loaded) {
+    return <div className="container-page py-20 text-sm text-muted">{t("misc.loading")}</div>;
+  }
+
+  if (editing && !existing) {
+    return (
+      <div className="container-page py-20 text-center">
+        <h1 className="font-display text-2xl font-bold text-ink">{t("space.notFound")}</h1>
+        <Link to="/portfolio" className="mt-5 inline-block">
+          <Button>{t("nav.portfolio")}</Button>
+        </Link>
+      </div>
+    );
+  }
+
+  const archived = existing?.status === "archived";
 
   return (
     <>
       <PageHeader
-        title="List a space"
-        lead="Six steps. What you're asked changes with the kind of space you're listing."
+        title={editing ? t("edit.title") : t("list.title")}
+        lead={editing ? t("edit.lead") : t("list.lead")}
+        actions={
+          editing ? (
+            <div className="flex flex-wrap gap-2">
+              <Button
+                variant="secondary"
+                size="sm"
+                disabled={working}
+                onClick={() => void setListingStatus(archived ? "published" : "archived")}
+              >
+                {archived ? <Undo2 size={15} aria-hidden /> : <Archive size={15} aria-hidden />}
+                {archived ? t("edit.restore") : t("edit.archive")}
+              </Button>
+              <Button variant="secondary" size="sm" onClick={() => setConfirmDelete(true)}>
+                <Trash2 size={15} aria-hidden />
+                {t("edit.delete")}
+              </Button>
+            </div>
+          ) : undefined
+        }
       />
+
+      {archived && (
+        <div className="container-page pt-6">
+          <p className="rounded-card bg-warn-100 p-4 text-sm leading-relaxed text-warn-700">
+            {t("edit.archivedNotice")}
+          </p>
+        </div>
+      )}
 
       <div className="container-page max-w-3xl py-8 md:py-10">
         {/* Progress */}
@@ -346,11 +502,85 @@ export default function ListSpace() {
               <p className="mt-4 text-xs text-muted">
                 Only the options that make sense for a {SPACE_TYPE_LABEL[spaceType].toLowerCase()} are shown.
               </p>
+
+              {category === "living" && (
+                <div className="mt-7 border-t border-hairline pt-6">
+                  <h3 className="mb-1 font-display font-bold text-ink">{t("rules.title")}</h3>
+                  <p className="mb-4 text-xs text-muted">
+                    This is the first thing most renters filter on, so it's worth getting right.
+                  </p>
+
+                  <ul className="flex flex-wrap gap-2">
+                    <li>
+                      <Chip
+                        active={rules.familyAllowed}
+                        onClick={() => setRules({ ...rules, familyAllowed: !rules.familyAllowed })}
+                      >
+                        {t("filter.familyAllowed")}
+                      </Chip>
+                    </li>
+                    <li>
+                      <Chip
+                        active={rules.bachelorAllowed}
+                        onClick={() => setRules({ ...rules, bachelorAllowed: !rules.bachelorAllowed })}
+                      >
+                        {t("filter.bachelorAllowed")}
+                      </Chip>
+                    </li>
+                    <li>
+                      <Chip
+                        active={rules.studentFriendly}
+                        onClick={() => setRules({ ...rules, studentFriendly: !rules.studentFriendly })}
+                      >
+                        {t("filter.studentFriendly")}
+                      </Chip>
+                    </li>
+                  </ul>
+
+                  <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                    <Field label="Gender preference">
+                      <select
+                        value={rules.genderPreference}
+                        onChange={(e) =>
+                          setRules({ ...rules, genderPreference: e.target.value as GenderPreference })
+                        }
+                        className={inputClass}
+                      >
+                        <option value="any">No preference</option>
+                        <option value="male">Men only</option>
+                        <option value="female">Women only</option>
+                      </select>
+                    </Field>
+                    <Field label="Maximum occupants">
+                      <input
+                        type="number"
+                        min={1}
+                        value={rules.maxOccupants ?? ""}
+                        placeholder="No limit"
+                        onChange={(e) =>
+                          setRules({
+                            ...rules,
+                            maxOccupants: e.target.value === "" ? null : Number(e.target.value),
+                          })
+                        }
+                        className={cn(inputClass, "tnum")}
+                      />
+                    </Field>
+                  </div>
+                </div>
+              )}
             </Step>
           )}
 
           {step === 4 && (
-            <Step title="Price and availability">
+            <Step title={t("list.photos")}>
+              <p className="mb-5 text-sm text-muted">{t("list.photosLead")}</p>
+              <PhotoUploader spaceId={draftId} images={photos} onChange={setPhotos} />
+            </Step>
+          )}
+
+          {step === 5 && (
+            <Step title={t("list.priceAvailability")}>
               <div className="grid gap-4 sm:grid-cols-2">
                 <Field label={transaction === "rent" ? "Monthly rent" : "Asking price"}>
                   <MoneyInput value={price} onChange={setPrice} />
@@ -397,8 +627,8 @@ export default function ListSpace() {
             </Step>
           )}
 
-          {step === 5 && (
-            <Step title="Review and publish">
+          {step === 6 && (
+            <Step title={t("list.review")}>
               <dl className="divide-y divide-hairline rounded-2xl bg-ivory ring-1 ring-hairline">
                 <Review label="Space" value={`${name || SPACE_TYPE_LABEL[spaceType]} · ${SPACE_TYPE_LABEL[spaceType]}`} />
                 <Review
@@ -446,14 +676,39 @@ export default function ListSpace() {
                 <ArrowRight size={16} aria-hidden />
               </Button>
             ) : (
-              <Button disabled={saving} onClick={() => void publish()}>
+              <Button disabled={saving} onClick={() => void (editing ? saveEdit() : publish())}>
                 <Check size={16} aria-hidden />
-                {saving ? "Publishing…" : "Publish space"}
+                {saving
+                  ? t("action.publishing")
+                  : editing
+                    ? t("action.saveChanges")
+                    : t("action.publish")}
               </Button>
             )}
           </div>
         </div>
       </div>
+
+      <Modal
+        open={confirmDelete}
+        onClose={() => setConfirmDelete(false)}
+        title={t("edit.deleteTitle")}
+        footer={
+          <div className="flex gap-2">
+            <Button variant="secondary" fullWidth onClick={() => setConfirmDelete(false)}>
+              {t("action.cancel")}
+            </Button>
+            <Button variant="destructive" fullWidth disabled={working} onClick={() => void destroy()}>
+              {t("edit.delete")}
+            </Button>
+          </div>
+        }
+      >
+        <p className="text-sm leading-relaxed text-ink-soft">{t("edit.deleteBody")}</p>
+        <p className="mt-3 rounded-xl bg-warn-100 p-3 text-sm leading-relaxed text-warn-700">
+          {t("edit.deleteWarning")}
+        </p>
+      </Modal>
     </>
   );
 }

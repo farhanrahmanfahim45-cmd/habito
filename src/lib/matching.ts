@@ -290,4 +290,31 @@ export const DEFAULT_REQUIREMENTS: SearchRequirements = {
   minSizeSqft: null,
   moveInDate: new Date(Date.now() + 21 * 86400000).toISOString().slice(0, 10),
   amenities: [],
+  occupancy: "any",
 };
+
+/**
+ * Whether a listing will accept this household at all.
+ *
+ * Deliberately not part of the score: being told a place is a 78% match when
+ * the owner won't take bachelors wastes a viewing and a phone call. Listings
+ * that exclude you are filtered out instead.
+ */
+export function acceptsOccupancy(l: SpaceListing, occupancy: SearchRequirements["occupancy"]): boolean {
+  if (occupancy === "any") return true;
+  if (l.space.category !== "living") return true;
+
+  const rules = l.space.rules;
+  if (!rules) return true;
+
+  switch (occupancy) {
+    case "family":
+      return rules.familyAllowed;
+    case "bachelor":
+      return rules.bachelorAllowed;
+    case "student":
+      return rules.studentFriendly || rules.bachelorAllowed;
+    default:
+      return true;
+  }
+}

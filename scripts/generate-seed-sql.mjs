@@ -88,7 +88,7 @@ lines.push("");
 
 /* ── Spaces ──────────────────────────────────────────────────────────────── */
 
-lines.push("insert into spaces (id, property_id, name, category, space_type, transaction, status, price, service_charge, utilities, security_deposit, advance_months, attributes, amenities, availability, available_from, availability_note, total_units, available_units, images, description, verification, views, is_seed, created_at, updated_at) values");
+lines.push("insert into spaces (id, property_id, name, category, space_type, transaction, status, price, service_charge, utilities, security_deposit, advance_months, attributes, amenities, family_allowed, bachelor_allowed, student_friendly, gender_pref, max_occupants, availability, available_from, availability_note, total_units, available_units, images, description, verification, views, is_seed, created_at, updated_at) values");
 lines.push(
   seed.spaces
     .map((s) => {
@@ -98,6 +98,8 @@ lines.push(
         `${q(s.spaceType)}, '${s.transaction}', 'published', ${n(s.cost.price)}, ` +
         `${n(s.cost.serviceCharge)}, ${n(s.cost.utilities)}, ${n(s.cost.securityDeposit)}, ` +
         `${n(s.cost.advanceMonths)}, ${json(s.attributes)}, ${arr(s.amenities)}, ` +
+        `${s.rules.familyAllowed}, ${s.rules.bachelorAllowed}, ${s.rules.studentFriendly}, ` +
+        `'${s.rules.genderPreference}', ${n(s.rules.maxOccupants)}, ` +
         `'${a.status}', ${q(a.availableFrom)}::date, ${q(a.note ?? null)}, ` +
         `${n(a.totalUnits)}, ${n(a.availableUnits)}, ${json(s.images)}, ${q(s.description)}, ` +
         `'${SPACE_VERIFICATION[s.verification.space] ?? "unverified"}', ${n(s.views)}, true, ` +

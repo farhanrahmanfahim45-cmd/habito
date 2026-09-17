@@ -38,6 +38,17 @@ gives each new sign-up a profile.
 Run `supabase/migrations/0002_realtime.sql` as a third query. Without it
 messages still arrive, but on a twenty-second poll rather than instantly.
 
+### Run the stage 3 migration
+
+`supabase/migrations/0003_stage3.sql` adds dual-role accounts, occupancy rules,
+the language preference and the photo storage bucket. Run it as another query.
+
+### Run the stage 4 migration
+
+`supabase/migrations/0004_stage4.sql` removes the owner/renter gate, adds
+notification preferences, and installs a guard that refuses to delete a space
+with conversations attached — archiving is the safe path.
+
 ### Load the seed listings
 
 Open another query, paste `supabase/seed.sql`, and run it. That's 96 owners,

@@ -33,7 +33,10 @@ export function Guard({ allow, children }: { allow: AccountRole[]; children: Rea
     );
   }
 
-  if (!allow.includes(account.role)) {
+  // Owner pages need the capability, which a renter can switch on at any time.
+  const permitted = allow.includes(account.role) || (allow.includes("owner") && account.canOwn);
+
+  if (!permitted) {
     return (
       <div className="container-page max-w-md py-24 text-center">
         <h1 className="font-display text-2xl font-bold text-ink">That page isn't for this account.</h1>

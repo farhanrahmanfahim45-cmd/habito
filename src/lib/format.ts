@@ -1,18 +1,32 @@
 const TAKA = "\u09F3";
 
+const BENGALI_DIGITS = ["০", "১", "২", "৩", "৪", "৫", "৬", "৭", "৮", "৯"];
+
+/** The active language, published on <html> by the i18n provider. */
+function activeLanguage(): "en" | "bn" {
+  if (typeof document === "undefined") return "en";
+  return document.documentElement.dataset.lang === "bn" ? "bn" : "en";
+}
+
+/** Bengali numerals where the interface is in Bangla. */
+function digits(text: string): string {
+  if (activeLanguage() !== "bn") return text;
+  return text.replace(/\d/g, (d) => BENGALI_DIGITS[Number(d)]);
+}
+
 export function money(amount: number): string {
-  return TAKA + amount.toLocaleString("en-IN");
+  return TAKA + digits(amount.toLocaleString("en-IN"));
 }
 
 /** Compact form for map markers and dense chips: ৳12K, ৳8.5K, ৳45L */
 export function moneyCompact(amount: number): string {
   if (amount >= 10_000_00) {
     const lakh = amount / 100000;
-    return `${TAKA}${lakh % 1 === 0 ? lakh.toFixed(0) : lakh.toFixed(1)}L`;
+    return `${TAKA}${digits(lakh % 1 === 0 ? lakh.toFixed(0) : lakh.toFixed(1))}${activeLanguage() === "bn" ? "লা" : "L"}`;
   }
   if (amount >= 1000) {
     const k = amount / 1000;
-    return `${TAKA}${k % 1 === 0 ? k.toFixed(0) : k.toFixed(1)}K`;
+    return `${TAKA}${digits(k % 1 === 0 ? k.toFixed(0) : k.toFixed(1))}${activeLanguage() === "bn" ? "হা" : "K"}`;
   }
   return money(amount);
 }
@@ -44,11 +58,13 @@ export function isStale(iso: string): boolean {
 }
 
 export function longDate(iso: string): string {
-  return new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+  const locale = activeLanguage() === "bn" ? "bn-BD" : "en-GB";
+  return new Date(iso).toLocaleDateString(locale, { day: "numeric", month: "long", year: "numeric" });
 }
 
 export function shortDate(iso: string): string {
-  return new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "short" });
+  const locale = activeLanguage() === "bn" ? "bn-BD" : "en-GB";
+  return new Date(iso).toLocaleDateString(locale, { day: "numeric", month: "short" });
 }
 
 export function availabilityLine(iso: string): string {

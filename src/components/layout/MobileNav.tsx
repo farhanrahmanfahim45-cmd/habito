@@ -1,27 +1,25 @@
 import { NavLink } from "react-router-dom";
-import { Compass, Search, Bookmark, LayoutGrid, Plus, UserRound, MessagesSquare } from "lucide-react";
+import { Compass, Search, Bookmark, MessagesSquare, LayoutGrid } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { useHabito } from "@/hooks/useHabito";
+import { useI18n } from "@/i18n";
 
-/** Thumb-reachable, and it changes with the role — owners don't need a shortlist. */
+/**
+ * Five destinations, the same for everyone. My spaces is always here rather
+ * than behind a mode, because listing a room is something a renter might do
+ * next week without wanting to think about which kind of user they are.
+ */
 export function MobileNav() {
-  const { savedIds, role, unreadMessages } = useHabito();
+  const { savedIds, unreadMessages } = useHabito();
+  const { t } = useI18n();
 
-  const items =
-    role === "owner"
-      ? [
-          { to: "/portfolio", label: "Spaces", icon: LayoutGrid, end: false },
-          { to: "/list", label: "List", icon: Plus, end: false },
-          { to: "/requests", label: "Requests", icon: Search, end: false },
-          { to: "/account", label: "Profile", icon: UserRound, end: false },
-        ]
-      : [
-          { to: "/", label: "Home", icon: Compass, end: true },
-          { to: "/explore", label: "Explore", icon: LayoutGrid, end: false },
-          { to: "/search", label: "Search", icon: Search, end: false },
-          { to: "/saved", label: "Saved", icon: Bookmark, end: false, count: savedIds.length },
-          { to: "/messages", label: "Chats", icon: MessagesSquare, end: false, count: unreadMessages },
-        ];
+  const items = [
+    { to: "/", key: "nav.home", icon: Compass, end: true },
+    { to: "/search", key: "nav.search", icon: Search, end: false },
+    { to: "/saved", key: "nav.saved", icon: Bookmark, end: false, count: savedIds.length },
+    { to: "/messages", key: "nav.chats", icon: MessagesSquare, end: false, count: unreadMessages },
+    { to: "/portfolio", key: "nav.portfolio", icon: LayoutGrid, end: false },
+  ] as const;
 
   return (
     <nav
@@ -29,31 +27,36 @@ export function MobileNav() {
       className="fixed inset-x-0 bottom-0 z-40 border-t border-hairline bg-surface/95 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden"
     >
       <ul className="flex">
-        {items.map(({ to, label, icon: Icon, end, ...rest }) => {
-          const count = (rest as { count?: number }).count;
+        {items.map((item) => {
+          const count = "count" in item ? item.count : undefined;
           return (
-            <li key={to} className="flex-1">
+            <li key={item.to} className="flex-1">
               <NavLink
-                to={to}
-                end={end}
+                to={item.to}
+                end={item.end}
                 className={({ isActive }) =>
                   cn(
-                    "flex h-14 flex-col items-center justify-center gap-0.5 text-[0.65rem] font-semibold transition-colors",
+                    "flex h-14 flex-col items-center justify-center gap-0.5 px-1 text-[0.62rem] font-semibold transition-colors",
                     isActive ? "text-ink" : "text-muted",
                   )
                 }
               >
                 {({ isActive }) => (
                   <>
-                    <span className={cn("relative rounded-full px-3 py-1 transition-colors", isActive && "bg-aqua-100")}>
-                      <Icon size={18} aria-hidden />
+                    <span
+                      className={cn(
+                        "relative rounded-full px-3 py-1 transition-colors",
+                        isActive && "bg-aqua-100",
+                      )}
+                    >
+                      <item.icon size={18} aria-hidden />
                       {count ? (
-                        <span className="absolute -right-0 -top-0.5 min-w-4 rounded-full bg-aqua-600 px-1 text-[0.55rem] font-bold leading-4 text-white tnum">
+                        <span className="absolute -right-0 -top-0.5 min-w-4 rounded-full bg-aqua-600 px-1 text-[0.55rem] font-bold leading-4 tnum text-white">
                           {count}
                         </span>
                       ) : null}
                     </span>
-                    {label}
+                    <span className="max-w-full truncate">{t(item.key)}</span>
                   </>
                 )}
               </NavLink>

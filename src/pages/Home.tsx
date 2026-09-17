@@ -10,11 +10,13 @@ import { SPACE_TYPE_LABEL } from "@/types/space";
 import type { SpaceCategory, SpaceListing, TransactionType } from "@/types/space";
 import { moneyCompact, daysSince } from "@/lib/format";
 import { cn } from "@/lib/cn";
+import { useI18n } from "@/i18n";
 import { SpaceCardSkeleton } from "@/components/ui/Skeleton";
 
 const CATEGORIES = Object.keys(CATEGORY_STYLE) as SpaceCategory[];
 
 export default function Home() {
+  const { t } = useI18n();
   const { listings, ready, isSaved, toggleSaved, isComparing, toggleCompare, requirements, setRequirements } =
     useHabito();
 
@@ -56,8 +58,8 @@ export default function Home() {
       <CategoryStrip listings={listings} />
 
       <Rail
-        title="New this week"
-        lead="The most recently updated spaces across the platform."
+        title={t("home.newThisWeek")}
+        lead={t("home.newThisWeekBody")}
         to="/search"
         items={fresh.slice(0, 8)}
         {...rail}
@@ -66,16 +68,16 @@ export default function Home() {
       <BeyondTheCity listings={rural} />
 
       <Rail
-        title="Room to work"
-        lead="Shops, offices and storage for people running something."
+        title={t("home.roomToWork")}
+        lead={t("home.roomToWorkBody")}
         to="/search?category=business"
         items={commercial.slice(0, 8)}
         {...rail}
       />
 
       <Rail
-        title="Easiest on a budget"
-        lead="Living spaces at the lower end, cheapest first."
+        title={t("home.budgetTitle")}
+        lead={t("home.budgetBody")}
         to="/search?category=living"
         items={budget.slice(0, 8)}
         {...rail}
@@ -96,6 +98,7 @@ function Hero({
   setRequirements: ReturnType<typeof useHabito>["setRequirements"];
 }) {
   const navigate = useNavigate();
+  const { t } = useI18n();
   const [transaction, setTransaction] = useState<TransactionType>(requirements.transaction);
   const [category, setCategory] = useState<SpaceCategory | "any">(requirements.category);
   const [area, setArea] = useState(requirements.area);
@@ -121,30 +124,29 @@ function Hero({
         <div className="rise">
           <p className="inline-flex items-center gap-2 rounded-full bg-surface/80 px-3 py-1.5 text-xs font-semibold text-ink-soft ring-1 ring-hairline backdrop-blur">
             <span className="size-1.5 rounded-full bg-coral" aria-hidden />
-            Homes · Shops · Offices · Storage · Parking · Land
+            {t("home.heroEyebrow")}
           </p>
 
           <h1 className="mt-5 font-display text-[2.75rem] font-extrabold leading-[0.98] text-ink sm:text-6xl lg:text-[4.25rem]">
-            Find the space
+            {t("home.heroLine1")}
             <br />
-            that fits.
+            {t("home.heroLine2")}
           </h1>
 
           <p className="mt-6 max-w-md text-base leading-relaxed text-ink-soft sm:text-lg">
-            Not only flats. Habito makes every kind of usable space discoverable — and helps owners
-            put the ones sitting empty to work.
+            {t("home.heroBody")}
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3">
             <Link to="/find">
               <Button size="lg">
-                Find a space
+                {t("home.findSpace")}
                 <ArrowRight size={17} aria-hidden />
               </Button>
             </Link>
             <Link to="/list">
               <Button size="lg" variant="secondary">
-                List your space
+                {t("home.listSpace")}
               </Button>
             </Link>
           </div>
@@ -152,21 +154,21 @@ function Hero({
 
         {/* The search is part of the product, not a bar dropped on a banner. */}
         <div className="rise rounded-card bg-surface/95 p-5 shadow-[0_30px_70px_-40px_rgb(16_24_40/0.55)] ring-1 ring-hairline backdrop-blur sm:p-6">
-          <h2 className="font-display text-lg font-bold text-ink">What are you looking for?</h2>
+          <h2 className="font-display text-lg font-bold text-ink">{t("home.lookingFor")}</h2>
 
           <div className="mt-4 inline-flex rounded-full bg-ivory-deep p-0.5">
-            {(["rent", "sale"] as TransactionType[]).map((t) => (
+            {(["rent", "sale"] as TransactionType[]).map((t2) => (
               <button
-                key={t}
+                key={t2}
                 type="button"
-                aria-pressed={transaction === t}
-                onClick={() => setTransaction(t)}
+                aria-pressed={transaction === t2}
+                onClick={() => setTransaction(t2)}
                 className={cn(
                   "rounded-full px-4 py-1.5 text-sm font-bold transition-colors",
-                  transaction === t ? "bg-ink text-ivory" : "text-muted hover:text-ink",
+                  transaction === t2 ? "bg-ink text-ivory" : "text-muted hover:text-ink",
                 )}
               >
-                {t === "rent" ? "Rent" : "Buy"}
+                {t2 === "rent" ? t("transaction.rent") : t("transaction.buy")}
               </button>
             ))}
           </div>
@@ -174,7 +176,7 @@ function Hero({
           <ul className="mt-4 flex flex-wrap gap-1.5">
             <li>
               <CategoryChip active={category === "any"} onClick={() => setCategory("any")}>
-                Anything
+                {t("home.anything")}
               </CategoryChip>
             </li>
             {CATEGORIES.map((c) => {
@@ -183,7 +185,7 @@ function Hero({
                 <li key={c}>
                   <CategoryChip active={category === c} onClick={() => setCategory(c)}>
                     <Icon size={13} aria-hidden />
-                    {CATEGORY_STYLE[c].label}
+                    {t(`category.${c}` as never)}
                   </CategoryChip>
                 </li>
               );
@@ -192,7 +194,7 @@ function Hero({
 
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             <label className="block">
-              <span className="mb-1.5 block text-sm font-medium text-ink-soft">Where</span>
+              <span className="mb-1.5 block text-sm font-medium text-ink-soft">{t("home.where")}</span>
               <select
                 value={area}
                 onChange={(e) => setArea(e.target.value)}
@@ -207,7 +209,7 @@ function Hero({
             </label>
 
             <label className="block">
-              <span className="mb-1.5 block text-sm font-medium text-ink-soft">Up to</span>
+              <span className="mb-1.5 block text-sm font-medium text-ink-soft">{t("home.upTo")}</span>
               <div className="relative">
                 <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted">৳</span>
                 <input
@@ -224,13 +226,13 @@ function Hero({
 
           <Button size="lg" fullWidth className="mt-4" onClick={submit}>
             <Search size={17} aria-hidden />
-            Explore spaces
+            {t("home.exploreSpaces")}
           </Button>
 
           <p className="mt-3 text-center text-xs text-muted">
-            Want scored matches?{" "}
+            {t("home.wantScored")}{" "}
             <Link to="/find" className="font-semibold text-aqua-700 hover:underline">
-              Tell us what you need
+              {t("home.tellUs")}
             </Link>
           </p>
         </div>
@@ -266,13 +268,14 @@ function CategoryChip({
 /* ── Category strip ───────────────────────────────────────────────── */
 
 function CategoryStrip({ listings }: { listings: SpaceListing[] }) {
+  const { t } = useI18n();
   return (
     <section aria-labelledby="cats" className="container-page py-14 md:py-16">
       <h2 id="cats" className="font-display text-2xl font-bold text-ink sm:text-3xl">
-        Every kind of space
+        {t("home.everyKind")}
       </h2>
       <p className="mt-2 max-w-lg text-sm text-muted">
-        One platform for the places people live, work, store, park and farm.
+        {t("home.everyKindBody")}
       </p>
 
       <ul className="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
@@ -291,11 +294,16 @@ function CategoryStrip({ listings }: { listings: SpaceListing[] }) {
                 <span className={cn("flex size-10 items-center justify-center rounded-xl", style.chip)}>
                   <style.icon size={19} aria-hidden />
                 </span>
-                <span className="font-display font-bold text-ink">{style.label}</span>
-                <span className="text-xs leading-snug text-muted">{style.blurb}</span>
+                <span className="font-display font-bold text-ink">{t(`category.${c}` as never)}</span>
+                <span className="text-xs leading-snug text-muted">{t(`category.${c}.blurb` as never)}</span>
                 <span className="mt-auto pt-2 text-sm font-semibold tnum text-ink">
-                  {inCategory.length} spaces
-                  {from !== null && <span className="font-medium text-muted"> · from {moneyCompact(from)}</span>}
+                  {t("home.spacesCount", { count: inCategory.length })}
+                  {from !== null && (
+                    <span className="font-medium text-muted">
+                      {" · "}
+                      {t("home.from", { price: moneyCompact(from) })}
+                    </span>
+                  )}
                 </span>
               </Link>
             </li>
@@ -329,6 +337,7 @@ function Rail({
   onToggleSave: (id: string) => void;
   onToggleCompare: (id: string) => void;
 }) {
+  const { t } = useI18n();
   if (ready && items.length === 0) return null;
 
   return (
@@ -339,7 +348,7 @@ function Rail({
           <p className="mt-1.5 text-sm text-muted">{lead}</p>
         </div>
         <Link to={to} className="inline-flex items-center gap-1.5 text-sm font-semibold text-aqua-700 hover:text-ink">
-          See all
+          {t("action.seeAll")}
           <ArrowRight size={15} aria-hidden />
         </Link>
       </div>
@@ -370,6 +379,7 @@ function Rail({
 /* ── Beyond the city ──────────────────────────────────────────────── */
 
 function BeyondTheCity({ listings }: { listings: SpaceListing[] }) {
+  const { t } = useI18n();
   if (listings.length === 0) return null;
   const featured = listings.slice(0, 3);
 
@@ -381,18 +391,17 @@ function BeyondTheCity({ listings }: { listings: SpaceListing[] }) {
             <div>
               <p className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold">
                 <MapPin size={12} aria-hidden />
-                Outside the city
+                {t("home.outsideCity")}
               </p>
               <h2 id="rural" className="mt-4 font-display text-3xl font-bold leading-tight sm:text-4xl">
-                There's more to property than city apartments.
+                {t("home.ruralTitle")}
               </h2>
               <p className="mt-4 max-w-sm leading-relaxed text-ivory/70">
-                Tin-shed homes, homesteads, farmland and ponds — the spaces mainstream property
-                sites in Bangladesh barely list at all.
+                {t("home.ruralBody")}
               </p>
               <Link to="/search?geography=rural" className="mt-6 inline-block">
                 <Button size="lg" className="bg-aqua-400 text-ink hover:bg-aqua-200">
-                  Explore beyond the city
+                  {t("home.ruralCta")}
                   <ArrowRight size={16} aria-hidden />
                 </Button>
               </Link>
@@ -436,32 +445,22 @@ function BeyondTheCity({ listings }: { listings: SpaceListing[] }) {
 
 /* ── How it works ─────────────────────────────────────────────────── */
 
-const SEEKER_STEPS = [
-  { title: "Tell us what you need", body: "Category, area, budget and when you need it." },
-  { title: "See scored matches", body: "Every listing carries a score and the reasons behind it." },
-  { title: "Compare what's close", body: "Up to four spaces side by side, differences highlighted." },
-  { title: "Send one clear inquiry", body: "The owner gets your budget and date up front." },
-];
-
-const OWNER_STEPS = [
-  { title: "Add your property", body: "The building, house or plot you hold." },
-  { title: "Add the spaces in it", body: "Flats, a shop, a godown, the garage — all under one roof." },
-  { title: "Keep availability true", body: "Confirm what's still free so stale listings drop away." },
-  { title: "Receive matched inquiries", body: "From people whose budget and timing already fit." },
-];
+const SEEKER_STEPS = ["steps.seeker1", "steps.seeker2", "steps.seeker3", "steps.seeker4"] as const;
+const OWNER_STEPS = ["steps.owner1", "steps.owner2", "steps.owner3", "steps.owner4"] as const;
 
 function HowItWorks() {
+  const { t } = useI18n();
   return (
     <section aria-labelledby="how" className="border-t border-hairline bg-ivory-deep">
       <div className="container-page py-14 md:py-20">
         <h2 id="how" className="font-display text-2xl font-bold text-ink sm:text-3xl">
-          Two sides, one platform
+          {t("home.twoSides")}
         </h2>
 
         <div className="mt-8 grid gap-6 lg:grid-cols-2">
           {[
-            { heading: "If you're looking", steps: SEEKER_STEPS, accent: "bg-aqua-400" },
-            { heading: "If you own", steps: OWNER_STEPS, accent: "bg-coral" },
+            { heading: t("home.ifLooking"), steps: SEEKER_STEPS, accent: "bg-aqua-400" },
+            { heading: t("home.ifOwn"), steps: OWNER_STEPS, accent: "bg-coral" },
           ].map((col) => (
             <div key={col.heading} className="rounded-card bg-surface p-6 ring-1 ring-hairline">
               <h3 className="flex items-center gap-2 font-display text-lg font-bold text-ink">
@@ -469,14 +468,16 @@ function HowItWorks() {
                 {col.heading}
               </h3>
               <ol className="mt-5 space-y-4">
-                {col.steps.map((s, i) => (
-                  <li key={s.title} className="flex gap-3.5">
+                {col.steps.map((stepKey, i) => (
+                  <li key={stepKey} className="flex gap-3.5">
                     <span className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-ivory-deep text-xs font-bold tnum text-ink">
                       {i + 1}
                     </span>
                     <div>
-                      <p className="font-semibold text-ink">{s.title}</p>
-                      <p className="mt-0.5 text-sm leading-relaxed text-muted">{s.body}</p>
+                      <p className="font-semibold text-ink">{t(`${stepKey}.title` as never)}</p>
+                      <p className="mt-0.5 text-sm leading-relaxed text-muted">
+                        {t(`${stepKey}.body` as never)}
+                      </p>
                     </div>
                   </li>
                 ))}
