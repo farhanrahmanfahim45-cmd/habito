@@ -1,0 +1,6 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600' width='800' height='600' role='img' preserveAspectRatio='xMidYMid slice'><defs><linearGradient id='s' x1='0' y1='0' x2='0.6' y2='1'><stop offset='0' stop-color='#65C8D6'/><stop offset='1' stop-color='#dff2f5'/></linearGradient></defs><rect width='800' height='600' fill='#F7F5F0'/><rect width='800' height='600' fill='url(#s)'/>
+<rect x='0' y='250' width='800' height='350' fill='#101828' opacity='0.1'/>
+<g stroke='#fff' stroke-width='6' opacity='0.85'><line x1='90' y1='300' x2='60' y2='590'/><line x1='240' y1='300' x2='210' y2='590'/><line x1='390' y1='300' x2='360' y2='590'/><line x1='540' y1='300' x2='510' y2='590'/><line x1='690' y1='300' x2='660' y2='590'/></g>
+<g fill='#fff' opacity='0.8'><rect x='170' y='390' width='150' height='70' rx='18'/><rect x='196' y='362' width='100' height='40' rx='14'/></g>
+<g fill='#101828' opacity='0.35'><circle cx='206' cy='466' r='14'/><circle cx='288' cy='466' r='14'/></g>
+<rect x='60' y='150' width='680' height='100' rx='8' fill='#fff' opacity='0.5'/></svg>

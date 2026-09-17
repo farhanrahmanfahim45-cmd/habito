@@ -1,0 +1,123 @@
+@import "tailwindcss";
+
+/* ─────────────────────────────────────────────────────────────
+   HABITO — design tokens
+   70% calm neutral surfaces · 20% brand · 10% expressive accent.
+   Category colours are the only place many hues appear at once,
+   and they appear small.
+   ───────────────────────────────────────────────────────────── */
+@theme {
+  --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Manrope", ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  --color-ivory: #f7f5f0;
+  --color-ivory-deep: #efece4;
+  --color-surface: #ffffff;
+  --color-hairline: #e4e0d6;
+  --color-hairline-strong: #cdc8ba;
+
+  --color-ink: #101828;
+  --color-ink-soft: #3a4356;
+  --color-muted: #6d7588;
+
+  --color-aqua-50: #eef8fa;
+  --color-aqua-100: #d8eff3;
+  --color-aqua-200: #a9dde5;
+  --color-aqua-400: #65c8d6;
+  --color-aqua-600: #2a95a6;
+  --color-aqua-700: #1d6d7b;
+
+  --color-mint: #b9e6d5;
+  --color-mint-ink: #2f6f58;
+  --color-sun: #f4d77a;
+  --color-sun-ink: #8a6410;
+  --color-lilac: #c9c4f5;
+  --color-lilac-ink: #4e47a8;
+  --color-coral: #f28b6b;
+  --color-coral-ink: #a8462a;
+
+  --color-ok-100: #dcf0e5;
+  --color-ok-600: #2c7a52;
+  --color-warn-100: #fbeed6;
+  --color-warn-700: #96601a;
+  --color-danger-100: #f8e2de;
+  --color-danger-600: #a33c2b;
+
+  --radius-card: 1.25rem;
+}
+
+@layer base {
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    background-color: var(--color-ivory);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, .display {
+    font-family: var(--font-display);
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+    font-weight: 700;
+  }
+
+  p { text-wrap: pretty; }
+
+  :focus-visible {
+    outline: 2px solid var(--color-aqua-600);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  .tnum { font-variant-numeric: tabular-nums; }
+}
+
+@layer utilities {
+  .container-page {
+    width: 100%;
+    max-width: 1240px;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+
+  @media (min-width: 768px) {
+    .container-page { padding-inline: 2rem; }
+  }
+
+  .img-scrim {
+    background: linear-gradient(
+      to top,
+      rgb(16 24 40 / 0.84) 0%,
+      rgb(16 24 40 / 0.45) 38%,
+      rgb(16 24 40 / 0.06) 70%,
+      transparent 100%
+    );
+  }
+
+  .atmosphere {
+    background:
+      radial-gradient(60rem 30rem at 8% -10%, rgb(185 230 213 / 0.55), transparent 60%),
+      radial-gradient(48rem 26rem at 92% 0%, rgb(101 200 214 / 0.38), transparent 62%),
+      radial-gradient(40rem 24rem at 60% 34%, rgb(201 196 245 / 0.28), transparent 65%);
+  }
+
+  .rise { animation: rise 520ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  .hide-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+  .hide-scrollbar::-webkit-scrollbar { display: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rise { animation: none; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
