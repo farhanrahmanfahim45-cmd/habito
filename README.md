@@ -105,6 +105,9 @@ Manrope for everything else.
   in the model and in search.
 - **Stage 4.5 (done)** — first-run onboarding (language, intent, area, all
   skippable) and in-context coachmarks instead of a walkthrough.
+- **Geography (done)** — all 50 Dhaka Metropolitan Police thanas with their
+  neighbourhoods, greater Dhaka, and the divisional cities, behind a searchable
+  picker that matches neighbourhoods as well as area names.
 - **Stage 5** — bookings: request → accept → confirm → complete, availability
   enforced, phone revealed on acceptance.
 - **Stage 6** — payments against a sandbox gateway, then rent records and receipts.

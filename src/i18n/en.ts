@@ -514,6 +514,8 @@ export const en = {
   "coach.costTitle": "Why some listings show no total",
   "coach.costBody": "When an owner lists every cost we show what you would really pay each month. When they leave some out, we say so rather than showing a tempting rent.",
   "coach.gotIt": "Got it",
+  "area.searchPlaceholder": "Search an area or neighbourhood",
+  "area.noMatch": "Nothing matches \"{query}\".",
   "time.today": "Today",
   "time.yesterday": "Yesterday",
   "time.daysAgo": "{count}d ago",

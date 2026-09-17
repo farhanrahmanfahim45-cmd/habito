@@ -9,6 +9,7 @@ import { useToast } from "@/components/ui/Toast";
 import { Button } from "@/components/ui/Button";
 import { CATEGORY_STYLE, TYPES_BY_CATEGORY, AMENITIES, AMENITIES_BY_CATEGORY } from "@/data/catalog";
 import { AREAS } from "@/data/areas";
+import { AreaPicker } from "@/components/ui/AreaPicker";
 import { SPACE_TYPE_LABEL, CATEGORY_OF_TYPE } from "@/types/space";
 import type {
   AmenityKey, AvailabilityStatus, GenderPreference, ListingStatus, OccupancyRules, Property,
@@ -408,14 +409,8 @@ export default function ListSpace() {
                       className={inputClass}
                     />
                   </Field>
-                  <Field label="Area">
-                    <select value={area} onChange={(e) => setArea(e.target.value)} className={inputClass}>
-                      {AREAS.map((a) => (
-                        <option key={a.id} value={a.name}>
-                          {a.name}
-                        </option>
-                      ))}
-                    </select>
+                  <Field label={t("filter.area")}>
+                    <AreaPicker value={area} onChange={setArea} />
                   </Field>
                   <Field label="Neighbourhood">
                     <input

@@ -172,6 +172,21 @@ Clear the flag first: DevTools → Application → Local Storage → delete
 - [ ] A listing with undisclosed costs shows a one-time note explaining why
 - [ ] Each note disappears for good once dismissed
 
+## H — Geography
+
+- [ ] Choosing an area opens a searchable sheet, not a 72-item dropdown
+- [ ] Areas are grouped: Dhaka Metro, Greater Dhaka, then the other divisions
+- [ ] Typing a **neighbourhood** finds its thana — "kazipara" returns Mirpur Model,
+      "banasree" returns Rampura, "sector 7" returns Uttara East
+- [ ] The search filter has an "everywhere" option; the listing form does not
+- [ ] Search results still appear after changing area
+- [ ] The picker is usable one-handed on a phone
+
+Supply is spread across 40 of the 72 areas, weighted the way it really is —
+dense in Mirpur, Mohammadpur, Badda, thin in the divisional cities. Areas with
+no listings are expected and correct: they show the empty state with nearby
+alternatives.
+
 ## Known gaps at this stage
 
 Bookings, payments, reviews, maintenance requests and the admin panel have

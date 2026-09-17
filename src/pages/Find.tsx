@@ -4,7 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { useHabito } from "@/hooks/useHabito";
 import { Button } from "@/components/ui/Button";
 import { CATEGORY_STYLE, TYPES_BY_CATEGORY, AMENITIES, AMENITIES_BY_CATEGORY } from "@/data/catalog";
-import { AREAS } from "@/data/areas";
+import { AreaPicker } from "@/components/ui/AreaPicker";
 import { SPACE_TYPE_LABEL } from "@/types/space";
 import type { AmenityKey, SearchRequirements, SpaceCategory, SpaceType, TransactionType } from "@/types/space";
 import { cn } from "@/lib/cn";
@@ -101,18 +101,9 @@ export default function Find() {
         </Card>
 
         <Card title="Where?">
-          <select
-            aria-label="Area"
-            value={draft.area}
-            onChange={(e) => set("area", e.target.value)}
-            className="h-11 w-full rounded-xl bg-ivory px-3 text-[0.9375rem] text-ink ring-1 ring-hairline-strong focus:outline-none focus:ring-2 focus:ring-aqua-600 sm:max-w-sm"
-          >
-            {AREAS.map((a) => (
-              <option key={a.id} value={a.name}>
-                {a.name} — {a.district} ({a.geography})
-              </option>
-            ))}
-          </select>
+          <div className="sm:max-w-sm">
+            <AreaPicker value={draft.area} onChange={(v) => set("area", v)} />
+          </div>
           <p className="mt-2 text-xs text-muted">
             Spaces nearby still appear, ranked by how far they are from here.
           </p>

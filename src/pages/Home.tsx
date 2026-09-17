@@ -5,7 +5,7 @@ import { useHabito } from "@/hooks/useHabito";
 import { Button } from "@/components/ui/Button";
 import { SpaceCard } from "@/components/space/SpaceCard";
 import { CATEGORY_STYLE } from "@/data/catalog";
-import { AREAS } from "@/data/areas";
+import { AreaPicker } from "@/components/ui/AreaPicker";
 import { SPACE_TYPE_LABEL } from "@/types/space";
 import type { SpaceCategory, SpaceListing, TransactionType } from "@/types/space";
 import { moneyCompact, daysSince } from "@/lib/format";
@@ -195,17 +195,7 @@ function Hero({
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             <label className="block">
               <span className="mb-1.5 block text-sm font-medium text-ink-soft">{t("home.where")}</span>
-              <select
-                value={area}
-                onChange={(e) => setArea(e.target.value)}
-                className="h-11 w-full rounded-xl bg-ivory px-3 text-[0.9375rem] text-ink ring-1 ring-hairline-strong focus:outline-none focus:ring-2 focus:ring-aqua-600"
-              >
-                {AREAS.map((a) => (
-                  <option key={a.id} value={a.name}>
-                    {a.name}
-                  </option>
-                ))}
-              </select>
+              <AreaPicker value={area} onChange={setArea} />
             </label>
 
             <label className="block">

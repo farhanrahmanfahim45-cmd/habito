@@ -497,6 +497,8 @@ export const bn: Record<keyof typeof en, string> = {
   "coach.costTitle": "কিছু বিজ্ঞাপনে মোট খরচ নেই কেন",
   "coach.costBody": "মালিক সব খরচ দিলে আমরা দেখাই মাসে আসলে কত লাগবে। না দিলে সেটাই বলি — কম ভাড়া দেখিয়ে লোভ দেখাই না।",
   "coach.gotIt": "বুঝেছি",
+  "area.searchPlaceholder": "এলাকা বা মহল্লার নাম লিখুন",
+  "area.noMatch": "\"{query}\" নামে কিছু পাওয়া যায়নি।",
   "time.today": "আজ",
   "time.yesterday": "গতকাল",
   "time.daysAgo": "{count} দিন আগে",

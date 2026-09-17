@@ -11,7 +11,7 @@ import { Modal } from "@/components/ui/Modal";
 import { scoreAll, nearbyAlternatives, acceptsOccupancy } from "@/lib/matching";
 import { money, isStale, moneyCompact } from "@/lib/format";
 import { CATEGORY_STYLE, AMENITIES, AMENITY_KEYS } from "@/data/catalog";
-import { AREAS } from "@/data/areas";
+import { AreaPicker } from "@/components/ui/AreaPicker";
 import { trustLevel } from "@/components/space/badges";
 import { cn } from "@/lib/cn";
 import { useI18n } from "@/i18n";
@@ -339,19 +339,7 @@ function FilterPanel({ filters, onChange }: { filters: Filters; onChange: (f: Fi
       </Group>
 
       <Group label="Area">
-        <select
-          aria-label="Area"
-          value={filters.area}
-          onChange={(e) => set("area", e.target.value)}
-          className="h-10 w-full rounded-xl bg-ivory px-3 text-sm ring-1 ring-hairline-strong focus:outline-none focus:ring-2 focus:ring-aqua-600"
-        >
-          <option value="all">Everywhere</option>
-          {AREAS.map((a) => (
-            <option key={a.id} value={a.name}>
-              {a.name}
-            </option>
-          ))}
-        </select>
+        <AreaPicker value={filters.area} onChange={(v) => set("area", v)} allowAnywhere />
       </Group>
 
       <Group label="Setting">

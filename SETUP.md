@@ -49,6 +49,12 @@ the language preference and the photo storage bucket. Run it as another query.
 notification preferences, and installs a guard that refuses to delete a space
 with conversations attached — archiving is the safe path.
 
+### Run the stage 4 migration
+
+`supabase/migrations/0004_stage4.sql` adds the archive state and the rule that
+a space carrying conversations cannot be deleted, only archived — enforced by
+the database, not just the interface.
+
 ### Load the seed listings
 
 Open another query, paste `supabase/seed.sql`, and run it. That's 96 owners,

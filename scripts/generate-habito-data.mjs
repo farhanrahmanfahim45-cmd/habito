@@ -8,23 +8,56 @@
 import { writeFileSync, mkdirSync } from "node:fs";
 
 const AREAS = [
-  { name: "Mirpur", district: "Dhaka", geo: "urban", lat: 23.8069, lng: 90.3687, idx: 0.85, hoods: ["Mirpur 1", "Mirpur 10", "Mirpur 11", "Kazipara", "Shewrapara"] },
-  { name: "Mohammadpur", district: "Dhaka", geo: "urban", lat: 23.759, lng: 90.3595, idx: 0.9, hoods: ["Tajmahal Road", "Shyamoli", "Adabor"] },
-  { name: "Uttara", district: "Dhaka", geo: "urban", lat: 23.87, lng: 90.399, idx: 1.15, hoods: ["Sector 3", "Sector 7", "Sector 10"] },
-  { name: "Badda", district: "Dhaka", geo: "urban", lat: 23.7806, lng: 90.4264, idx: 0.88, hoods: ["Middle Badda", "North Badda", "Merul Badda"] },
-  { name: "Bashundhara R/A", district: "Dhaka", geo: "urban", lat: 23.82, lng: 90.4265, idx: 1.25, hoods: ["Block A", "Block C", "Block D"] },
-  { name: "Rampura", district: "Dhaka", geo: "urban", lat: 23.761, lng: 90.418, idx: 0.86, hoods: ["West Rampura", "Banasree"] },
-  { name: "Kuril", district: "Dhaka", geo: "urban", lat: 23.8223, lng: 90.4198, idx: 1.0, hoods: ["Kuril Bishwa Road", "Nadda"] },
-  { name: "Khilkhet", district: "Dhaka", geo: "urban", lat: 23.8293, lng: 90.4189, idx: 0.92, hoods: ["Khilkhet Bazar", "Nikunja"] },
-  { name: "Kallyanpur", district: "Dhaka", geo: "urban", lat: 23.779, lng: 90.3597, idx: 0.82, hoods: ["Kallyanpur", "Darussalam"] },
-  { name: "Jatrabari", district: "Dhaka", geo: "urban", lat: 23.7104, lng: 90.4335, idx: 0.7, hoods: ["Jatrabari", "Konapara"] },
-  { name: "Savar", district: "Dhaka", geo: "suburban", lat: 23.8583, lng: 90.2667, idx: 0.62, hoods: ["Bank Colony", "Radio Colony"] },
-  { name: "Tongi", district: "Gazipur", geo: "suburban", lat: 23.8917, lng: 90.4058, idx: 0.65, hoods: ["Cherag Ali", "Station Road"] },
-  { name: "Keraniganj", district: "Dhaka", geo: "suburban", lat: 23.69, lng: 90.39, idx: 0.6, hoods: ["Zinzira", "Aganagar"] },
-  { name: "Narayanganj", district: "Narayanganj", geo: "suburban", lat: 23.6238, lng: 90.5, idx: 0.66, hoods: ["Chashara", "Fatullah"] },
-  { name: "Manikganj", district: "Manikganj", geo: "rural", lat: 23.8617, lng: 90.0003, idx: 0.4, hoods: ["Saturia", "Ghior"] },
-  { name: "Munshiganj", district: "Munshiganj", geo: "rural", lat: 23.5422, lng: 90.5305, idx: 0.45, hoods: ["Sirajdikhan", "Tongibari"] },
-  { name: "Sonargaon", district: "Narayanganj", geo: "rural", lat: 23.6486, lng: 90.6006, idx: 0.42, hoods: ["Baidyer Bazar", "Panam"] },
+  // Dhaka — a spread across the metro rather than every thana, weighted the
+  // way real supply is: dense in Mirpur, Mohammadpur, Badda, Uttara.
+  { name: "Mirpur Model", district: "Dhaka", geo: "urban", lat: 23.8069, lng: 90.3687, idx: 0.85, w: 10, hoods: ["Mirpur 1", "Mirpur 10", "Mirpur 11", "Kazipara", "Shewrapara"] },
+  { name: "Pallabi", district: "Dhaka", geo: "urban", lat: 23.8223, lng: 90.3654, idx: 0.8, w: 5, hoods: ["Mirpur 11", "Mirpur 12", "Pallabi"] },
+  { name: "Mohammadpur", district: "Dhaka", geo: "urban", lat: 23.759, lng: 90.3595, idx: 0.9, w: 8, hoods: ["Tajmahal Road", "Katasur", "Nurjahan Road"] },
+  { name: "Adabor", district: "Dhaka", geo: "urban", lat: 23.7695, lng: 90.3566, idx: 0.85, w: 4, hoods: ["Adabor", "Shyamoli", "Ring Road"] },
+  { name: "Badda", district: "Dhaka", geo: "urban", lat: 23.7806, lng: 90.4264, idx: 0.88, w: 8, hoods: ["Middle Badda", "North Badda", "Merul Badda"] },
+  { name: "Vatara", district: "Dhaka", geo: "urban", lat: 23.81, lng: 90.4265, idx: 1.2, w: 6, hoods: ["Bashundhara Block A", "Block C", "Block D", "Kuril", "Nadda"] },
+  { name: "Uttara East", district: "Dhaka", geo: "urban", lat: 23.87, lng: 90.402, idx: 1.15, w: 5, hoods: ["Sector 3", "Sector 4", "Sector 7"] },
+  { name: "Uttara West", district: "Dhaka", geo: "urban", lat: 23.8759, lng: 90.3795, idx: 1.1, w: 4, hoods: ["Sector 10", "Sector 11", "Sector 13"] },
+  { name: "Rampura", district: "Dhaka", geo: "urban", lat: 23.761, lng: 90.418, idx: 0.86, w: 6, hoods: ["West Rampura", "Banasree", "Ulon"] },
+  { name: "Khilgaon", district: "Dhaka", geo: "urban", lat: 23.7501, lng: 90.4256, idx: 0.88, w: 5, hoods: ["Khilgaon", "Taltola", "Goran"] },
+  { name: "Mugda", district: "Dhaka", geo: "urban", lat: 23.7375, lng: 90.4318, idx: 0.78, w: 3, hoods: ["Mugdapara", "Manda"] },
+  { name: "Sabujbagh", district: "Dhaka", geo: "urban", lat: 23.7405, lng: 90.434, idx: 0.76, w: 3, hoods: ["Basabo", "Madertek"] },
+  { name: "Jatrabari", district: "Dhaka", geo: "urban", lat: 23.7104, lng: 90.4335, idx: 0.7, w: 5, hoods: ["Jatrabari", "Konapara", "Shanir Akhra"] },
+  { name: "Shyampur", district: "Dhaka", geo: "urban", lat: 23.6928, lng: 90.4344, idx: 0.68, w: 3, hoods: ["Jurain", "Postagola"] },
+  { name: "Demra", district: "Dhaka", geo: "urban", lat: 23.7104, lng: 90.4903, idx: 0.65, w: 3, hoods: ["Matuail", "Sarulia"] },
+  { name: "Khilkhet", district: "Dhaka", geo: "urban", lat: 23.8293, lng: 90.4189, idx: 0.92, w: 4, hoods: ["Khilkhet", "Nikunja 1", "Nikunja 2"] },
+  { name: "Dakshinkhan", district: "Dhaka", geo: "urban", lat: 23.8748, lng: 90.4157, idx: 0.72, w: 3, hoods: ["Ashkona", "Faydabad"] },
+  { name: "Turag", district: "Dhaka", geo: "urban", lat: 23.8703, lng: 90.3763, idx: 0.7, w: 3, hoods: ["Kamarpara", "Diabari"] },
+  { name: "Darus-Salam", district: "Dhaka", geo: "urban", lat: 23.7859, lng: 90.3554, idx: 0.82, w: 4, hoods: ["Darussalam", "Technical", "Gabtoli"] },
+  { name: "Kafrul", district: "Dhaka", geo: "urban", lat: 23.7942, lng: 90.3829, idx: 0.9, w: 3, hoods: ["Ibrahimpur", "West Kafrul"] },
+  { name: "Tejgaon", district: "Dhaka", geo: "urban", lat: 23.7639, lng: 90.3934, idx: 1.0, w: 3, hoods: ["Farmgate", "Nakhalpara"] },
+  { name: "Dhanmondi", district: "Dhaka", geo: "urban", lat: 23.7461, lng: 90.3742, idx: 1.35, w: 3, hoods: ["Dhanmondi", "Jigatola", "Shukrabad"] },
+  { name: "Hazaribagh", district: "Dhaka", geo: "urban", lat: 23.7377, lng: 90.3661, idx: 0.8, w: 3, hoods: ["Rayerbazar", "Hazaribagh"] },
+  { name: "Lalbagh", district: "Dhaka", geo: "urban", lat: 23.7189, lng: 90.3879, idx: 0.75, w: 3, hoods: ["Azimpur", "Nawabganj"] },
+  { name: "Wari", district: "Dhaka", geo: "urban", lat: 23.7182, lng: 90.4218, idx: 0.8, w: 3, hoods: ["Wari", "Rankin Street"] },
+  { name: "Gulshan", district: "Dhaka", geo: "urban", lat: 23.7925, lng: 90.4144, idx: 1.8, w: 2, hoods: ["Gulshan 1", "Gulshan 2", "Niketan"] },
+  { name: "Banani", district: "Dhaka", geo: "urban", lat: 23.7937, lng: 90.4066, idx: 1.7, w: 2, hoods: ["Banani", "Chairman Bari"] },
+
+  // Greater Dhaka
+  { name: "Savar", district: "Dhaka", geo: "suburban", lat: 23.8583, lng: 90.2667, idx: 0.62, w: 5, hoods: ["Bank Colony", "Radio Colony", "Genda"] },
+  { name: "Ashulia", district: "Dhaka", geo: "suburban", lat: 23.9167, lng: 90.3167, idx: 0.55, w: 3, hoods: ["Jamgora", "Baipail"] },
+  { name: "Keraniganj", district: "Dhaka", geo: "suburban", lat: 23.69, lng: 90.39, idx: 0.6, w: 3, hoods: ["Zinzira", "Aganagar"] },
+  { name: "Tongi", district: "Gazipur", geo: "suburban", lat: 23.8917, lng: 90.4058, idx: 0.65, w: 4, hoods: ["Cherag Ali", "Station Road"] },
+  { name: "Gazipur Sadar", district: "Gazipur", geo: "suburban", lat: 23.9999, lng: 90.4203, idx: 0.58, w: 3, hoods: ["Joydebpur", "Board Bazar"] },
+  { name: "Narayanganj", district: "Narayanganj", geo: "suburban", lat: 23.6238, lng: 90.5, idx: 0.66, w: 4, hoods: ["Chashara", "Fatullah"] },
+
+  // Rural
+  { name: "Sonargaon", district: "Narayanganj", geo: "rural", lat: 23.6486, lng: 90.6006, idx: 0.42, w: 3, hoods: ["Baidyer Bazar", "Panam"] },
+  { name: "Munshiganj", district: "Munshiganj", geo: "rural", lat: 23.5422, lng: 90.5305, idx: 0.45, w: 3, hoods: ["Sirajdikhan", "Tongibari"] },
+  { name: "Manikganj", district: "Manikganj", geo: "rural", lat: 23.8617, lng: 90.0003, idx: 0.4, w: 3, hoods: ["Saturia", "Ghior"] },
+  { name: "Narsingdi", district: "Narsingdi", geo: "rural", lat: 23.9226, lng: 90.715, idx: 0.45, w: 2, hoods: ["Madhabdi", "Palash"] },
+
+  // Other cities — thin, which is honest about where supply would start
+  { name: "Chattogram — Panchlaish", district: "Chattogram", geo: "urban", lat: 22.361, lng: 91.829, idx: 0.9, w: 3, hoods: ["Panchlaish", "Nasirabad"] },
+  { name: "Chattogram — Agrabad", district: "Chattogram", geo: "urban", lat: 22.3269, lng: 91.8123, idx: 0.85, w: 2, hoods: ["Agrabad", "Halishahar"] },
+  { name: "Sylhet City", district: "Sylhet", geo: "urban", lat: 24.8949, lng: 91.8687, idx: 0.8, w: 3, hoods: ["Zindabazar", "Amberkhana", "Uposhohor"] },
+  { name: "Khulna City", district: "Khulna", geo: "urban", lat: 22.8456, lng: 89.5403, idx: 0.7, w: 2, hoods: ["Sonadanga", "Boyra"] },
+  { name: "Rajshahi City", district: "Rajshahi", geo: "urban", lat: 24.3745, lng: 88.6042, idx: 0.68, w: 2, hoods: ["Shaheb Bazar", "Motihar"] },
 ];
 
 const FIRST = ["Rafiqul", "Nusrat", "Shahin", "Farhana", "Kamrul", "Jamal", "Sabbir", "Abdul", "Tanvir", "Ruma", "Mizanur", "Sharmin", "Habibur", "Nasrin", "Delwar", "Ayesha", "Sohel", "Rokeya", "Anisur", "Mahmuda", "Faruk", "Shirin", "Jahangir", "Tahmina", "Moinul", "Sultana"];
@@ -280,6 +313,26 @@ function makeSpace(idx, property, area, type, sequence) {
     note = `${attributes.workstations} workstations`;
   }
 
+  // Who the space is open to. Only living spaces have an opinion; a godown
+  // does not care. Shared rooms are the ones that actually carry gender rules.
+  const shared = type === "shared-room" || type === "room";
+  const rules =
+    category === "living"
+      ? {
+          familyAllowed: shared ? rnd() > 0.75 : rnd() > 0.2,
+          bachelorAllowed: shared ? true : rnd() > 0.45,
+          studentFriendly: shared ? rnd() > 0.15 : rnd() > 0.6,
+          genderPreference: shared && rnd() > 0.6 ? (rnd() > 0.5 ? "male" : "female") : "any",
+          maxOccupants: shared ? int(2, 4) : null,
+        }
+      : {
+          familyAllowed: true,
+          bachelorAllowed: true,
+          studentFriendly: true,
+          genderPreference: "any",
+          maxOccupants: null,
+        };
+
   const vLevel = rnd() > 0.44 ? "full" : rnd() > 0.35 ? "partial" : "minimal";
   const pool = IMAGE_POOL[category];
   const images = Array.from({ length: int(2, 4) }, (_, k) => {
@@ -304,6 +357,8 @@ function makeSpace(idx, property, area, type, sequence) {
     cost,
     attributes,
     amenities,
+    rules,
+    status: "published",
     availability: { status, availableFrom: iso(availableInDays), ...(note ? { note } : {}), ...(totalUnits ? { totalUnits, availableUnits } : {}) },
     images,
     description,
@@ -327,7 +382,7 @@ let spaceIdx = 1;
 const BUILDING_WORDS = ["Villa", "Tower", "Bhaban", "Manzil", "Residence", "Heights", "Garden", "House", "Plaza", "Nibash"];
 
 for (let i = 0; i < PROPERTY_COUNT; i++) {
-  const area = pick(AREAS);
+  const area = weighted(AREAS);
   const hood = pick(area.hoods);
   const ownerName = `${pick(FIRST)} ${pick(LAST)}`;
   const vLevel = rnd() > 0.45 ? "full" : rnd() > 0.35 ? "partial" : "minimal";
@@ -405,7 +460,7 @@ DEMO_OWNER.responseRate = 94;
 DEMO_OWNER.responseTimeHours = 3;
 
 const showcase = [
-  { area: AREAS.find((a) => a.name === "Mirpur"), name: "Rahman Building", mix: ["apartment", "apartment", "shop", "godown", "garage"] },
+  { area: AREAS.find((a) => a.name === "Mirpur Model"), name: "Rahman Building", mix: ["apartment", "apartment", "shop", "godown", "garage"] },
   { area: AREAS.find((a) => a.name === "Badda"), name: "Rahman Annex", mix: ["room", "shared-room", "parking-slot"] },
   { area: AREAS.find((a) => a.name === "Manikganj"), name: "Rahman Bari", mix: ["tin-shed", "farmland"] },
 ];

@@ -5,7 +5,7 @@ import { PageHeader } from "@/components/layout/PageHeader";
 import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
 import { CATEGORY_STYLE } from "@/data/catalog";
-import { AREAS } from "@/data/areas";
+import { AreaPicker } from "@/components/ui/AreaPicker";
 import { money, longDate } from "@/lib/format";
 import { CATEGORY_LABEL } from "@/types/space";
 import type { SpaceCategory, TransactionType } from "@/types/space";
@@ -154,13 +154,7 @@ export default function Requests() {
 
           <label className="block">
             <span className="mb-1.5 block text-sm font-medium text-ink-soft">Where</span>
-            <select value={area} onChange={(e) => setArea(e.target.value)} className={inputClass}>
-              {AREAS.map((a) => (
-                <option key={a.id} value={a.name}>
-                  {a.name}
-                </option>
-              ))}
-            </select>
+            <AreaPicker value={area} onChange={setArea} />
           </label>
 
           <div className="grid grid-cols-2 gap-3">
