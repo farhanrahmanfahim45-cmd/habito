@@ -255,6 +255,23 @@ export interface MatchResult {
   factors: MatchFactor[];
 }
 
+/** The one dimension that decides whether a space is big enough for you. */
+export interface CapacityNeed {
+  /** Living and business: floor area. */
+  minSizeSqft?: number | null;
+  /** Living: how many bedrooms. */
+  minBedrooms?: number | null;
+  /** Business: desks an office must seat. */
+  minWorkstations?: number | null;
+  /** Storage: usable floor area, and headroom for stacking. */
+  minCeilingFt?: number | null;
+  /** Parking: vehicles to be kept. */
+  carSlots?: number | null;
+  motorcycleSlots?: number | null;
+  /** Land: plot size in decimals. */
+  minLandDecimal?: number | null;
+}
+
 export interface SearchRequirements {
   transaction: TransactionType;
   category: SpaceCategory | "any";
@@ -262,7 +279,12 @@ export interface SearchRequirements {
   area: string;
   budgetMin: number;
   budgetMax: number;
-  minSizeSqft: number | null;
+  /**
+   * What "big enough" means, which differs by category. A garage has no square
+   * footage worth asking about and a pond has no bedrooms; only the field that
+   * applies is ever set.
+   */
+  capacity: CapacityNeed;
   moveInDate: string;
   amenities: AmenityKey[];
   /** Who is moving in, so listings that exclude them can be filtered out. */

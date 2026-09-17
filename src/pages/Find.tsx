@@ -8,6 +8,7 @@ import { AreaPicker } from "@/components/ui/AreaPicker";
 import { SPACE_TYPE_LABEL } from "@/types/space";
 import type { AmenityKey, SearchRequirements, SpaceCategory, SpaceType, TransactionType } from "@/types/space";
 import { cn } from "@/lib/cn";
+import { useI18n } from "@/i18n";
 
 const CATEGORIES = Object.keys(CATEGORY_STYLE) as SpaceCategory[];
 
@@ -135,15 +136,7 @@ export default function Find() {
           />
         </Card>
 
-        <Card title="Minimum size" optional>
-          <div className="flex flex-wrap gap-2">
-            {[null, 200, 500, 800, 1200].map((v) => (
-              <Chip key={String(v)} small active={draft.minSizeSqft === v} onClick={() => set("minSizeSqft", v)}>
-                {v === null ? "No minimum" : `${v}+ sqft`}
-              </Chip>
-            ))}
-          </div>
-        </Card>
+        <CapacityCard draft={draft} set={set} />
 
         <Card title="Anything you can't do without?" optional>
           <ul className="flex flex-wrap gap-2">
@@ -184,6 +177,152 @@ export default function Find() {
         </Button>
       </div>
     </div>
+  );
+}
+
+/**
+ * "Big enough" means something different per category, so the question changes
+ * with it: bedrooms for a home, floor area for a shop, headroom for a godown,
+ * slots for parking, decimals for land.
+ */
+function CapacityCard({
+  draft,
+  set,
+}: {
+  draft: SearchRequirements;
+  set: <K extends keyof SearchRequirements>(k: K, v: SearchRequirements[K]) => void;
+}) {
+  const { t } = useI18n();
+  const cap = draft.capacity;
+  const put = (patch: Partial<SearchRequirements["capacity"]>) => set("capacity", { ...cap, ...patch });
+
+  // Until a category is chosen there is no sensible unit to ask in.
+  if (draft.category === "any") return null;
+
+  const CONFIG: Partial<
+    Record<
+      SpaceCategory,
+      {
+        label: string;
+        key: keyof SearchRequirements["capacity"];
+        choices: Array<{ v: number | null; label: string }>;
+      }
+    >
+  > = {
+    living: {
+      label: t("find.minBedrooms"),
+      key: "minBedrooms",
+      choices: [
+        { v: null, label: t("find.noMinimum") },
+        { v: 1, label: "1+" },
+        { v: 2, label: "2+" },
+        { v: 3, label: "3+" },
+        { v: 4, label: "4+" },
+      ],
+    },
+    business: {
+      label: t("find.minSize"),
+      key: "minSizeSqft",
+      choices: [
+        { v: null, label: t("find.noMinimum") },
+        { v: 200, label: "200+ sqft" },
+        { v: 500, label: "500+ sqft" },
+        { v: 1000, label: "1,000+ sqft" },
+        { v: 2000, label: "2,000+ sqft" },
+      ],
+    },
+    storage: {
+      label: t("find.minStorage"),
+      key: "minSizeSqft",
+      choices: [
+        { v: null, label: t("find.noMinimum") },
+        { v: 500, label: "500+ sqft" },
+        { v: 1000, label: "1,000+ sqft" },
+        { v: 2000, label: "2,000+ sqft" },
+        { v: 4000, label: "4,000+ sqft" },
+      ],
+    },
+    parking: {
+      label: t("find.slotsNeeded"),
+      key: "carSlots",
+      choices: [
+        { v: null, label: t("find.noMinimum") },
+        { v: 1, label: "1" },
+        { v: 2, label: "2" },
+        { v: 3, label: "3+" },
+      ],
+    },
+    land: {
+      label: t("find.minLand"),
+      key: "minLandDecimal",
+      choices: [
+        { v: null, label: t("find.noMinimum") },
+        { v: 10, label: "10+ decimal" },
+        { v: 30, label: "30+ decimal" },
+        { v: 60, label: "60+ decimal" },
+        { v: 100, label: "100+ decimal" },
+      ],
+    },
+  };
+
+  const config = CONFIG[draft.category];
+  if (!config) return null;
+
+  const current = cap[config.key] ?? null;
+
+  return (
+    <Card title={config.label} optional>
+      <div className="flex flex-wrap gap-2">
+        {config.choices.map((choice) => (
+          <Chip
+            key={String(choice.v)}
+            small
+            active={current === choice.v}
+            onClick={() => put({ [config.key]: choice.v })}
+          >
+            {choice.label}
+          </Chip>
+        ))}
+      </div>
+
+      {draft.category === "storage" && (
+        <>
+          <p className="mb-2 mt-5 text-sm font-medium text-ink-soft">{t("find.minCeiling")}</p>
+          <div className="flex flex-wrap gap-2">
+            {[null, 10, 14, 18].map((v) => (
+              <Chip
+                key={String(v)}
+                small
+                active={(cap.minCeilingFt ?? null) === v}
+                onClick={() => put({ minCeilingFt: v })}
+              >
+                {v === null ? t("find.noMinimum") : `${v}+ ft`}
+              </Chip>
+            ))}
+          </div>
+        </>
+      )}
+
+      {draft.category === "parking" && (
+        <>
+          <p className="mb-2 mt-5 text-sm font-medium text-ink-soft">{t("find.motorcycleSlots")}</p>
+          <div className="flex flex-wrap gap-2">
+            {[null, 1, 2, 4].map((v) => (
+              <Chip
+                key={String(v)}
+                small
+                active={(cap.motorcycleSlots ?? null) === v}
+                onClick={() => put({ motorcycleSlots: v })}
+              >
+                {v === null ? t("find.noMinimum") : String(v)}
+              </Chip>
+            ))}
+          </div>
+        </>
+      )}
+
+      <p className="mt-4 text-xs leading-relaxed text-muted">{t("find.capacityNote")}</p>
+    </Card>
   );
 }
 

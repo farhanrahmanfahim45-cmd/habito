@@ -187,6 +187,17 @@ dense in Mirpur, Mohammadpur, Badda, thin in the divisional cities. Areas with
 no listings are expected and correct: they show the empty state with nearby
 alternatives.
 
+## I — Category weighting
+
+- [ ] Find asks a different capacity question per category: bedrooms for
+      living, floor area for business, area + headroom for storage, vehicles
+      for parking, decimals for land
+- [ ] A parking listing's match breakdown has **no size row at all**
+- [ ] A shop's breakdown gives location more weight than budget
+- [ ] A godown's breakdown gives capacity 20 points
+- [ ] Asking for 2 car slots and finding a garage with 1 free scores it down
+      under Availability, with the free-slot note as the reason
+
 ## Known gaps at this stage
 
 Bookings, payments, reviews, maintenance requests and the admin panel have
