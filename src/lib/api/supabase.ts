@@ -661,6 +661,15 @@ export const supabaseRepository: Repository = {
     if (error) fail("Could not waive that month", error);
   },
 
+  async extendSchedule(bookingId: string, months = 12): Promise<void> {
+    await requireUser("extend a rent schedule");
+    const { error } = await client().rpc("extend_rent_schedule", {
+      target_booking: bookingId,
+      add_months: months,
+    });
+    if (error) fail("Could not extend that schedule", error);
+  },
+
   /* ── Messaging ────────────────────────────────────────────────────── */
 
   async conversations(): Promise<Conversation[]> {

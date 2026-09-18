@@ -280,6 +280,14 @@ cancelling the booking puts the space back.
 - [ ] The receipt says it was issued against a simulated payment
 - [ ] An invoice past its due date shows as Overdue without anyone setting it
 - [ ] A sale listing raises **no** rent schedule
+- [ ] Once every raised month is settled, the owner sees "the rent schedule has
+      run out" with an option to add another 12 months
+- [ ] Extending twice leaves no gap and no duplicate month
+- [ ] **A renter cannot extend** — the database refuses it
+
+The booking form caps at 24 months on purpose. A tenancy here is open-ended,
+and raising 60 invoices on day one would pretend to know something nobody
+knows; the schedule is extended as it runs out instead.
 
 Database guards, all verified against Postgres:
 
@@ -342,7 +350,36 @@ landscapes and objects, which looks worse than the illustration and makes a
 property app look careless. Replace them with curated Unsplash property
 photographs first; the file explains how.
 
-## Known gaps at this stage
+## P — The map
+
+- [ ] Search has a List / Map toggle beside the sort control
+- [ ] The map loads only when opened — Leaflet is not in the main bundle
+- [ ] Markers show the price, not a generic pin
+- [ ] Dense areas collapse into a numbered cluster; clicking one zooms in
+- [ ] Zooming in breaks clusters apart into individual prices
+- [ ] **At street level there are no number bubbles at all** — every marker
+      shows a price. If you have zoomed to one block, a bubble marked "4" is
+      the thing you zoomed in to get rid of
+- [ ] Clicking a price opens a card with the photo, area and price
+- [ ] The card says whether the point is **approximate** or **placed by the owner**
+- [ ] Listing a new property offers a draggable pin, with skip allowed
+- [ ] A skipped pin shows "approximate" on the map rather than pretending
+- [ ] No horizontal scroll at 390px in either view
+
+### Why not Google Maps
+
+Google's tiles need an API key tied to a billing account with a card on file —
+the same wall as the payment gateway. OpenStreetMap needs no key, costs
+nothing, and renders Dhaka well. Swapping the tile layer later is one line in
+`SpaceMap.tsx`.
+
+### What the clustering is and isn't
+
+Grid clustering: coordinates rounded to a cell that shrinks as you zoom. Crude
+next to a proper clustering library, but it needs no extra dependency and
+resolves to individual markers by the time you're looking at one
+neighbourhood. If listing density grows, `leaflet.markercluster` is the
+upgrade.
 
 Bookings, payments, reviews, maintenance requests and the admin panel have
 database tables but no interface yet.

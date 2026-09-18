@@ -71,6 +71,7 @@ export interface PropertyRow {
   geography: "urban" | "suburban" | "rural";
   latitude: number | null;
   longitude: number | null;
+  location_source: "area" | "pinned" | "verified" | null;
   nearby: Array<{ label: string; km: number }>;
   cover_image: string | null;
   verification: "unverified" | "pending" | "verified";
@@ -153,8 +154,9 @@ export function toProperty(row: PropertyRow): Property {
     address: row.address,
     district: row.district,
     geography: row.geography,
-    latitude: row.latitude ?? 0,
-    longitude: row.longitude ?? 0,
+    latitude: Number(row.latitude ?? 0),
+    longitude: Number(row.longitude ?? 0),
+    locationSource: row.location_source ?? "area",
     nearby: row.nearby ?? [],
     coverImage: row.cover_image ?? "/photos/living-1.svg",
     createdAt: row.created_at.slice(0, 10),
@@ -228,6 +230,7 @@ export function propertyInsert(input: Omit<Property, "id" | "createdAt" | "synth
     geography: input.geography,
     latitude: input.latitude,
     longitude: input.longitude,
+    location_source: input.locationSource,
     nearby: input.nearby,
     cover_image: input.coverImage,
   };

@@ -244,3 +244,33 @@
     }
   }
 }
+
+/* ── Leaflet ────────────────────────────────────────────────────────────
+   Leaflet's own chrome is dated next to the rest of the interface, so the
+   controls and popup are restyled rather than left as defaults. */
+.leaflet-container {
+  font-family: var(--font-sans);
+  background: var(--color-ivory-deep);
+}
+
+.habito-marker { background: none; border: none; }
+
+.leaflet-popup-content-wrapper {
+  border-radius: 1rem;
+  padding: 0.5rem;
+  box-shadow: 0 12px 32px -12px rgb(16 24 40 / 0.28);
+}
+
+.leaflet-popup-content { margin: 0.25rem; }
+.leaflet-popup-tip { box-shadow: none; }
+
+.leaflet-control-zoom a {
+  border-radius: 0.6rem !important;
+  color: var(--color-ink) !important;
+  border-color: var(--color-hairline) !important;
+}
+
+.leaflet-control-attribution {
+  font-size: 0.62rem;
+  background: rgb(255 255 255 / 0.85) !important;
+}

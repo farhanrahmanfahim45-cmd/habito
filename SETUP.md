@@ -87,6 +87,16 @@ Sign out and back in. A **Review** link appears in the header, and `/admin`
 becomes reachable. Everyone else gets nothing — the database refuses the
 underlying calls regardless of what the interface shows.
 
+### Run the stage 10 migration
+
+`supabase/migrations/0010_map.sql` adds coordinates and the location source to
+properties, plus a bounding-box lookup for the map.
+
+### Run the stage 11 migration
+
+`supabase/migrations/0011_extend_rent.sql` lets an owner add more months to a
+rent schedule that has run out.
+
 ### Load the seed listings
 
 Open another query, paste `supabase/seed.sql`, and run it. That's 96 owners,

@@ -571,6 +571,40 @@ export const localRepository: Repository = {
     return settle(undefined);
   },
 
+  async extendSchedule(bookingId: string, months = 12): Promise<void> {
+    const data = read();
+    const booking = data.bookings.find((b) => b.id === bookingId);
+    if (!booking) return settle(undefined);
+
+    // Carry on from the last month already there, so extending twice neither
+    // overlaps nor leaves a gap.
+    const existing = data.invoices.filter((i) => i.bookingId === bookingId);
+    const sorted = existing.map((i) => i.periodStart).sort();
+    const lastIso = sorted.length ? sorted[sorted.length - 1] : booking.moveInDate;
+    const last = new Date(lastIso);
+
+    for (let i = 1; i <= months; i++) {
+      const period = new Date(last.getFullYear(), last.getMonth() + i, last.getDate());
+      const iso = period.toISOString().slice(0, 10);
+      if (data.invoices.some((x) => x.bookingId === bookingId && x.periodStart === iso)) continue;
+
+      data.invoices.push({
+        id: `INV-${bookingId}-${iso}`,
+        bookingId,
+        spaceId: booking.spaceId,
+        periodStart: iso,
+        dueDate: iso,
+        amount: booking.amount,
+        status: "due",
+        paidAt: null,
+        receiptNo: null,
+      });
+    }
+
+    write(data);
+    return settle(undefined);
+  },
+
   /* ── Messaging ──────────────────────────────────────────────────── */
 
   async conversations(): Promise<Conversation[]> {

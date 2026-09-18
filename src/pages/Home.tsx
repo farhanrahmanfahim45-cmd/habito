@@ -10,6 +10,7 @@ import { SPACE_TYPE_LABEL } from "@/types/space";
 import type { SpaceCategory, SpaceListing, TransactionType } from "@/types/space";
 import { moneyCompact, daysSince } from "@/lib/format";
 import { cn } from "@/lib/cn";
+import { displayImage } from "@/lib/localize";
 import { useI18n } from "@/i18n";
 import { SpaceCardSkeleton } from "@/components/ui/Skeleton";
 
@@ -406,7 +407,7 @@ function BeyondTheCity({ listings }: { listings: SpaceListing[] }) {
                   >
                     <div className="aspect-4/3 overflow-hidden">
                       <img
-                        src={l.space.images[0].url}
+                        src={displayImage(l.space.images[0])}
                         alt={l.space.images[0].alt}
                         loading="lazy"
                         className="size-full object-cover transition-transform duration-500 group-hover:scale-105"

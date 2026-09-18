@@ -456,6 +456,12 @@ for (let i = 0; i < PROPERTY_COUNT; i++) {
     address: `House ${int(3, 120)}, Road ${int(1, 22)}, ${hood}`,
     district: area.district,
     geography: area.geo,
+    // Scattered around the area centre so the map is not one stacked pin.
+    // Marked "area" rather than "pinned": these are invented positions and
+    // the interface says as much.
+    latitude: Number((area.lat + (rnd() - 0.5) * 0.028).toFixed(6)),
+    longitude: Number((area.lng + (rnd() - 0.5) * 0.028).toFixed(6)),
+    locationSource: "area",
     latitude: Number((area.lat + (rnd() - 0.5) * 0.016).toFixed(5)),
     longitude: Number((area.lng + (rnd() - 0.5) * 0.016).toFixed(5)),
     nearby: [
@@ -525,6 +531,12 @@ showcase.forEach((entry, i) => {
     address: `House ${12 + i * 7}, Road ${3 + i}, ${hood}`,
     district: area.district,
     geography: area.geo,
+    // Scattered around the area centre so the map is not one stacked pin.
+    // Marked "area" rather than "pinned": these are invented positions and
+    // the interface says as much.
+    latitude: Number((area.lat + (rnd() - 0.5) * 0.028).toFixed(6)),
+    longitude: Number((area.lng + (rnd() - 0.5) * 0.028).toFixed(6)),
+    locationSource: "area",
     latitude: Number((area.lat + (rnd() - 0.5) * 0.01).toFixed(5)),
     longitude: Number((area.lng + (rnd() - 0.5) * 0.01).toFixed(5)),
     nearby: [

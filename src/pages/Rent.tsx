@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Receipt, Wallet, FlaskConical, Check, AlertCircle } from "lucide-react";
+import { Receipt, Wallet, FlaskConical, Check, AlertCircle, CalendarPlus } from "lucide-react";
 import { db } from "@/lib/api";
 import { useI18n } from "@/i18n";
 import { PageHeader } from "@/components/layout/PageHeader";
@@ -78,6 +78,19 @@ export default function Rent() {
     }
   };
 
+  const extend = async (bookingId: string) => {
+    setBusy(bookingId);
+    try {
+      await db.extendSchedule(bookingId, 12);
+      await load();
+      notify(t("rent.extended"));
+    } catch (e) {
+      notify(e instanceof Error ? e.message : t("auth.errorGeneric"));
+    } finally {
+      setBusy(null);
+    }
+  };
+
   const outstanding = (invoices ?? []).filter((i) => i.status === "due" || i.status === "overdue");
   const settled = (invoices ?? []).filter((i) => i.status !== "due" && i.status !== "overdue");
   const owed = outstanding.reduce((sum, i) => sum + i.amount, 0);
@@ -132,6 +145,28 @@ export default function Rent() {
                     </li>
                   ))}
                 </ul>
+              </section>
+            )}
+
+            {/* A schedule with nothing left to pay has run out, and a tenancy
+                that is still going needs more months raised. */}
+            {(invoices ?? []).some((i) => i.youAreOwner) && outstanding.length === 0 && (
+              <section className="rounded-card bg-surface p-5 ring-1 ring-hairline">
+                <h2 className="font-display font-bold text-ink">{t("rent.runOut")}</h2>
+                <p className="mt-1 text-sm leading-relaxed text-muted">{t("rent.runOutBody")}</p>
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  className="mt-3"
+                  disabled={busy !== null}
+                  onClick={() => {
+                    const b = (invoices ?? []).find((i) => i.youAreOwner)?.bookingId;
+                    if (b) void extend(b);
+                  }}
+                >
+                  <CalendarPlus size={15} aria-hidden />
+                  {t("rent.extend")}
+                </Button>
               </section>
             )}
 

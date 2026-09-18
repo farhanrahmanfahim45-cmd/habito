@@ -74,6 +74,8 @@ export interface Repository {
    */
   payInvoice(invoiceId: string): Promise<void>;
   waiveInvoice(invoiceId: string): Promise<void>;
+  /** Owner only. Adds another run of months onto an existing schedule. */
+  extendSchedule(bookingId: string, months?: number): Promise<void>;
 
   /* Messaging */
   conversations(): Promise<Conversation[]>;

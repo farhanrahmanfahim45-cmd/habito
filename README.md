@@ -126,6 +126,8 @@ Manrope for everything else.
   labels, headings and the footer are translated.
 - **Still to build** — notifications screen, saved searches with alerts,
   reviews after a completed booking, maintenance requests.
+- **Map (done)** — Leaflet and OpenStreetMap, price markers, grid clustering,
+  owner pin-drop when listing, and honest labelling of approximate points.
 - **Final pass (done)** — motion system with reduced-motion support, photo
   component with shimmer and fallback, thinner mobile cards, sheet-style
   modals, and rent scheduling replacing the fixed-term months field. against a sandbox gateway, then rent records and receipts.

@@ -211,6 +211,8 @@ export interface Space {
   synthetic: boolean;
 }
 
+export type LocationSource = "area" | "pinned" | "verified";
+
 export interface Property {
   id: string;
   name: string;
@@ -222,6 +224,8 @@ export interface Property {
   geography: Geography;
   latitude: number;
   longitude: number;
+  /** How the point was arrived at, so the map can say what it means. */
+  locationSource: LocationSource;
   nearby: Array<{ label: string; km: number }>;
   coverImage: string;
   createdAt: string;

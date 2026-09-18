@@ -82,13 +82,13 @@ lines.push("");
 
 /* ── Properties ──────────────────────────────────────────────────────────── */
 
-lines.push("insert into properties (id, owner_id, name, area, neighborhood, address, district, geography, latitude, longitude, nearby, cover_image, verification, is_seed, created_at) values");
+lines.push("insert into properties (id, owner_id, name, area, neighborhood, address, district, geography, latitude, longitude, location_source, nearby, cover_image, verification, is_seed, created_at) values");
 lines.push(
   seed.properties
     .map((p) =>
       `  (${uuidLit(p.id)}, ${uuidLit(p.ownerId)}, ${q(p.name)}, ${q(p.area)}, ` +
       `${q(p.neighborhood)}, ${q(p.address)}, ${q(p.district)}, '${p.geography}', ` +
-      `${n(p.latitude)}, ${n(p.longitude)}, ${json(p.nearby)}, ${q(p.coverImage)}, ` +
+      `${n(p.latitude)}, ${n(p.longitude)}, ${q(p.locationSource ?? 'area')}, ${json(p.nearby)}, ${q(p.coverImage)}, ` +
       `'unverified', true, ${q(p.createdAt)}::timestamptz)`,
     )
     .join(",\n") + ";",

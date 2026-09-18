@@ -3,6 +3,7 @@ import { X, ArrowRight } from "lucide-react";
 import { useHabito } from "@/hooks/useHabito";
 import { Button } from "@/components/ui/Button";
 import { moneyCompact } from "@/lib/format";
+import { displayImage } from "@/lib/localize";
 
 /** Slides up once two or more spaces are selected. Hidden on the compare page itself. */
 export function CompareTray() {
@@ -23,7 +24,7 @@ export function CompareTray() {
         <ul className="flex flex-1 gap-2 overflow-x-auto hide-scrollbar">
           {selected.map((l) => (
             <li key={l.space.id} className="flex shrink-0 items-center gap-2 rounded-xl bg-white/10 py-1 pl-1 pr-2">
-              <img src={l.space.images[0].url} alt="" className="size-8 rounded-lg object-cover" />
+              <img src={displayImage(l.space.images[0])} alt="" className="size-8 rounded-lg object-cover" />
               <span className="max-w-28 truncate text-xs font-medium">{l.space.name}</span>
               <span className="text-xs text-ivory/60 tnum">{moneyCompact(l.space.cost.price)}</span>
               <button

@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/Button";
 import { CATEGORY_STYLE, TYPES_BY_CATEGORY, AMENITIES, AMENITIES_BY_CATEGORY } from "@/data/catalog";
 import { AREAS } from "@/data/areas";
 import { AreaPicker } from "@/components/ui/AreaPicker";
+import { PinPicker } from "@/components/space/PinPicker";
 import { SPACE_TYPE_LABEL, CATEGORY_OF_TYPE } from "@/types/space";
 import type {
   AmenityKey, AvailabilityStatus, GenderPreference, ListingStatus, OccupancyRules, Property,
@@ -65,6 +66,8 @@ export default function ListSpace() {
     maxOccupants: null,
   });
   const [photos, setPhotos] = useState<SpaceImage[]>([]);
+  // Null until the owner drags the marker; the area centre is used meanwhile.
+  const [pin, setPin] = useState<[number, number] | null>(null);
   // Whether the owner touched the photos at all. Without this, removing every
   // photo is indistinguishable from not opening the step, and the old images
   // come straight back on save.
@@ -78,6 +81,8 @@ export default function ListSpace() {
   const [availableFrom, setAvailableFrom] = useState(new Date().toISOString().slice(0, 10));
 
   const category = CATEGORY_OF_TYPE[spaceType];
+  /** The chosen area's centre, used as the pin's starting point. */
+  const selectedArea = AREAS.find((a) => a.name === area);
 
   // Fetched by id rather than taken from the browsing list, because an
   // archived space is deliberately absent from that list.
@@ -194,8 +199,9 @@ export default function ListSpace() {
         address: `${neighborhood.trim() || area}, ${area}`,
         district: areaMeta.district,
         geography: areaMeta.geography,
-        latitude: areaMeta.latitude,
-        longitude: areaMeta.longitude,
+        latitude: pin ? pin[0] : areaMeta.latitude,
+        locationSource: pin ? ("pinned" as const) : ("area" as const),
+        longitude: pin ? pin[1] : areaMeta.longitude,
         nearby: [],
         coverImage: `/photos/${category === "land" ? "land-1" : "living-1"}.svg`,
       });
@@ -422,7 +428,7 @@ export default function ListSpace() {
                   <Field label={t("filter.area")}>
                     <AreaPicker value={area} onChange={setArea} />
                   </Field>
-                  <Field label="Neighbourhood">
+                  <Field label={t("list.neighbourhood")}>
                     <input
                       value={neighborhood}
                       onChange={(e) => setNeighborhood(e.target.value)}
@@ -430,6 +436,19 @@ export default function ListSpace() {
                       className={inputClass}
                     />
                   </Field>
+                </div>
+              )}
+
+              {/* Only for a new property — an existing one already has a pin. */}
+              {propertyId === "new" && selectedArea && (
+                <div className="mt-7 border-t border-hairline pt-6">
+                  <h3 className="mb-1 font-display font-bold text-ink">{t("map.pinTitle")}</h3>
+                  <p className="mb-4 text-sm leading-relaxed text-muted">{t("map.pinBody")}</p>
+                  <PinPicker
+                    centre={[selectedArea.latitude, selectedArea.longitude]}
+                    value={pin}
+                    onChange={setPin}
+                  />
                 </div>
               )}
             </Step>

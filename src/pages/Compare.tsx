@@ -10,6 +10,7 @@ import { trustLevel } from "@/components/space/badges";
 import { SPACE_TYPE_LABEL, AVAILABILITY_LABEL } from "@/types/space";
 import type { AmenityKey } from "@/types/space";
 import { cn } from "@/lib/cn";
+import { displayImage } from "@/lib/localize";
 import { useI18n } from "@/i18n";
 
 /** Rows adapt to what's being compared — no empty "bedrooms" row for a garage. */
@@ -90,7 +91,7 @@ export default function Compare() {
                 {selected.map((l) => (
                   <th key={l.space.id} scope="col" className="min-w-48 px-3 py-4 text-left align-top">
                     <Link to={`/space/${l.space.id}`} className="block">
-                      <img src={l.space.images[0].url} alt="" className="mb-2 h-24 w-full rounded-xl object-cover" />
+                      <img src={displayImage(l.space.images[0])} alt="" className="mb-2 h-24 w-full rounded-xl object-cover" />
                       <span className="font-display font-bold text-ink hover:text-aqua-700">{l.space.name}</span>
                     </Link>
                     <p className="mt-0.5 text-xs font-normal text-muted">

@@ -6,6 +6,14 @@ import { PageHeader } from "@/components/layout/PageHeader";
 import { SpaceCard } from "@/components/space/SpaceCard";
 import { SpaceCardSkeleton } from "@/components/ui/Skeleton";
 import { Coachmark } from "@/components/ui/Coachmark";
+import { lazy, Suspense } from "react";
+import { Map as MapIcon, List as ListIcon } from "lucide-react";
+
+// Leaflet is a large dependency and most visits never open the map, so it is
+// loaded only when someone asks for it.
+const SpaceMap = lazy(() =>
+  import("@/components/space/SpaceMap").then((m) => ({ default: m.SpaceMap })),
+);
 import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
 import { scoreAll, nearbyAlternatives, acceptsOccupancy } from "@/lib/matching";
@@ -14,6 +22,7 @@ import { CATEGORY_STYLE, AMENITY_KEYS } from "@/data/catalog";
 import { AreaPicker } from "@/components/ui/AreaPicker";
 import { trustLevel } from "@/components/space/badges";
 import { cn } from "@/lib/cn";
+import { displayImage } from "@/lib/localize";
 import { useI18n } from "@/i18n";
 import type { AmenityKey, Geography, SpaceCategory } from "@/types/space";
 
@@ -56,6 +65,8 @@ const DEFAULTS: Filters = {
 };
 
 export default function Search() {
+  const { t } = useI18n();
+  const [view, setView] = useState<"list" | "map">("list");
   const [params] = useSearchParams();
   const { listings, ready, requirements, hasStatedNeeds, isSaved, toggleSaved, isComparing, toggleCompare } =
     useHabito();
@@ -154,7 +165,7 @@ export default function Search() {
                 {ready ? `${results.length} ${results.length === 1 ? "space" : "spaces"}` : "Loading…"}
               </p>
 
-              <div className="ml-auto flex items-center gap-2">
+              <div className="ml-auto flex flex-wrap items-center justify-end gap-2">
                 <label className="flex items-center gap-2 text-sm text-muted">
                   <span className="hidden sm:inline">Sort</span>
                   <select
@@ -170,9 +181,34 @@ export default function Search() {
                   </select>
                 </label>
 
+                <div
+                  role="group"
+                  aria-label={`${t("map.list")} / ${t("map.title")}`}
+                  className="flex items-center rounded-full bg-ivory-deep p-0.5 ring-1 ring-hairline"
+                >
+                  {([
+                    { key: "list" as const, label: t("map.list"), icon: ListIcon },
+                    { key: "map" as const, label: t("map.title"), icon: MapIcon },
+                  ]).map((option) => (
+                    <button
+                      key={option.key}
+                      type="button"
+                      aria-pressed={view === option.key}
+                      onClick={() => setView(option.key)}
+                      className={cn(
+                        "press inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-xs font-bold transition-colors",
+                        view === option.key ? "bg-ink text-ivory" : "text-muted hover:text-ink",
+                      )}
+                    >
+                      <option.icon size={14} aria-hidden />
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+
                 <Button variant="secondary" className="lg:hidden" onClick={() => setSheetOpen(true)}>
                   <SlidersHorizontal size={16} aria-hidden />
-                  Filters
+                  {t("search.filters")}
                   {activeCount > 0 && (
                     <span className="rounded-full bg-aqua-400 px-1.5 text-[0.65rem] font-bold tnum text-ink">
                       {activeCount}
@@ -190,6 +226,14 @@ export default function Search() {
               </div>
             ) : results.length === 0 ? (
               <NothingYet onReset={() => setFilters(DEFAULTS)} />
+            ) : view === "map" ? (
+              <Suspense
+                fallback={
+                  <div className="h-[70vh] min-h-96 animate-pulse rounded-card bg-ivory-deep" />
+                }
+              >
+                <SpaceMap listings={results} className="h-[70vh] min-h-96 w-full max-w-full" />
+              </Suspense>
             ) : (
               <div className="stagger grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
                 {hasStatedNeeds && (
@@ -231,7 +275,7 @@ export default function Search() {
                         className="flex items-center gap-3.5 rounded-2xl p-2 transition-colors hover:bg-ivory"
                       >
                         <img
-                          src={listing.space.images[0].url}
+                          src={displayImage(listing.space.images[0])}
                           alt=""
                           className="size-16 shrink-0 rounded-xl object-cover"
                         />
