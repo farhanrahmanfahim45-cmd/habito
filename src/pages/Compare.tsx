@@ -10,16 +10,18 @@ import { trustLevel } from "@/components/space/badges";
 import { SPACE_TYPE_LABEL, AVAILABILITY_LABEL } from "@/types/space";
 import type { AmenityKey } from "@/types/space";
 import { cn } from "@/lib/cn";
+import { useI18n } from "@/i18n";
 
 /** Rows adapt to what's being compared — no empty "bedrooms" row for a garage. */
 export default function Compare() {
+  const { t } = useI18n();
   const { compareIds, listings, clearCompare, toggleCompare, requirements, hasStatedNeeds } = useHabito();
   const selected = listings.filter((l) => compareIds.includes(l.space.id));
 
   if (selected.length === 0) {
     return (
       <>
-        <PageHeader title="Compare" lead="Put up to four spaces side by side and let the differences show." />
+        <PageHeader title={t("compare.title")} lead={t("compare.lead")} />
         <div className="container-page py-10">
           <div className="flex flex-col items-center rounded-card bg-surface px-6 py-16 text-center ring-1 ring-hairline">
             <span className="mb-4 flex size-12 items-center justify-center rounded-full bg-aqua-100 text-aqua-700">
@@ -66,7 +68,7 @@ export default function Compare() {
   return (
     <>
       <PageHeader
-        title="Compare"
+        title={t("compare.title")}
         lead={`${selected.length} space${selected.length > 1 ? "s" : ""} side by side. The strongest figure in each row is highlighted.`}
         actions={
           <Button variant="secondary" onClick={clearCompare}>
@@ -196,7 +198,7 @@ export default function Compare() {
               </Row>
 
               {amenityRows.map((key) => (
-                <Row key={key} label={AMENITIES[key].label}>
+                <Row key={key} label={t(`amenity.${key}` as never)}>
                   {selected.map((l) => (
                     <Cell key={l.space.id}>
                       {l.space.amenities.includes(key) ? (

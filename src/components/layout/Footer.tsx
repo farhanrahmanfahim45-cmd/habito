@@ -1,30 +1,32 @@
 import { Link } from "react-router-dom";
 import { Wordmark } from "./Header";
+import { useI18n } from "@/i18n";
 import { LanguageToggle } from "@/components/ui/LanguageToggle";
 
 const COLUMNS = [
   {
-    heading: "Find a space",
+    heading: "footer.findHeading" as const,
     links: [
-      { to: "/explore", label: "Explore" },
-      { to: "/search", label: "Search" },
-      { to: "/find", label: "Find my space" },
-      { to: "/saved", label: "Saved" },
-      { to: "/messages", label: "Messages" },
+      { to: "/explore", key: "nav.explore" as const },
+      { to: "/search", key: "nav.search" as const },
+      { to: "/find", key: "nav.find" as const },
+      { to: "/saved", key: "nav.saved" as const },
+      { to: "/messages", key: "nav.messages" as const },
     ],
   },
   {
-    heading: "For owners",
+    heading: "footer.ownerHeading" as const,
     links: [
-      { to: "/list", label: "List a space" },
-      { to: "/portfolio", label: "My spaces" },
-      { to: "/signup", label: "Create an account" },
-      { to: "/requests", label: "Space requests" },
+      { to: "/list", key: "nav.list" as const },
+      { to: "/portfolio", key: "nav.portfolio" as const },
+      { to: "/signup", key: "auth.createAccount" as const },
+      { to: "/requests", key: "nav.requests" as const },
     ],
   },
 ];
 
 export function Footer() {
+  const { t } = useI18n();
   return (
     <footer className="mt-20 border-t border-hairline bg-ivory-deep">
       <div className="container-page grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-4">
@@ -33,20 +35,17 @@ export function Footer() {
           <div className="mt-4 sm:hidden">
             <LanguageToggle />
           </div>
-          <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted">
-            Habito makes every kind of usable space discoverable — homes, rooms, shops, offices,
-            storage, parking and land, across Bangladesh.
-          </p>
+          <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted">{t("footer.blurb")}</p>
         </div>
 
         {COLUMNS.map((col) => (
-          <nav key={col.heading} aria-label={col.heading}>
-            <h2 className="mb-3 font-display text-sm font-bold text-ink">{col.heading}</h2>
+          <nav key={col.heading} aria-label={t(col.heading)}>
+            <h2 className="mb-3 font-display text-sm font-bold text-ink">{t(col.heading)}</h2>
             <ul className="space-y-2">
               {col.links.map((l) => (
                 <li key={l.to}>
                   <Link to={l.to} className="text-sm text-muted transition-colors hover:text-ink">
-                    {l.label}
+                    {t(l.key)}
                   </Link>
                 </li>
               ))}

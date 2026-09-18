@@ -12,8 +12,25 @@ export function Guard({ allow, children }: { allow: AccountRole[]; children: Rea
   const { ready, configured, account } = useAuth();
   const location = useLocation();
 
-  // Without a database there are no accounts, so guards would lock out the
-  // whole owner side of the demo. Let it through and let the local store serve.
+  // Moderation is the exception to everything below: it always needs a real
+  // admin account. Without a database there is nothing to moderate and no way
+  // to be an admin, so the page is simply unavailable.
+  const adminOnly = allow.length === 1 && allow[0] === "admin";
+
+  if (adminOnly && !configured) {
+    return (
+      <div className="container-page max-w-md py-24 text-center">
+        <h1 className="font-display text-2xl font-bold text-ink">Not available in this build.</h1>
+        <p className="mt-2 text-sm leading-relaxed text-muted">
+          Moderation needs the database and an administrator account. This build has neither.
+        </p>
+      </div>
+    );
+  }
+
+  // Everything else: without a database there are no accounts, so guards would
+  // lock out the whole owner side of the demo. Let it through and let the local
+  // store serve.
   if (!configured) return <>{children}</>;
 
   if (!ready) {

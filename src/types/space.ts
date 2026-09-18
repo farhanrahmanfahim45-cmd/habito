@@ -95,6 +95,8 @@ export interface Owner {
 
 export interface SpaceImage {
   url: string;
+  /** Illustration used when the photograph is unavailable or switched off. */
+  fallback?: string | null;
   label: string;
   alt: string;
   demo: true;
@@ -182,6 +184,9 @@ export interface Space {
   id: string;
   propertyId: string;
   name: string;
+  /** Bangla name, where one exists. Seed listings have it; owner-written ones don't. */
+  nameBn?: string | null;
+  descriptionBn?: string | null;
   /** Archived spaces leave search but keep their conversations. */
   status: ListingStatus;
   category: SpaceCategory;
@@ -308,6 +313,44 @@ export interface SpaceRequest {
 
 export type InquiryStatus = "new" | "contacted" | "interested" | "closed";
 
+/* ── Bookings ─────────────────────────────────────────────────────── */
+
+export type BookingStatus =
+  | "requested"
+  | "accepted"
+  | "payment-pending"
+  | "confirmed"
+  | "completed"
+  | "rejected"
+  | "cancelled"
+  | "payment-failed";
+
+export interface Booking {
+  id: string;
+  spaceId: string;
+  spaceName: string;
+  spaceImage: string | null;
+  area: string | null;
+  renterId: string;
+  renterName: string;
+  ownerId: string;
+  ownerName: string;
+  status: BookingStatus;
+  moveInDate: string;
+  months: number;
+  amount: number;
+  message: string | null;
+  /** Only populated once the owner accepts. */
+  phoneShared: boolean;
+  renterPhone: string | null;
+  ownerPhone: string | null;
+  declineReason: string | null;
+  createdAt: string;
+  decidedAt: string | null;
+  /** True when the signed-in account is the owner side of this booking. */
+  youAreOwner: boolean;
+}
+
 export interface Inquiry {
   id: string;
   spaceId: string;
@@ -321,6 +364,50 @@ export interface Inquiry {
 }
 
 export type DemoRole = "seeker" | "owner";
+
+/* ── Moderation ───────────────────────────────────────────────────── */
+
+export type TrustTier = "unverified" | "phone-verified" | "reviewed" | "id-verified";
+
+/** A listing waiting on a decision, with the reason it surfaced. */
+export interface ReviewItem {
+  spaceId: string;
+  spaceName: string;
+  area: string | null;
+  ownerId: string;
+  ownerName: string;
+  ownerTrust: TrustTier;
+  completeness: number;
+  flaggedDuplicate: boolean;
+  hiddenAt: string | null;
+  hiddenReason: string | null;
+  reportCount: number;
+  openReports: number;
+  priority: number;
+}
+
+/* ── Rent and payments ────────────────────────────────────────────── */
+
+export type InvoiceStatus = "due" | "paid" | "overdue" | "waived" | "cancelled";
+
+export interface RentInvoice {
+  id: string;
+  bookingId: string;
+  spaceId: string;
+  spaceName: string;
+  area: string | null;
+  counterpartName: string;
+  youAreOwner: boolean;
+  periodStart: string;
+  periodEnd: string;
+  dueDate: string;
+  amount: number;
+  status: InvoiceStatus;
+  paidAt: string | null;
+  receiptNo: string | null;
+  /** True when the payment behind it was made in the sandbox, not a gateway. */
+  simulated: boolean;
+}
 
 /* ── Messaging ────────────────────────────────────────────────────── */
 

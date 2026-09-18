@@ -5,10 +5,15 @@ import type { Repository } from "./types";
 const localListeners = new Set<() => void>();
 const notifyLocalChange = () => localListeners.forEach((fn) => fn());
 import type {
+  Booking,
+  BookingStatus,
   Conversation,
   Inquiry,
   InquiryStatus,
   Message,
+  RentInvoice,
+  ReviewItem,
+
   Owner,
   Property,
   Space,
@@ -44,7 +49,49 @@ interface Database {
   requests: SpaceRequest[];
   savedIds: string[];
   threads: LocalThread[];
+  bookings: LocalBooking[];
+  invoices: LocalInvoice[];
 }
+
+interface LocalInvoice {
+  id: string;
+  bookingId: string;
+  spaceId: string;
+  periodStart: string;
+  dueDate: string;
+  amount: number;
+  status: RentInvoice["status"];
+  paidAt: string | null;
+  receiptNo: string | null;
+}
+
+let receiptCounter = 0;
+
+interface LocalBooking {
+  id: string;
+  spaceId: string;
+  status: BookingStatus;
+  moveInDate: string;
+  months: number;
+  amount: number;
+  message: string | null;
+  phoneShared: boolean;
+  createdAt: string;
+  decidedAt: string | null;
+  declineReason: string | null;
+}
+
+/** The same moves the database allows, mirrored so both backends behave alike. */
+const TRANSITIONS: Record<BookingStatus, BookingStatus[]> = {
+  requested: ["accepted", "rejected", "cancelled"],
+  accepted: ["payment-pending", "confirmed", "cancelled"],
+  "payment-pending": ["confirmed", "payment-failed", "cancelled"],
+  "payment-failed": ["payment-pending", "cancelled"],
+  confirmed: ["completed", "cancelled"],
+  completed: [],
+  rejected: [],
+  cancelled: [],
+};
 
 /** Local stand-in for conversations + messages. */
 interface LocalThread {
@@ -70,6 +117,8 @@ function freshDatabase(): Database {
     requests: [],
     savedIds: [],
     threads: [],
+    bookings: [],
+    invoices: [],
   };
 }
 
@@ -94,6 +143,8 @@ function read(): Database {
       merged.requests = parsed.requests ?? [];
       merged.savedIds = (parsed.savedIds ?? []).filter((id) => merged.spaces.some((s) => s.id === id));
       merged.threads = parsed.threads ?? [];
+      merged.bookings = parsed.bookings ?? [];
+      merged.invoices = parsed.invoices ?? [];
       // Spaces created before occupancy rules existed default to open.
       for (const space of merged.spaces) {
         if (!space.status) space.status = "published";
@@ -315,6 +366,209 @@ export const localRepository: Repository = {
     data.requests = [request, ...data.requests];
     write(data);
     return settle(request);
+  },
+
+  /* ── Bookings ───────────────────────────────────────────────────── */
+
+  async bookings(): Promise<Booking[]> {
+    const data = read();
+
+    return settle(
+      data.bookings.map((b) => {
+        const space = data.spaces.find((s) => s.id === b.spaceId);
+        const property = space ? data.properties.find((p) => p.id === space.propertyId) : undefined;
+        const owner = property ? data.owners.find((o) => o.id === property.ownerId) : undefined;
+
+        return {
+          id: b.id,
+          spaceId: b.spaceId,
+          spaceName: space?.name ?? "A space",
+          spaceImage: space?.images[0]?.url ?? null,
+          area: property?.area ?? null,
+          renterId: LOCAL_USER_ID,
+          // Without accounts one person plays both sides, so naming the renter
+          // "You" produces "with You" and "You's number". Label it as the demo
+          // counterpart instead.
+          renterName: "Demo renter",
+          ownerId: owner?.id ?? "",
+          ownerName: owner?.name ?? "Owner",
+          status: b.status,
+          moveInDate: b.moveInDate,
+          months: b.months,
+          amount: b.amount,
+          message: b.message,
+          phoneShared: b.phoneShared,
+          renterPhone: b.phoneShared ? "01700000000" : null,
+          ownerPhone: b.phoneShared ? "01800000000" : null,
+          declineReason: b.declineReason,
+          createdAt: b.createdAt,
+          decidedAt: b.decidedAt,
+          // Without accounts there is one person, who sees both sides.
+          youAreOwner: true,
+        };
+      }),
+    );
+  },
+
+  async requestBooking(input): Promise<Booking> {
+    const data = read();
+    const space = data.spaces.find((s) => s.id === input.spaceId);
+
+    if (!space) throw new Error("That space no longer exists.");
+    if (space.availability.status === "occupied" || space.availability.status === "maintenance") {
+      throw new Error("That space is not available to book.");
+    }
+
+    const booking: LocalBooking = {
+      id: `BK-${Date.now()}`,
+      spaceId: input.spaceId,
+      status: "requested",
+      moveInDate: input.moveInDate,
+      months: input.months,
+      amount: input.amount,
+      message: input.message ?? null,
+      phoneShared: false,
+      createdAt: new Date().toISOString(),
+      decidedAt: null,
+      declineReason: null,
+    };
+
+    data.bookings = [booking, ...data.bookings];
+    write(data);
+
+    const [made] = await this.bookings();
+    return made;
+  },
+
+  async setBookingStatus(bookingId: string, status: BookingStatus, reason?: string): Promise<void> {
+    const data = read();
+    const booking = data.bookings.find((b) => b.id === bookingId);
+    if (!booking) return settle(undefined);
+
+    if (!TRANSITIONS[booking.status].includes(status)) {
+      throw new Error(`A booking cannot go from ${booking.status} to ${status}.`);
+    }
+
+    booking.status = status;
+    if (reason !== undefined) booking.declineReason = reason;
+
+    if (status === "accepted") {
+      booking.phoneShared = true;
+      booking.decidedAt = new Date().toISOString();
+    }
+    if (status === "rejected") booking.decidedAt = new Date().toISOString();
+
+    // Mirror the database: confirming raises the rent schedule.
+    if (status === "confirmed") {
+      const start = new Date(booking.moveInDate);
+      for (let i = 0; i < Math.max(booking.months, 1); i++) {
+        const period = new Date(start.getFullYear(), start.getMonth() + i, start.getDate());
+        const iso = period.toISOString().slice(0, 10);
+        if (data.invoices.some((x) => x.bookingId === booking.id && x.periodStart === iso)) continue;
+
+        data.invoices.push({
+          id: `INV-${booking.id}-${i}`,
+          bookingId: booking.id,
+          spaceId: booking.spaceId,
+          periodStart: iso,
+          dueDate: iso,
+          amount: booking.amount,
+          status: "due",
+          paidAt: null,
+          receiptNo: null,
+        });
+      }
+    }
+
+    // Mirror the database: a confirmed booking takes the space off the market.
+    const space = data.spaces.find((s) => s.id === booking.spaceId);
+    if (space) {
+      if (status === "confirmed") space.availability = { ...space.availability, status: "occupied" };
+      if (status === "completed" || status === "cancelled") {
+        space.availability = { ...space.availability, status: "available" };
+      }
+    }
+
+    write(data);
+    return settle(undefined);
+  },
+
+  /* ── Moderation ─────────────────────────────────────────────────── */
+  // Moderation is meaningless without accounts to moderate. Rather than
+  // simulate a queue, this build says so.
+
+  async reviewQueue(): Promise<ReviewItem[]> {
+    return settle([]);
+  },
+
+  async setListingVisible(): Promise<void> {
+    throw new Error("Moderation needs the database. This build has no accounts.");
+  },
+
+  async setTrust(): Promise<void> {
+    throw new Error("Moderation needs the database. This build has no accounts.");
+  },
+
+  async resolveReports(): Promise<void> {
+    throw new Error("Moderation needs the database. This build has no accounts.");
+  },
+
+  async clearDuplicate(): Promise<void> {
+    throw new Error("Moderation needs the database. This build has no accounts.");
+  },
+
+  /* ── Rent ───────────────────────────────────────────────────────── */
+
+  async invoices(): Promise<RentInvoice[]> {
+    const data = read();
+    const today = new Date().toISOString().slice(0, 10);
+
+    return settle(
+      data.invoices.map((inv) => {
+        const space = data.spaces.find((s) => s.id === inv.spaceId);
+        const property = space ? data.properties.find((p) => p.id === space.propertyId) : undefined;
+        const owner = property ? data.owners.find((o) => o.id === property.ownerId) : undefined;
+
+        return {
+          id: inv.id,
+          bookingId: inv.bookingId,
+          spaceId: inv.spaceId,
+          spaceName: space?.name ?? "A space",
+          area: property?.area ?? null,
+          counterpartName: owner?.name ?? "Owner",
+          youAreOwner: true,
+          periodStart: inv.periodStart,
+          periodEnd: inv.periodStart,
+          dueDate: inv.dueDate,
+          // Overdue is a fact about the date, not something stored.
+          status: inv.status === "due" && inv.dueDate < today ? "overdue" : inv.status,
+          amount: inv.amount,
+          paidAt: inv.paidAt,
+          receiptNo: inv.receiptNo,
+          simulated: true,
+        };
+      }),
+    );
+  },
+
+  async payInvoice(invoiceId: string): Promise<void> {
+    const data = read();
+    const inv = data.invoices.find((i) => i.id === invoiceId);
+    if (!inv || inv.status === "paid") return settle(undefined);
+
+    inv.status = "paid";
+    inv.paidAt = new Date().toISOString();
+    inv.receiptNo = `HAB-${new Date().getFullYear()}-${String(++receiptCounter).padStart(6, "0")}`;
+    write(data);
+    return settle(undefined);
+  },
+
+  async waiveInvoice(invoiceId: string): Promise<void> {
+    const data = read();
+    const inv = data.invoices.find((i) => i.id === invoiceId);
+    if (inv && inv.status !== "paid") inv.status = "waived";
+    write(data);
+    return settle(undefined);
   },
 
   /* ── Messaging ──────────────────────────────────────────────────── */

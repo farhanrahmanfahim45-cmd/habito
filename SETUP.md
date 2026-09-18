@@ -55,6 +55,38 @@ with conversations attached — archiving is the safe path.
 a space carrying conversations cannot be deleted, only archived — enforced by
 the database, not just the interface.
 
+### Run the stage 5 migration
+
+`supabase/migrations/0005_bookings.sql` adds the booking state machine, the
+availability guard, phone-number reveal on acceptance, and the caretaker table.
+
+### Run the stage 6 migration
+
+`supabase/migrations/0006_trust.sql` adds trust tiers, the listing
+completeness gate, posting rate limits, duplicate detection and the report
+threshold. `MODERATION.md` explains the reasoning.
+
+### Run the stage 7 migration
+
+`supabase/migrations/0007_payments.sql` adds the rent ledger, receipts and the
+payment guards.
+
+### Run the stage 8 migration
+
+`supabase/migrations/0008_admin.sql` adds the review queue, the moderation
+actions and an append-only audit trail.
+
+**Making yourself an administrator.** There is deliberately no way to do this
+from the app. In the SQL editor:
+
+```sql
+update profiles set role = 'admin' where email = 'you@example.com';
+```
+
+Sign out and back in. A **Review** link appears in the header, and `/admin`
+becomes reachable. Everyone else gets nothing — the database refuses the
+underlying calls regardless of what the interface shows.
+
 ### Load the seed listings
 
 Open another query, paste `supabase/seed.sql`, and run it. That's 96 owners,

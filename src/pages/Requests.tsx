@@ -10,6 +10,7 @@ import { money, longDate } from "@/lib/format";
 import { CATEGORY_LABEL } from "@/types/space";
 import type { SpaceCategory, TransactionType } from "@/types/space";
 import { cn } from "@/lib/cn";
+import { useI18n } from "@/i18n";
 
 const inputClass =
   "h-11 w-full rounded-xl bg-ivory px-3 text-[0.9375rem] text-ink ring-1 ring-hairline-strong focus:outline-none focus:ring-2 focus:ring-aqua-600";
@@ -19,6 +20,7 @@ const inputClass =
  * which owners can then answer.
  */
 export default function Requests() {
+  const { t } = useI18n();
   const { requests, addRequest, requirements, role } = useHabito();
   const [open, setOpen] = useState(false);
 
@@ -119,7 +121,7 @@ export default function Requests() {
       <Modal
         open={open}
         onClose={() => setOpen(false)}
-        title="Post a request"
+        title={t("requests.post")}
         footer={
           <div className="flex gap-2">
             <Button variant="secondary" fullWidth onClick={() => setOpen(false)}>

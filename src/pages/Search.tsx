@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
 import { scoreAll, nearbyAlternatives, acceptsOccupancy } from "@/lib/matching";
 import { money, isStale, moneyCompact } from "@/lib/format";
-import { CATEGORY_STYLE, AMENITIES, AMENITY_KEYS } from "@/data/catalog";
+import { CATEGORY_STYLE, AMENITY_KEYS } from "@/data/catalog";
 import { AreaPicker } from "@/components/ui/AreaPicker";
 import { trustLevel } from "@/components/space/badges";
 import { cn } from "@/lib/cn";
@@ -143,7 +143,7 @@ export default function Search() {
       <div className="container-page py-8 md:py-10">
         <div className="grid gap-8 lg:grid-cols-[16rem_1fr]">
           <aside className="hidden lg:block">
-            <div className="sticky top-24 rounded-card bg-surface p-5 ring-1 ring-hairline">
+            <div className="sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto overscroll-contain rounded-card bg-surface p-5 ring-1 ring-hairline">
               <FilterPanel filters={filters} onChange={setFilters} />
             </div>
           </aside>
@@ -183,7 +183,7 @@ export default function Search() {
             </div>
 
             {!ready ? (
-              <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+              <div className="stagger grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
                 {Array.from({ length: 6 }, (_, i) => (
                   <SpaceCardSkeleton key={i} />
                 ))}
@@ -191,7 +191,7 @@ export default function Search() {
             ) : results.length === 0 ? (
               <NothingYet onReset={() => setFilters(DEFAULTS)} />
             ) : (
-              <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+              <div className="stagger grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
                 {hasStatedNeeds && (
                   <Coachmark
                     id="match"
@@ -325,7 +325,7 @@ function FilterPanel({ filters, onChange }: { filters: Filters; onChange: (f: Fi
         </button>
       </div>
 
-      <Group label="Category">
+      <Group label={t("filter.category")}>
         <div className="flex flex-wrap gap-1.5">
           <Pill active={filters.category === "all"} onClick={() => set("category", "all")}>
             All
@@ -338,11 +338,11 @@ function FilterPanel({ filters, onChange }: { filters: Filters; onChange: (f: Fi
         </div>
       </Group>
 
-      <Group label="Area">
+      <Group label={t("filter.area")}>
         <AreaPicker value={filters.area} onChange={(v) => set("area", v)} allowAnywhere />
       </Group>
 
-      <Group label="Setting">
+      <Group label={t("filter.setting")}>
         <div className="flex flex-wrap gap-1.5">
           {(["all", "urban", "suburban", "rural"] as const).map((g) => (
             <Pill key={g} active={filters.geography === g} onClick={() => set("geography", g)}>
@@ -385,16 +385,16 @@ function FilterPanel({ filters, onChange }: { filters: Filters; onChange: (f: Fi
         </div>
       </Group>
 
-      <Group label="Show only">
+      <Group label={t("filter.showOnly")}>
         <div className="space-y-2">
-          <Check label="Available spaces" checked={filters.availableOnly} onChange={(v) => set("availableOnly", v)} />
-          <Check label="Updated in the last 3 weeks" checked={filters.freshOnly} onChange={(v) => set("freshOnly", v)} />
-          <Check label="Full cost disclosed" checked={filters.fullCostOnly} onChange={(v) => set("fullCostOnly", v)} />
-          <Check label="Verified (demo)" checked={filters.verifiedOnly} onChange={(v) => set("verifiedOnly", v)} />
+          <Check label={t("filter.available")} checked={filters.availableOnly} onChange={(v) => set("availableOnly", v)} />
+          <Check label={t("filter.fresh")} checked={filters.freshOnly} onChange={(v) => set("freshOnly", v)} />
+          <Check label={t("filter.fullCost")} checked={filters.fullCostOnly} onChange={(v) => set("fullCostOnly", v)} />
+          <Check label={t("filter.verified")} checked={filters.verifiedOnly} onChange={(v) => set("verifiedOnly", v)} />
         </div>
       </Group>
 
-      <Group label="Amenities">
+      <Group label={t("filter.amenities")}>
         <div className="flex flex-wrap gap-1.5">
           {AMENITY_KEYS.slice(0, 14).map((key) => (
             <Pill
@@ -409,7 +409,7 @@ function FilterPanel({ filters, onChange }: { filters: Filters; onChange: (f: Fi
                 )
               }
             >
-              {AMENITIES[key].label}
+              {t(`amenity.${key}` as never)}
             </Pill>
           ))}
         </div>

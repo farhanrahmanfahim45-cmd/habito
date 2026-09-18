@@ -7,6 +7,26 @@
  */
 import { writeFileSync, mkdirSync } from "node:fs";
 
+
+/** Bengali numerals, so a Bangla listing reads as one throughout. */
+const BN_DIGITS = ["০","১","২","৩","৪","৫","৬","৭","৮","৯"];
+const bnNum = (v) => String(v).replace(/\d/g, (d) => BN_DIGITS[Number(d)]);
+
+const TYPE_BN = {
+  apartment: "ফ্ল্যাট", room: "রুম", "shared-room": "শেয়ার রুম", sublet: "সাবলেট",
+  house: "বাড়ি", "tin-shed": "টিনশেড বাড়ি", shop: "দোকান", office: "অফিস",
+  godown: "গুদাম", garage: "গ্যারেজ", "parking-slot": "পার্কিং স্লট",
+  farmland: "কৃষিজমি", pond: "পুকুর", homestead: "ভিটে",
+};
+
+/** Mirrors src/data/photos.ts so the generator and the app agree. */
+const SEED_PHOTO_POOL = Object.fromEntries(
+  ["living", "business", "storage", "parking", "land"].map((c) => [
+    c,
+    ["a", "b", "c", "d"].map((k) => `https://picsum.photos/seed/habito-${c}-${k}/1200/800`),
+  ]),
+);
+
 const AREAS = [
   // Dhaka — a spread across the metro rather than every thana, weighted the
   // way real supply is: dense in Mirpur, Mohammadpur, Badda, Uttara.
@@ -126,6 +146,7 @@ function makeSpace(idx, property, area, type, sequence) {
   let price;
   let name;
   let description;
+  let descriptionBn;
 
   const sqft = (lo, hi) => round(int(lo, hi), 10);
 
@@ -145,6 +166,7 @@ function makeSpace(idx, property, area, type, sequence) {
           : round((8000 + bedrooms * int(3500, 6800)) * area.idx, 500);
       name = `Flat ${int(1, 8)}${pick(["A", "B", "C"])}`;
       description = `${bedrooms} bedroom flat of ${attributes.sizeSqft} sqft on floor ${attributes.floor}.`;
+      descriptionBn = `${bnNum(attributes.floor)} তলায় ${bnNum(attributes.sizeSqft)} বর্গফুটের ${bnNum(bedrooms)} রুমের ফ্ল্যাট।`;
       break;
     }
     case "room":
@@ -157,6 +179,7 @@ function makeSpace(idx, property, area, type, sequence) {
       price = round(int(type === "shared-room" ? 4000 : 6000, type === "shared-room" ? 8000 : 11500) * area.idx, 500);
       name = `${type === "shared-room" ? "Shared room" : "Room"} ${sequence}`;
       description = `${type === "shared-room" ? "Bed space in a shared flat" : "Single room"} of ${attributes.sizeSqft} sqft.`;
+      descriptionBn = `${bnNum(attributes.sizeSqft)} বর্গফুটের ${type === "shared-room" ? "শেয়ার ফ্ল্যাটে সিট" : "একক রুম"}।`;
       break;
     }
     case "sublet": {
@@ -168,6 +191,7 @@ function makeSpace(idx, property, area, type, sequence) {
       price = round(int(8000, 15000) * area.idx, 500);
       name = `Sublet ${sequence}`;
       description = `Furnished sublet of ${attributes.sizeSqft} sqft inside a family flat.`;
+      descriptionBn = `ফ্যামিলি ফ্ল্যাটের ভেতরে ${bnNum(attributes.sizeSqft)} বর্গফুটের ফার্নিশড সাবলেট।`;
       break;
     }
     case "house":
@@ -187,6 +211,7 @@ function makeSpace(idx, property, area, type, sequence) {
           : round(int(type === "tin-shed" ? 3500 : 16000, type === "tin-shed" ? 9000 : 45000) * area.idx, 500);
       name = type === "tin-shed" ? "Tin-shed house" : type === "homestead" ? "Homestead" : "House";
       description = `${bedrooms} room ${type === "tin-shed" ? "tin-shed home" : "house"} with ${attributes.waterSource ? "a water source" : "shared water access"}.`;
+      descriptionBn = `${bnNum(bedrooms)} রুমের ${type === "tin-shed" ? "টিনশেড বাড়ি" : "বাড়ি"}, ${attributes.waterSource ? "নিজস্ব পানির ব্যবস্থা" : "পানি শেয়ার করে"}।`;
       break;
     }
     case "shop": {
@@ -200,6 +225,7 @@ function makeSpace(idx, property, area, type, sequence) {
           : round(int(9000, 42000) * area.idx, 500);
       name = `Shop ${String(sequence).padStart(2, "0")}`;
       description = `${attributes.sizeSqft} sqft shop with ${attributes.frontageFt} ft frontage. Suits ${attributes.suitableFor.toLowerCase()}.`;
+      descriptionBn = `${bnNum(attributes.sizeSqft)} বর্গফুটের দোকান, সামনে ${bnNum(attributes.frontageFt)} ফুট খোলা।`;
       break;
     }
     case "office": {
@@ -210,6 +236,7 @@ function makeSpace(idx, property, area, type, sequence) {
       price = round(int(18000, 95000) * area.idx, 1000);
       name = `Office floor ${attributes.floor}`;
       description = `${attributes.sizeSqft} sqft office fitted for about ${attributes.workstations} workstations.`;
+      descriptionBn = `${bnNum(attributes.sizeSqft)} বর্গফুটের অফিস, প্রায় ${bnNum(attributes.workstations)} জনের বসার ব্যবস্থা।`;
       break;
     }
     case "godown": {
@@ -221,6 +248,7 @@ function makeSpace(idx, property, area, type, sequence) {
       price = round(int(12000, 60000) * area.idx, 500);
       name = `Godown ${String(sequence).padStart(2, "0")}`;
       description = `${attributes.sizeSqft} sqft storage with ${attributes.ceilingHeightFt} ft ceiling.`;
+      descriptionBn = `${bnNum(attributes.sizeSqft)} বর্গফুটের গুদাম, ছাদের উচ্চতা ${bnNum(attributes.ceilingHeightFt)} ফুট।`;
       break;
     }
     case "garage": {
@@ -231,6 +259,7 @@ function makeSpace(idx, property, area, type, sequence) {
       price = round(int(1500, 6000) * area.idx, 100);
       name = "Garage";
       description = `${attributes.carSlots} car and ${attributes.motorcycleSlots} motorcycle slots, ${attributes.covered ? "covered" : "open"}.`;
+      descriptionBn = `${bnNum(attributes.carSlots)}টি গাড়ি ও ${bnNum(attributes.motorcycleSlots)}টি মোটরসাইকেলের জায়গা, ${attributes.covered ? "ছাউনি আছে" : "খোলা"}।`;
       break;
     }
     case "parking-slot": {
@@ -241,6 +270,7 @@ function makeSpace(idx, property, area, type, sequence) {
       price = round(int(1200, 4500) * area.idx, 100);
       name = `Parking slot ${sequence}`;
       description = `Single ${attributes.covered ? "covered" : "open"} car slot, access ${attributes.accessHours.toLowerCase()}.`;
+      descriptionBn = `একটি ${attributes.covered ? "ছাউনি দেওয়া" : "খোলা"} গাড়ির স্লট।`;
       break;
     }
     case "farmland":
@@ -256,12 +286,14 @@ function makeSpace(idx, property, area, type, sequence) {
           : round(attributes.landAreaDecimal * int(180, 700), 500);
       name = type === "pond" ? "Pond" : "Farmland plot";
       description = `${attributes.landAreaDecimal} decimal of ${attributes.landUse.toLowerCase()} land${attributes.roadAccess ? " with road access" : ""}.`;
+      descriptionBn = `${bnNum(attributes.landAreaDecimal)} শতাংশ জমি${attributes.roadAccess ? ", রাস্তার সংযোগসহ" : ""}।`;
       break;
     }
     default:
       price = 10000;
       name = "Space";
       description = "Space.";
+      descriptionBn = "জায়গা।";
   }
 
   // roughly a quarter of listings withhold part of the cost on purpose
@@ -335,12 +367,18 @@ function makeSpace(idx, property, area, type, sequence) {
 
   const vLevel = rnd() > 0.44 ? "full" : rnd() > 0.35 ? "partial" : "minimal";
   const pool = IMAGE_POOL[category];
+  // Seed listings get photographs so the prototype shows visual variety. They
+  // are labelled in the interface, permanently — see src/data/photos.ts.
+  const photoPool = SEED_PHOTO_POOL[category];
   const images = Array.from({ length: int(2, 4) }, (_, k) => {
     const file = pick(pool);
     const labels = { living: ["Exterior", "Living area", "Bedroom", "Kitchen"], business: ["Frontage", "Interior", "Floor"], storage: ["Exterior", "Storage floor"], parking: ["Entrance", "Parking area"], land: ["Plot", "Surroundings", "Access road"] };
     const label = labels[category][k % labels[category].length];
     return {
-      url: `/photos/${file}.svg`,
+      // A photograph for variety, with the illustration kept as the fallback
+      // the interface drops to if the remote image fails.
+      url: photoPool[k % photoPool.length],
+      fallback: `/photos/${file}.svg`,
       label,
       alt: `Illustrative demo image representing the ${label.toLowerCase()} of ${name} at ${property.name}`,
       demo: true,
@@ -355,6 +393,13 @@ function makeSpace(idx, property, area, type, sequence) {
     spaceType: type,
     transaction,
     cost,
+    nameBn: (() => {
+      const suffix = name.match(/[\d]+[A-Z]?$/);
+      return suffix
+        ? `${TYPE_BN[type] ?? name} ${bnNum(suffix[0])}`
+        : (TYPE_BN[type] ?? name);
+    })(),
+    descriptionBn,
     attributes,
     amenities,
     rules,

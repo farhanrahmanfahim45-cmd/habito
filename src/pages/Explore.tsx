@@ -8,10 +8,12 @@ import { SpaceCardSkeleton } from "@/components/ui/Skeleton";
 import { AREAS } from "@/data/areas";
 import { scoreAll } from "@/lib/matching";
 import { daysSince } from "@/lib/format";
+import { useI18n } from "@/i18n";
 import type { SpaceListing } from "@/types/space";
 
 /** Discovery rather than a results grid: each rail answers a different question. */
 export default function Explore() {
+  const { t } = useI18n();
   const { listings, ready, requirements, hasStatedNeeds, isSaved, toggleSaved, isComparing, toggleCompare } =
     useHabito();
 
@@ -51,7 +53,7 @@ export default function Explore() {
   return (
     <>
       <PageHeader
-        title="Explore"
+        title={t("explore.title")}
         lead="Wander through what's on the platform — by area, by category, by what's just been added."
       />
 
@@ -59,7 +61,7 @@ export default function Explore() {
         <AreaStrip listings={listings} />
 
         {hasStatedNeeds && (
-          <Rail title="Closest to what you asked for" lead="Ranked by your stated needs." to="/search" items={topMatches} {...handlers} />
+          <Rail title={t("explore.closest")} lead={t("explore.closestLead")} to="/search" items={topMatches} {...handlers} />
         )}
 
         <Rail
@@ -70,10 +72,10 @@ export default function Explore() {
           {...handlers}
         />
 
-        <Rail title="Just added" lead="The freshest listings on Habito." to="/search" items={newest} {...handlers} />
+        <Rail title={t("explore.justAdded")} lead={t("explore.justAddedLead")} to="/search" items={newest} {...handlers} />
 
         <Rail
-          title="Park it or store it"
+          title={t("explore.parkStore")}
           lead="Garages, slots and godowns — the spaces nobody else lists properly."
           to="/search?category=parking"
           items={parking.slice(0, 8)}
@@ -81,7 +83,7 @@ export default function Explore() {
         />
 
         {forSale.length > 0 && (
-          <Rail title="For sale" lead="Homes, shops and land on the market." to="/search" items={forSale.slice(0, 8)} {...handlers} />
+          <Rail title={t("explore.forSale")} lead={t("explore.forSaleLead")} to="/search" items={forSale.slice(0, 8)} {...handlers} />
         )}
       </div>
     </>

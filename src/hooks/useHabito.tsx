@@ -98,12 +98,20 @@ export function HabitoProvider({ children }: { children: ReactNode }) {
       return;
     }
 
+    // Guard against overlapping runs: the subscription and the poll can both
+    // fire while a query is still in flight, which tripled the request count.
+    let inFlight = false;
+
     const count = async () => {
+      if (inFlight) return;
+      inFlight = true;
       try {
         const threads = await db.conversations();
         setUnreadMessages(threads.reduce((sum, c) => sum + c.unread, 0));
       } catch {
         setUnreadMessages(0);
+      } finally {
+        inFlight = false;
       }
     };
 

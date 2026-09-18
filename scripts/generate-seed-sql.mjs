@@ -97,13 +97,13 @@ lines.push("");
 
 /* ── Spaces ──────────────────────────────────────────────────────────────── */
 
-lines.push("insert into spaces (id, property_id, name, category, space_type, transaction, status, price, service_charge, utilities, security_deposit, advance_months, attributes, amenities, family_allowed, bachelor_allowed, student_friendly, gender_pref, max_occupants, availability, available_from, availability_note, total_units, available_units, images, description, verification, views, is_seed, created_at, updated_at) values");
+lines.push("insert into spaces (id, property_id, name, name_bn, description_bn, category, space_type, transaction, status, price, service_charge, utilities, security_deposit, advance_months, attributes, amenities, family_allowed, bachelor_allowed, student_friendly, gender_pref, max_occupants, availability, available_from, availability_note, total_units, available_units, images, description, verification, views, is_seed, created_at, updated_at) values");
 lines.push(
   seed.spaces
     .map((s) => {
       const a = s.availability;
       return (
-        `  (${uuidLit(s.id)}, ${uuidLit(s.propertyId)}, ${q(s.name)}, '${s.category}', ` +
+        `  (${uuidLit(s.id)}, ${uuidLit(s.propertyId)}, ${q(s.name)}, ${q(s.nameBn)}, ${q(s.descriptionBn)}, '${s.category}', ` +
         `${q(s.spaceType)}, '${s.transaction}', 'published', ${n(s.cost.price)}, ` +
         `${n(s.cost.serviceCharge)}, ${n(s.cost.utilities)}, ${n(s.cost.securityDeposit)}, ` +
         `${n(s.cost.advanceMonths)}, ${json(s.attributes)}, ${arr(s.amenities)}, ` +

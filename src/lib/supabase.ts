@@ -83,6 +83,8 @@ export interface SpaceRow {
   id: string;
   property_id: string;
   name: string;
+  name_bn: string | null;
+  description_bn: string | null;
   category: SpaceCategory;
   space_type: string;
   transaction: TransactionType;

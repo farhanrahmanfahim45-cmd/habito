@@ -76,6 +76,103 @@
 
   .tnum { font-variant-numeric: tabular-nums; }
 
+  /* ── Motion ──────────────────────────────────────────────────────────
+     Restrained on purpose. Easing curves that decelerate rather than
+     bounce, durations short enough to feel like response rather than
+     performance, and nothing that moves more than a few pixels. A property
+     app that springs about reads as a toy, which is the opposite of what
+     someone about to spend a month's rent wants to feel. */
+
+  :root {
+    --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-in-out-soft: cubic-bezier(0.4, 0, 0.2, 1);
+    --dur-fast: 160ms;
+    --dur-base: 260ms;
+    --dur-slow: 420ms;
+  }
+
+  /* Content arriving. Small travel, no scale — scaling text looks cheap. */
+  @keyframes rise-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* A sheet coming up from the bottom of a phone. */
+  @keyframes sheet-up {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  @keyframes shimmer-sweep {
+    from { background-position: -160% 0; }
+    to   { background-position: 260% 0; }
+  }
+
+  .rise { animation: rise-in var(--dur-base) var(--ease-out-quint) both; }
+  .fade { animation: fade-in var(--dur-base) var(--ease-in-out-soft) both; }
+  .sheet { animation: sheet-up var(--dur-base) var(--ease-out-quint) both; }
+
+  /* Lists stagger, but only the first handful — past about eight items the
+     delay stops reading as craft and starts reading as lag. */
+  .stagger > * { animation: rise-in var(--dur-base) var(--ease-out-quint) both; }
+  .stagger > *:nth-child(1) { animation-delay: 0ms; }
+  .stagger > *:nth-child(2) { animation-delay: 40ms; }
+  .stagger > *:nth-child(3) { animation-delay: 80ms; }
+  .stagger > *:nth-child(4) { animation-delay: 120ms; }
+  .stagger > *:nth-child(5) { animation-delay: 160ms; }
+  .stagger > *:nth-child(6) { animation-delay: 200ms; }
+  .stagger > *:nth-child(7) { animation-delay: 240ms; }
+  .stagger > *:nth-child(n + 8) { animation-delay: 280ms; }
+
+  .shimmer {
+    background-image: linear-gradient(
+      100deg,
+      transparent 20%,
+      rgb(255 255 255 / 0.55) 42%,
+      transparent 64%
+    );
+    background-size: 220% 100%;
+    animation: shimmer-sweep 1.5s var(--ease-in-out-soft) infinite;
+  }
+
+  /* Cards lift slightly and the photograph inside creeps in. Pointer-only:
+     on a touch screen hover fires on tap and the lift reads as a glitch. */
+  @media (hover: hover) and (pointer: fine) {
+    .lift {
+      transition:
+        transform var(--dur-base) var(--ease-out-quint),
+        box-shadow var(--dur-base) var(--ease-out-quint);
+    }
+    .lift:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 28px -12px rgb(16 24 40 / 0.18);
+    }
+    .lift:hover .zoom { transform: scale(1.04); }
+    .zoom { transition: transform var(--dur-slow) var(--ease-out-quint); }
+  }
+
+  /* Anything tappable acknowledges the tap. 150ms, barely visible, but its
+     absence is what makes a web app feel unlike a native one. */
+  .press { transition: transform var(--dur-fast) var(--ease-out-quint); }
+  .press:active { transform: scale(0.97); }
+
+  /* Someone who has asked for less motion gets none of it. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
   /* Bengali runs taller and needs more line height; it also sets roughly
      15–20% longer than the same English string, so headings get a touch less
      tracking to keep them on the same number of lines. */

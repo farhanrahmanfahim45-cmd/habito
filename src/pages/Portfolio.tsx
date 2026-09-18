@@ -77,7 +77,7 @@ export default function Portfolio() {
   return (
     <>
       <PageHeader
-        title="My spaces"
+        title={t("portfolio.title")}
         lead="Every property you hold and every space inside it, in one view."
         actions={
           <Link to="/list">

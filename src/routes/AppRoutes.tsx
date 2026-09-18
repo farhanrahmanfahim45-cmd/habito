@@ -13,6 +13,9 @@ import Requests from "@/pages/Requests";
 import Profile from "@/pages/Profile";
 import Auth from "@/pages/Auth";
 import Messages from "@/pages/Messages";
+import Bookings from "@/pages/Bookings";
+import Rent from "@/pages/Rent";
+import Admin from "@/pages/Admin";
 import Settings from "@/pages/Settings";
 import NotFound from "@/pages/NotFound";
 
@@ -53,6 +56,32 @@ export function AppRoutes() {
         element={
           <Guard allow={["renter", "owner", "admin"]}>
             <Messages />
+          </Guard>
+        }
+      />
+      <Route
+        path="/bookings"
+        element={
+          <Guard allow={["renter", "owner", "admin"]}>
+            <Bookings />
+          </Guard>
+        }
+      />
+      <Route
+        path="/rent"
+        element={
+          <Guard allow={["renter", "owner", "admin"]}>
+            <Rent />
+          </Guard>
+        }
+      />
+      {/* Admin only — the database refuses these calls for anyone else, so
+          the guard is convenience rather than the protection. */}
+      <Route
+        path="/admin"
+        element={
+          <Guard allow={["admin"]}>
+            <Admin />
           </Guard>
         }
       />

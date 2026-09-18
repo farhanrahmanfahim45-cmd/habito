@@ -32,11 +32,17 @@ const NAV = [
   { to: "/explore", key: "nav.explore" },
   { to: "/search", key: "nav.search" },
   { to: "/portfolio", key: "nav.portfolio" },
+  { to: "/bookings", key: "nav.bookings" },
+  { to: "/rent", key: "nav.rent" },
 ] as const;
 
 export function Header() {
   const { savedIds, unreadMessages } = useHabito();
+  const { account } = useAuth();
   const { t } = useI18n();
+
+  // Only a moderator ever sees the queue.
+  const nav = account?.role === "admin" ? [...NAV, { to: "/admin", key: "nav.admin" } as const] : NAV;
 
   return (
     <header className="sticky top-0 z-40 border-b border-hairline bg-ivory/85 backdrop-blur-md">
@@ -44,7 +50,7 @@ export function Header() {
         <Wordmark className="text-base" />
 
         <nav aria-label="Main" className="hidden items-center gap-6 md:flex">
-          {NAV.map((item) => (
+          {nav.map((item) => (
             <NavLink
               key={item.to}
               to={item.to}

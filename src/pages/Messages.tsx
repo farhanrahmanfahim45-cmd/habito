@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { Skeleton } from "@/components/ui/Skeleton";
 import type { Conversation, Message } from "@/types/space";
 import { cn } from "@/lib/cn";
+import { useI18n } from "@/i18n";
 
 /**
  * Messages. One list, one thread, and on desktop both at once.
@@ -16,6 +17,7 @@ import { cn } from "@/lib/cn";
  * this about" — the thing being discussed sits at the top of the screen.
  */
 export default function Messages() {
+  const { t } = useI18n();
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -47,7 +49,7 @@ export default function Messages() {
   return (
     <>
       <PageHeader
-        title="Messages"
+        title={t("messages.title")}
         lead={
           totalUnread > 0
             ? `${totalUnread} unread ${totalUnread === 1 ? "message" : "messages"}.`

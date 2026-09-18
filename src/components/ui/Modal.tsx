@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import type { ReactNode } from "react";
 import { X } from "lucide-react";
 
@@ -34,8 +35,12 @@ export function Modal({
 
   if (!open) return null;
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center">
+  // Rendered into <body>. Inside a scrolling or transformed ancestor — the
+  // sticky filter panel, for one — a fixed element is positioned against that
+  // ancestor instead of the viewport, which is what put the area picker below
+  // the results rather than over them.
+  return createPortal(
+    <div className="fade fixed inset-0 z-50 flex items-end justify-center sm:items-center">
       <div
         className="absolute inset-0 bg-ink/50"
         onClick={onClose}
@@ -47,7 +52,7 @@ export function Modal({
         aria-modal="true"
         aria-label={title}
         tabIndex={-1}
-        className="relative max-h-[88vh] w-full overflow-y-auto rounded-t-card bg-surface sm:max-w-lg sm:rounded-card"
+        className="sheet relative max-h-[88vh] w-full overflow-y-auto overscroll-contain rounded-t-card bg-surface pb-[env(safe-area-inset-bottom)] sm:max-w-lg sm:rounded-card sm:pb-0"
       >
         <div className="flex items-start justify-between gap-4 border-b border-hairline px-5 py-4">
           <h2 className="font-display text-lg font-bold text-ink">{title}</h2>
@@ -63,6 +68,7 @@ export function Modal({
         <div className="px-5 py-4">{children}</div>
         {footer && <div className="border-t border-hairline px-5 py-4">{footer}</div>}
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }

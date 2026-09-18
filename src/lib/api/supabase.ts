@@ -3,10 +3,15 @@ import { client, toOwner, toProperty, toSpace, propertyInsert, spaceInsert, spac
 import type { ProfileRow, PropertyRow, SpaceRow } from "@/lib/supabase";
 import type { Repository } from "./types";
 import type {
+  Booking,
+  BookingStatus,
   Conversation,
   Inquiry,
   InquiryStatus,
   Message,
+  RentInvoice,
+  ReviewItem,
+  TrustTier,
   Owner,
   Property,
   Space,
@@ -48,7 +53,11 @@ async function requireUser(action: string): Promise<string> {
 async function loadListings(filter?: { spaceId?: string }): Promise<SpaceListing[]> {
   let query = client()
     .from("spaces")
-    .select(`${SPACE_COLUMNS}, properties!inner(${PROPERTY_COLUMNS}, profiles!inner(*))`)
+    .select(
+      // Named explicitly: property_managers adds a second properties→profiles
+      // path, and PostgREST will not guess between them.
+      `${SPACE_COLUMNS}, properties!inner(${PROPERTY_COLUMNS}, profiles!properties_owner_id_fkey!inner(*))`,
+    )
     .eq("status", "published");
 
   if (filter?.spaceId) query = query.eq("id", filter.spaceId);
@@ -355,6 +364,301 @@ export const supabaseRepository: Repository = {
 
     if (error) fail("Could not post the request", error);
     return { ...input, id: (data as { id: string }).id, createdAt: (data as { created_at: string }).created_at };
+  },
+
+  /* ── Bookings ─────────────────────────────────────────────────────── */
+
+  async bookings(): Promise<Booking[]> {
+    const userId = await currentUserId();
+    if (!userId) return [];
+
+    // Row-level security already limits this to bookings you are part of.
+    const { data, error } = await client()
+      .from("bookings")
+      .select(`
+        *,
+        spaces ( id, name, images, properties ( area ) ),
+        renter:profiles!bookings_renter_id_fkey ( id, name ),
+        owner:profiles!bookings_owner_id_fkey ( id, name )
+      `)
+      .order("created_at", { ascending: false });
+
+    if (error) fail("Could not load your bookings", error);
+
+    return (data ?? []).map((row) => {
+      const b = row as unknown as {
+        id: string; space_id: string; renter_id: string; owner_id: string;
+        status: BookingStatus; move_in_date: string; months: number; amount: number;
+        message: string | null; phone_shared: boolean;
+        renter_phone: string | null; owner_phone: string | null;
+        decline_reason: string | null; created_at: string; decided_at: string | null;
+        spaces: { name: string; images: Array<{ url: string }>; properties: { area: string } | null } | null;
+        renter: { id: string; name: string } | null;
+        owner: { id: string; name: string } | null;
+      };
+
+      return {
+        id: b.id,
+        spaceId: b.space_id,
+        spaceName: b.spaces?.name ?? "A space",
+        spaceImage: b.spaces?.images?.[0]?.url ?? null,
+        area: b.spaces?.properties?.area ?? null,
+        renterId: b.renter_id,
+        renterName: b.renter?.name ?? "Habito user",
+        ownerId: b.owner_id,
+        ownerName: b.owner?.name ?? "Owner",
+        status: b.status,
+        moveInDate: b.move_in_date,
+        months: b.months,
+        amount: b.amount,
+        message: b.message,
+        phoneShared: b.phone_shared,
+        renterPhone: b.renter_phone,
+        ownerPhone: b.owner_phone,
+        declineReason: b.decline_reason,
+        createdAt: b.created_at,
+        decidedAt: b.decided_at,
+        youAreOwner: b.owner_id === userId,
+      };
+    });
+  },
+
+  async requestBooking(input): Promise<Booking> {
+    const userId = await requireUser("request a booking");
+
+    // owner_id is overwritten by a trigger from the property, so what the
+    // client sends here cannot be used to misattribute a booking.
+    const { data, error } = await client()
+      .from("bookings")
+      .insert({
+        space_id: input.spaceId,
+        renter_id: userId,
+        owner_id: userId,
+        move_in_date: input.moveInDate,
+        months: input.months,
+        amount: input.amount,
+        message: input.message ?? null,
+      })
+      .select()
+      .single();
+
+    if (error) fail("Could not request this booking", error);
+
+    const row = data as { id: string; created_at: string; status: BookingStatus };
+    return {
+      id: row.id,
+      spaceId: input.spaceId,
+      spaceName: "",
+      spaceImage: null,
+      area: null,
+      renterId: userId,
+      renterName: "",
+      ownerId: "",
+      ownerName: "",
+      status: row.status,
+      moveInDate: input.moveInDate,
+      months: input.months,
+      amount: input.amount,
+      message: input.message ?? null,
+      phoneShared: false,
+      renterPhone: null,
+      ownerPhone: null,
+      declineReason: null,
+      createdAt: row.created_at,
+      decidedAt: null,
+      youAreOwner: false,
+    };
+  },
+
+  async setBookingStatus(bookingId: string, status: BookingStatus, reason?: string): Promise<void> {
+    await requireUser("change a booking");
+
+    const patch: Record<string, unknown> = { status };
+    if (reason !== undefined) patch.decline_reason = reason;
+
+    // Legal moves, permissions and the phone reveal are all decided by the
+    // database trigger; a rejection here is a real rejection.
+    const { error } = await client().from("bookings").update(patch).eq("id", bookingId);
+    if (error) fail("Could not update this booking", error);
+  },
+
+  /* ── Moderation ───────────────────────────────────────────────────── */
+
+  async reviewQueue(): Promise<ReviewItem[]> {
+    const { data, error } = await client()
+      .from("review_queue")
+      .select("*")
+      .order("priority", { ascending: true })
+      .order("created_at", { ascending: true });
+
+    if (error) fail("Could not load the review queue", error);
+
+    return (data ?? []).map((row) => {
+      const r = row as {
+        space_id: string; space_name: string; area: string | null;
+        owner_id: string; owner_name: string; owner_trust: TrustTier;
+        completeness: number; flagged_duplicate: boolean;
+        hidden_at: string | null; hidden_reason: string | null;
+        report_count: number; open_reports: number; priority: number;
+      };
+
+      return {
+        spaceId: r.space_id,
+        spaceName: r.space_name,
+        area: r.area,
+        ownerId: r.owner_id,
+        ownerName: r.owner_name,
+        ownerTrust: r.owner_trust,
+        completeness: r.completeness,
+        flaggedDuplicate: r.flagged_duplicate,
+        hiddenAt: r.hidden_at,
+        hiddenReason: r.hidden_reason,
+        reportCount: Number(r.report_count),
+        openReports: Number(r.open_reports),
+        priority: r.priority,
+      };
+    });
+  },
+
+  async setListingVisible(spaceId: string, visible: boolean, note?: string): Promise<void> {
+    // Every one of these writes its own audit row inside the function, so the
+    // record cannot be skipped by a client that forgets to write it.
+    const { error } = await client().rpc("admin_set_listing_visible", {
+      target: spaceId,
+      visible,
+      why: note ?? null,
+    });
+    if (error) fail("Could not change that listing", error);
+  },
+
+  async setTrust(profileId: string, tier: TrustTier, note: string): Promise<void> {
+    const { error } = await client().rpc("admin_set_trust", {
+      target: profileId,
+      tier,
+      why: note,
+    });
+    if (error) fail("Could not set that trust level", error);
+  },
+
+  async resolveReports(spaceId: string, dismiss: boolean, note?: string): Promise<void> {
+    const { error } = await client().rpc("admin_resolve_reports", {
+      target: spaceId,
+      dismiss,
+      why: note ?? null,
+    });
+    if (error) fail("Could not resolve those reports", error);
+  },
+
+  async clearDuplicate(spaceId: string, note?: string): Promise<void> {
+    const { error } = await client().rpc("admin_clear_duplicate", {
+      target: spaceId,
+      why: note ?? null,
+    });
+    if (error) fail("Could not clear that flag", error);
+  },
+
+  /* ── Rent ─────────────────────────────────────────────────────────── */
+
+  async invoices(): Promise<RentInvoice[]> {
+    const userId = await currentUserId();
+    if (!userId) return [];
+
+    // Sweep overdue first so what you see is current rather than yesterday's.
+    await client().rpc("mark_overdue_invoices");
+
+    const { data, error } = await client()
+      .from("rent_invoices")
+      .select(`
+        *,
+        spaces ( name, properties ( area ) ),
+        renter:profiles!rent_invoices_renter_id_fkey ( name ),
+        owner:profiles!rent_invoices_owner_id_fkey ( name ),
+        payments ( simulated )
+      `)
+      .order("due_date", { ascending: true });
+
+    if (error) fail("Could not load your rent", error);
+
+    return (data ?? []).map((row) => {
+      const r = row as unknown as {
+        id: string; booking_id: string; space_id: string; renter_id: string; owner_id: string;
+        period_start: string; period_end: string; due_date: string; amount: number;
+        status: RentInvoice["status"]; paid_at: string | null; receipt_no: string | null;
+        spaces: { name: string; properties: { area: string } | null } | null;
+        renter: { name: string } | null;
+        owner: { name: string } | null;
+        payments: { simulated: boolean } | null;
+      };
+
+      const youAreOwner = r.owner_id === userId;
+      return {
+        id: r.id,
+        bookingId: r.booking_id,
+        spaceId: r.space_id,
+        spaceName: r.spaces?.name ?? "A space",
+        area: r.spaces?.properties?.area ?? null,
+        counterpartName: (youAreOwner ? r.renter?.name : r.owner?.name) ?? "Habito user",
+        youAreOwner,
+        periodStart: r.period_start,
+        periodEnd: r.period_end,
+        dueDate: r.due_date,
+        amount: r.amount,
+        status: r.status,
+        paidAt: r.paid_at,
+        receiptNo: r.receipt_no,
+        simulated: r.payments?.simulated ?? false,
+      };
+    });
+  },
+
+  async payInvoice(invoiceId: string): Promise<void> {
+    const userId = await requireUser("pay rent");
+
+    const { data: invoice, error: readError } = await client()
+      .from("rent_invoices")
+      .select("id, booking_id, amount, status")
+      .eq("id", invoiceId)
+      .single();
+
+    if (readError) fail("Could not find that invoice", readError);
+    const inv = invoice as { booking_id: string; amount: number; status: string };
+    if (inv.status === "paid") return;
+
+    // Raised as pending — the database refuses any other starting status.
+    const { data: payment, error: insertError } = await client()
+      .from("payments")
+      .insert({
+        booking_id: inv.booking_id,
+        user_id: userId,
+        amount: inv.amount,
+        invoice_id: invoiceId,
+        kind: "rent",
+        gateway: "sandbox",
+        status: "pending",
+        simulated: true,
+      })
+      .select("id")
+      .single();
+
+    if (insertError) fail("Could not start that payment", insertError);
+
+    // Stands in for the gateway callback. A real integration replaces exactly
+    // this step and nothing else.
+    const { error: settleError } = await client()
+      .from("payments")
+      .update({ status: "successful", reference: `SANDBOX-${Date.now()}` })
+      .eq("id", (payment as { id: string }).id);
+
+    if (settleError) fail("That payment did not go through", settleError);
+  },
+
+  async waiveInvoice(invoiceId: string): Promise<void> {
+    await requireUser("waive rent");
+    const { error } = await client()
+      .from("rent_invoices")
+      .update({ status: "waived" })
+      .eq("id", invoiceId);
+    if (error) fail("Could not waive that month", error);
   },
 
   /* ── Messaging ────────────────────────────────────────────────────── */

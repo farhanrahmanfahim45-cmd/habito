@@ -4,6 +4,7 @@ import { ArrowRight, Home, Store, AlertCircle, MailCheck } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
+import { useI18n } from "@/i18n";
 
 type Mode = "signin" | "signup";
 
@@ -11,6 +12,7 @@ const inputClass =
   "h-11 w-full rounded-xl bg-ivory px-3 text-[0.9375rem] text-ink ring-1 ring-hairline-strong focus:outline-none focus:ring-2 focus:ring-aqua-600";
 
 export default function Auth({ initial = "signin" }: { initial?: Mode }) {
+  const { t } = useI18n();
   const { account, configured, signIn, signUp, resetPassword } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -124,14 +126,14 @@ export default function Auth({ initial = "signin" }: { initial?: Mode }) {
                   active={role === "renter"}
                   onClick={() => setRole("renter")}
                   icon={Home}
-                  title="I need a space"
+                  title={t("auth.needSpace")}
                   body="Search, save and enquire"
                 />
                 <RoleOption
                   active={role === "owner"}
                   onClick={() => setRole("owner")}
                   icon={Store}
-                  title="I have a space"
+                  title={t("auth.haveSpace")}
                   body="List and manage it"
                 />
               </div>

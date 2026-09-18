@@ -1,14 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import {
-  ArrowLeft, Bookmark, Scale, MapPin, Check, Minus, X, Building2, Flag, ChevronRight, Pencil,
-} from "lucide-react";
+import { ArrowLeft, Bookmark, Scale, MapPin, Check, Minus, X, Building2, Flag, ChevronRight, Pencil, CalendarCheck, Clock } from "lucide-react";
 import { useHabito } from "@/hooks/useHabito";
 import { db } from "@/lib/api";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
 import { Coachmark } from "@/components/ui/Coachmark";
+import { SpacePhoto } from "@/components/space/SpacePhoto";
 import { MatchRing } from "@/components/space/MatchRing";
 import { TrustBadge, AvailabilityBadge } from "@/components/space/badges";
 import { keySpec } from "@/components/space/SpaceCard";
@@ -19,6 +18,7 @@ import { SPACE_TYPE_LABEL } from "@/types/space";
 import type { MatchFactor, Space, SpaceListing } from "@/types/space";
 import { cn } from "@/lib/cn";
 import { useI18n } from "@/i18n";
+import { spaceName, spaceDescription, displayImage } from "@/lib/localize";
 
 export default function SpaceDetail() {
   const { id = "" } = useParams();
@@ -26,11 +26,12 @@ export default function SpaceDetail() {
   const { listings, ready, requirements, hasStatedNeeds, isSaved, toggleSaved, isComparing, toggleCompare, sendInquiry } =
     useHabito();
   const { account } = useAuth();
-  const { t } = useI18n();
+  const { t, language } = useI18n();
 
   const [active, setActive] = useState(0);
   const [lightbox, setLightbox] = useState(false);
   const [inquiryOpen, setInquiryOpen] = useState(false);
+  const [bookingOpen, setBookingOpen] = useState(false);
   const [siblings, setSiblings] = useState<Space[]>([]);
 
   const listing = useMemo(() => listings.find((l) => l.space.id === id) ?? null, [listings, id]);
@@ -62,6 +63,11 @@ export default function SpaceDetail() {
   const isMine = Boolean(account && property.ownerId === account.id);
   const match = hasStatedNeeds ? scoreListing(listing, requirements) : null;
   const saved = isSaved(space.id);
+
+  // Occupied and under-maintenance spaces cannot be booked; the database
+  // refuses too, but there is no point offering a button that will fail.
+  const bookable =
+    space.availability.status !== "occupied" && space.availability.status !== "maintenance";
   const comparing = isComparing(space.id);
   const isSale = space.transaction === "sale";
   const cat = CATEGORY_STYLE[space.category];
@@ -82,12 +88,16 @@ export default function SpaceDetail() {
           <button
             type="button"
             onClick={() => setLightbox(true)}
-            className="group relative overflow-hidden rounded-card bg-ivory-deep"
+            className="group lift relative overflow-hidden rounded-card bg-ivory-deep"
           >
-            <img
-              src={space.images[active].url}
+            <SpacePhoto
+              src={displayImage(space.images[active])}
               alt={space.images[active].alt}
-              className="aspect-4/3 w-full object-cover transition-transform duration-500 group-hover:scale-[1.03] md:aspect-16/10"
+              category={space.category}
+              demo={space.images[active].demo}
+              priority
+              className="aspect-4/3 w-full md:aspect-16/10"
+              imgClassName="zoom"
             />
             <span className="absolute bottom-3 left-3 rounded-full bg-ink/70 px-2.5 py-1 text-xs font-semibold text-white backdrop-blur">
               {space.images[active].label} · view all
@@ -107,7 +117,12 @@ export default function SpaceDetail() {
                   i === active ? "ring-ink" : "ring-transparent hover:ring-hairline-strong",
                 )}
               >
-                <img src={img.url} alt="" className="aspect-4/3 size-full object-cover md:aspect-auto md:h-full" />
+                <SpacePhoto
+                  src={displayImage(img)}
+                  alt=""
+                  category={space.category}
+                  className="aspect-4/3 size-full md:aspect-auto md:h-full"
+                />
               </button>
             ))}
           </div>
@@ -132,7 +147,7 @@ export default function SpaceDetail() {
             <TrustBadge verification={space.verification} />
           </div>
 
-          <h1 className="mt-4 font-display text-3xl font-extrabold text-ink sm:text-4xl">{space.name}</h1>
+          <h1 className="mt-4 font-display text-3xl font-extrabold text-ink sm:text-4xl">{spaceName(space, language)}</h1>
 
           <Link
             to={`/property/${property.id}`}
@@ -148,7 +163,7 @@ export default function SpaceDetail() {
             {property.area}, {property.district} · {property.geography}
           </p>
 
-          <p className="mt-6 leading-relaxed text-ink-soft">{space.description}</p>
+          <p className="mt-6 leading-relaxed text-ink-soft">{spaceDescription(space, language)}</p>
 
           {/* Adaptive specs — only fields that apply to this category */}
           <Section title="The space">
@@ -368,9 +383,18 @@ export default function SpaceDetail() {
                   </Button>
                 </Link>
               ) : (
-                <Button fullWidth onClick={() => setInquiryOpen(true)}>
-                  {t("action.sendInquiry")}
-                </Button>
+                <>
+                  <Button fullWidth onClick={() => setBookingOpen(true)} disabled={!bookable}>
+                    <CalendarCheck size={15} aria-hidden />
+                    {t("booking.request")}
+                  </Button>
+                  <Button fullWidth variant="secondary" onClick={() => setInquiryOpen(true)}>
+                    {t("action.sendInquiry")}
+                  </Button>
+                  {!bookable && (
+                    <p className="text-center text-xs text-muted">{t("booking.notAvailable")}</p>
+                  )}
+                </>
               )}
               <div className="grid grid-cols-2 gap-2">
                 <Button variant="secondary" onClick={() => void toggleSaved(space.id)}>
@@ -425,6 +449,13 @@ export default function SpaceDetail() {
         listing={listing}
         active={active}
         setActive={setActive}
+      />
+
+      <BookingModal
+        open={bookingOpen}
+        onClose={() => setBookingOpen(false)}
+        listing={listing}
+        requirements={requirements}
       />
 
       <InquiryModal
@@ -615,6 +646,144 @@ function Lightbox({
         ))}
       </div>
     </div>
+  );
+}
+
+/**
+ * Requesting a booking.
+ *
+ * Deliberately not a payment. The owner decides, and only once they accept do
+ * the two of you get each other's number — which is the thing that makes
+ * people willing to ask in the first place.
+ */
+function BookingModal({
+  open,
+  onClose,
+  listing,
+  requirements,
+}: {
+  open: boolean;
+  onClose: () => void;
+  listing: SpaceListing;
+  requirements: ReturnType<typeof useHabito>["requirements"];
+}) {
+  const { t } = useI18n();
+  const navigate = useNavigate();
+  const { account, configured } = useAuth();
+
+  const [moveIn, setMoveIn] = useState(requirements.moveInDate);
+  // Not a term of tenancy — the rent ledger runs month to month. This is only
+  // how many months of schedule to raise up front, which the owner can extend.
+  const [months, setMonths] = useState(12);
+  const [message, setMessage] = useState("");
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const amount = listing.space.cost.price;
+
+  const submit = async () => {
+    setSending(true);
+    setError(null);
+
+    try {
+      await db.requestBooking({
+        spaceId: listing.space.id,
+        moveInDate: moveIn,
+        months,
+        amount,
+        message: message.trim() || undefined,
+      });
+      onClose();
+      navigate("/bookings");
+    } catch (e) {
+      setError(e instanceof Error ? e.message : t("auth.errorGeneric"));
+    } finally {
+      setSending(false);
+    }
+  };
+
+  return (
+    <Modal
+      open={open}
+      onClose={onClose}
+      title={t("booking.requestTitle")}
+      footer={
+        <div className="flex gap-2">
+          <Button variant="secondary" fullWidth onClick={onClose}>
+            {t("action.cancel")}
+          </Button>
+          <Button fullWidth disabled={sending} onClick={() => void submit()}>
+            {sending ? t("action.sending") : t("booking.request")}
+          </Button>
+        </div>
+      }
+    >
+      <p className="text-sm leading-relaxed text-ink-soft">{t("booking.requestBody")}</p>
+
+      {configured && !account && (
+        <p className="mt-3 rounded-xl bg-warn-100 p-3 text-sm leading-relaxed text-warn-700">
+          {t("inquiry.signInFirst")}
+        </p>
+      )}
+
+      {error && (
+        <p className="mt-3 rounded-xl bg-danger-100 p-3 text-sm text-danger-600">{error}</p>
+      )}
+
+      <div className="mt-4 grid gap-4 sm:grid-cols-2">
+        <label className="block">
+          <span className="mb-1.5 block text-sm font-medium text-ink-soft">{t("booking.moveIn")}</span>
+          <input
+            type="date"
+            value={moveIn}
+            onChange={(e) => setMoveIn(e.target.value)}
+            className="h-11 w-full rounded-xl bg-ivory px-3 text-[0.9375rem] ring-1 ring-hairline-strong focus:outline-none focus:ring-2 focus:ring-aqua-600"
+          />
+        </label>
+
+        <label className="block">
+          <span className="mb-1.5 block text-sm font-medium text-ink-soft">
+            {t("booking.howLong")}
+          </span>
+          <select
+            value={months}
+            onChange={(e) => setMonths(Number(e.target.value))}
+            className="h-11 w-full rounded-xl bg-ivory px-3 text-[0.9375rem] ring-1 ring-hairline-strong focus:outline-none focus:ring-2 focus:ring-aqua-600"
+          >
+            <option value={3}>{t("booking.span3")}</option>
+            <option value={6}>{t("booking.span6")}</option>
+            <option value={12}>{t("booking.span12")}</option>
+            <option value={24}>{t("booking.span24")}</option>
+          </select>
+        </label>
+      </div>
+
+      <label className="mt-4 block">
+        <span className="mb-1.5 block text-sm font-medium text-ink-soft">{t("inquiry.yourMessage")}</span>
+        <textarea
+          rows={3}
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          placeholder={t("inquiry.default")}
+          className="w-full rounded-xl bg-ivory p-3 text-[0.9375rem] ring-1 ring-hairline-strong focus:outline-none focus:ring-2 focus:ring-aqua-600"
+        />
+      </label>
+
+      <dl className="mt-4 flex justify-between rounded-xl bg-ivory p-3 text-sm">
+        <dt className="text-muted">{t("booking.amount")}</dt>
+        <dd className="font-semibold tnum text-ink">
+          {money(amount)}
+          {listing.space.transaction === "rent" && t("transaction.perMonth")}
+        </dd>
+      </dl>
+
+      <p className="mt-3 text-xs leading-relaxed text-muted">{t("booking.howLongNote")}</p>
+
+      <p className="mt-2 flex items-start gap-2 text-xs leading-relaxed text-muted">
+        <Clock size={13} className="mt-0.5 shrink-0" aria-hidden />
+        {t("booking.phoneLater")}
+      </p>
+    </Modal>
   );
 }
 

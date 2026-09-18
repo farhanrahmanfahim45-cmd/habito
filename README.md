@@ -113,7 +113,22 @@ Manrope for everything else.
   judged on free slots and ignores floor area entirely.
 - **Stage 5** — bookings: request → accept → confirm → complete, availability
   enforced, phone revealed on acceptance.
-- **Stage 6** — payments against a sandbox gateway, then rent records and receipts.
+- **Stage 6 (done)** — trust without identity verification: tiers that state
+  what was actually checked, a completeness gate on publishing, posting rate
+  limits, duplicate detection and report-based hiding. See `MODERATION.md`.
+- **Stage 7 (done)** — rent ledger, invoices, receipts and payment guards. The
+  gateway step is simulated and labelled; `PAYMENTS.md` has the contract for
+  making it real.
+- **Stage 8 (done)** — the review queue: moderation actions for reports,
+  duplicates and owner review, behind an append-only audit trail.
+- **Stage 9 (partial)** — Bangla reaches the listings themselves: generated
+  seed listings carry a Bangla name and description, and amenity names, filter
+  labels, headings and the footer are translated.
+- **Still to build** — notifications screen, saved searches with alerts,
+  reviews after a completed booking, maintenance requests.
+- **Final pass (done)** — motion system with reduced-motion support, photo
+  component with shimmer and fallback, thinner mobile cards, sheet-style
+  modals, and rent scheduling replacing the fixed-term months field. against a sandbox gateway, then rent records and receipts.
 - **Stage 7** — admin panel, reports, reviews, maintenance requests.
 
 The schema already holds tables for all of it, so later stages add behaviour

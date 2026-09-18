@@ -65,6 +65,10 @@ export default function ListSpace() {
     maxOccupants: null,
   });
   const [photos, setPhotos] = useState<SpaceImage[]>([]);
+  // Whether the owner touched the photos at all. Without this, removing every
+  // photo is indistinguishable from not opening the step, and the old images
+  // come straight back on save.
+  const [photosTouched, setPhotosTouched] = useState(false);
   // Photos are filed under this id before the space row exists.
   const [draftId] = useState(() => crypto.randomUUID());
   const [price, setPrice] = useState(12000);
@@ -161,7 +165,13 @@ export default function ListSpace() {
       amenities,
       rules,
       availability: { ...existing.availability, status, availableFrom },
-      images: photos.length ? photos : existing.images,
+      // An owner who removed every photo meant to remove them. Fall back to the
+      // illustration rather than quietly restoring what they deleted.
+      images: photosTouched
+        ? photos.length
+          ? photos
+          : placeholderImages(category, name || SPACE_TYPE_LABEL[spaceType])
+        : existing.images,
     });
 
     await refresh();
@@ -319,7 +329,7 @@ export default function ListSpace() {
 
         <div className="rounded-card bg-surface p-5 ring-1 ring-hairline sm:p-7">
           {step === 0 && (
-            <Step title="What are you offering?">
+            <Step title={t("list.whatOffering")}>
               <ul className="flex flex-wrap gap-2">
                 {CATEGORIES.flatMap((c) => TYPES_BY_CATEGORY[c]).map((t) => (
                   <li key={t}>
@@ -351,7 +361,7 @@ export default function ListSpace() {
           )}
 
           {step === 1 && (
-            <Step title="Where is it?">
+            <Step title={t("list.whereIsIt")}>
               <p className="mb-2 text-sm font-medium text-ink-soft">Which property is this space in?</p>
               <div className="space-y-2">
                 {properties.map((p) => (
@@ -474,7 +484,7 @@ export default function ListSpace() {
           )}
 
           {step === 3 && (
-            <Step title="What does it include?">
+            <Step title={t("list.whatIncluded")}>
               <ul className="flex flex-wrap gap-2">
                 {AMENITIES_BY_CATEGORY[category].map((key) => {
                   const { label, icon: Icon } = AMENITIES[key];
@@ -570,7 +580,14 @@ export default function ListSpace() {
           {step === 4 && (
             <Step title={t("list.photos")}>
               <p className="mb-5 text-sm text-muted">{t("list.photosLead")}</p>
-              <PhotoUploader spaceId={draftId} images={photos} onChange={setPhotos} />
+              <PhotoUploader
+                spaceId={draftId}
+                images={photos}
+                onChange={(next) => {
+                  setPhotosTouched(true);
+                  setPhotos(next);
+                }}
+              />
             </Step>
           )}
 
@@ -644,7 +661,7 @@ export default function ListSpace() {
                   }
                 />
                 <Review label="Availability" value={status.replace("-", " ")} />
-                <Review label="Included" value={amenities.length ? amenities.map((a) => AMENITIES[a].label).join(", ") : "Nothing listed"} />
+                <Review label="Included" value={amenities.length ? amenities.map((a) => t(`amenity.${a}` as never)).join(", ") : "Nothing listed"} />
               </dl>
 
               <p className="mt-4 text-xs leading-relaxed text-muted">
@@ -706,6 +723,16 @@ export default function ListSpace() {
       </Modal>
     </>
   );
+}
+
+/** The illustration used when a listing has no photographs of its own. */
+function placeholderImages(category: SpaceCategory, label: string): SpaceImage[] {
+  return [0, 1].map((i) => ({
+    url: `/photos/${category}-${(i % 2) + 1}.svg`,
+    label: i === 0 ? "Main" : "Second view",
+    alt: `Illustrative placeholder image for ${label}`,
+    demo: true as const,
+  }));
 }
 
 /* ── Adaptive field sets ──────────────────────────────────────────── */

@@ -14,6 +14,7 @@ const CATEGORIES = Object.keys(CATEGORY_STYLE) as SpaceCategory[];
 
 /** Requirement intake. What you answer here drives every score you see after. */
 export default function Find() {
+  const { t } = useI18n();
   const navigate = useNavigate();
   const { requirements, setRequirements } = useHabito();
   const [draft, setDraft] = useState<SearchRequirements>(requirements);
@@ -41,7 +42,7 @@ export default function Find() {
       </header>
 
       <div className="mt-9 space-y-5">
-        <Card title="Are you renting or buying?">
+        <Card title={t("find.rentOrBuy")}>
           <div className="inline-flex rounded-full bg-ivory-deep p-0.5">
             {(["rent", "sale"] as TransactionType[]).map((t) => (
               <button
@@ -60,7 +61,7 @@ export default function Find() {
           </div>
         </Card>
 
-        <Card title="What kind of space?">
+        <Card title={t("find.whatKind")}>
           <ul className="flex flex-wrap gap-2">
             <li>
               <Chip active={draft.category === "any"} onClick={() => { set("category", "any"); set("spaceType", "any"); }}>
@@ -101,7 +102,7 @@ export default function Find() {
           )}
         </Card>
 
-        <Card title="Where?">
+        <Card title={t("find.where")}>
           <div className="sm:max-w-sm">
             <AreaPicker value={draft.area} onChange={(v) => set("area", v)} />
           </div>
@@ -126,7 +127,7 @@ export default function Find() {
           )}
         </Card>
 
-        <Card title="When do you need it?">
+        <Card title={t("find.whenNeed")}>
           <input
             type="date"
             aria-label="Move-in date"
@@ -138,10 +139,11 @@ export default function Find() {
 
         <CapacityCard draft={draft} set={set} />
 
-        <Card title="Anything you can't do without?" optional>
+        <Card title={t("find.essential")} optional>
           <ul className="flex flex-wrap gap-2">
             {amenityPool.map((key) => {
-              const { label, icon: Icon } = AMENITIES[key];
+              const { icon: Icon } = AMENITIES[key];
+              const label = t(`amenity.${key}` as never);
               const on = draft.amenities.includes(key);
               return (
                 <li key={key}>

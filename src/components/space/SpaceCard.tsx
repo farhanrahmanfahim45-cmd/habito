@@ -6,8 +6,10 @@ import { money, moneyCompact, lastUpdatedShort, isStale } from "@/lib/format";
 import { CATEGORY_STYLE } from "@/data/catalog";
 import { cn } from "@/lib/cn";
 import { useI18n } from "@/i18n";
+import { spaceName, displayImage } from "@/lib/localize";
 import { MatchPill } from "./MatchRing";
 import { TrustBadge, AvailabilityBadge } from "./badges";
+import { SpacePhoto } from "./SpacePhoto";
 
 /**
  * The key specification line changes per category. A garage has no bedrooms
@@ -73,7 +75,7 @@ export function SpaceCard({
   onToggleCompare?: (id: string) => void;
   size?: "default" | "large" | "compact";
 }) {
-  const { t } = useI18n();
+  const { t, language } = useI18n();
   const { space, property } = listing;
   const cat = CATEGORY_STYLE[space.category];
   const cover = space.images[0];
@@ -83,26 +85,28 @@ export function SpaceCard({
   return (
     <article
       className={cn(
-        "group relative flex flex-col overflow-hidden rounded-card bg-surface",
-        "ring-1 ring-hairline transition duration-200",
-        "hover:-translate-y-0.5 hover:shadow-[0_18px_40px_-24px_rgb(16_24_40/0.5)] hover:ring-hairline-strong",
+        "group lift relative flex flex-col overflow-hidden rounded-card bg-surface",
+        "ring-1 ring-hairline",
         "focus-within:ring-2 focus-within:ring-aqua-600",
         occupied && "opacity-75",
       )}
     >
       <div
         className={cn(
-          "relative overflow-hidden bg-ivory-deep",
+          "relative",
           size === "large" ? "aspect-16/10" : size === "compact" ? "aspect-3/2" : "aspect-4/3",
         )}
       >
-        <img
-          src={cover.url}
+        <SpacePhoto
+          src={displayImage(cover)}
           alt={cover.alt}
-          loading="lazy"
-          className="size-full object-cover transition-transform duration-500 group-hover:scale-[1.06]"
+          category={space.category}
+          demo={cover.demo}
+          bandPosition="bottom"
+          className="size-full"
+          imgClassName="zoom"
         />
-        <div className="absolute inset-x-0 bottom-0 h-2/3 img-scrim" aria-hidden />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 img-scrim" aria-hidden />
 
         <div className="absolute inset-x-3 top-3 flex items-start justify-between gap-2">
           {matchScore !== undefined ? (
@@ -117,11 +121,11 @@ export function SpaceCard({
             {onToggleCompare && (
               <button
                 type="button"
-                aria-label={comparing ? `Remove ${space.name} from compare` : `Add ${space.name} to compare`}
+                aria-label={comparing ? `Remove ${spaceName(space, language)} from compare` : `Add ${spaceName(space, language)} to compare`}
                 aria-pressed={comparing}
                 onClick={() => onToggleCompare(space.id)}
                 className={cn(
-                  "rounded-full p-2 backdrop-blur-sm transition-colors",
+                  "press rounded-full p-2 backdrop-blur-sm transition-colors",
                   comparing ? "bg-aqua-600 text-white" : "bg-surface/90 text-ink-soft hover:bg-surface",
                 )}
               >
@@ -131,7 +135,7 @@ export function SpaceCard({
             {onToggleSave && (
               <button
                 type="button"
-                aria-label={saved ? `Remove ${space.name} from saved` : `Save ${space.name}`}
+                aria-label={saved ? `Remove ${spaceName(space, language)} from saved` : `Save ${spaceName(space, language)}`}
                 aria-pressed={saved}
                 onClick={() => onToggleSave(space.id)}
                 className="rounded-full bg-surface/90 p-2 text-ink-soft backdrop-blur-sm transition-colors hover:bg-surface hover:text-aqua-700"
@@ -151,7 +155,7 @@ export function SpaceCard({
           </p>
           <h3 className="mt-1 truncate font-semibold text-white">
             <Link to={`/space/${space.id}`} className="after:absolute after:inset-0 focus:outline-none">
-              {space.name}
+              {spaceName(space, language)}
             </Link>
           </h3>
           <p className="truncate text-sm text-white/75">
@@ -174,7 +178,11 @@ export function SpaceCard({
               {t("transaction.forSale")}
             </span>
           )}
-          <AvailabilityBadge availability={space.availability} />
+          {/* Availability only when it is not the expected "free" — a badge
+              that appears on nine cards in ten carries no information. */}
+          {space.availability.status !== "available" && (
+            <AvailabilityBadge availability={space.availability} />
+          )}
         </div>
 
         <p className="text-sm text-ink-soft">{keySpec(listing)}</p>
@@ -188,7 +196,7 @@ export function SpaceCard({
             <p className="text-[0.8125rem] font-medium text-warn-700">{t("misc.fullCostNotListed")}</p>
           ))}
 
-        <div className="mt-auto flex items-center gap-2 border-t border-hairline pt-2.5">
+        <div className="mt-auto hidden items-center gap-2 border-t border-hairline pt-2.5 sm:flex">
           <TrustBadge verification={space.verification} compact />
           <span
             className={cn(

@@ -198,6 +198,150 @@ alternatives.
 - [ ] Asking for 2 car slots and finding a garage with 1 free scores it down
       under Availability, with the free-slot note as the reason
 
+## J — Bookings (Stage 5)
+
+With two accounts, renter in one window and owner in a private window:
+
+- [ ] A listing shows **Request to book** alongside Send inquiry
+- [ ] An occupied or under-maintenance space cannot be booked — button disabled
+- [ ] Requesting sends you to Bookings with the status **Requested**
+- [ ] The renter sees "phone numbers are exchanged only if the owner accepts"
+- [ ] The owner sees the request in their Bookings
+- [ ] **The renter cannot accept their own request** — no button, and the
+      database refuses if you try it directly
+- [ ] On Accept, both sides see the other's phone number for the first time
+- [ ] **Accepting does not take the space off the market** — it stays listed and
+      other people can still ask
+- [ ] The owner can accept several people at once and talk to all of them
+- [ ] Confirm asks "have you agreed with them?" before doing anything
+- [ ] On Confirm, the space becomes Occupied, leaves search, and everyone else
+      who asked is declined with a reason
+- [ ] A second person cannot book that space while it is occupied
+- [ ] On Mark complete, the space returns to Available
+- [ ] A completed booking is terminal — no further actions
+- [ ] Declining asks for a reason, and the renter sees it
+- [ ] Either side can cancel before completion
+
+**The state machine is enforced in the database.** Legal moves, who may make
+them, and the phone reveal are all in `0005_bookings.sql`, so a hidden button
+is a courtesy rather than the protection.
+
+### If listings stop loading after stage 5
+
+The caretaker table gives PostgREST a second path from `properties` to
+`profiles`, so an unqualified embed becomes ambiguous and the listings query
+fails with *"more than one relationship was found"*. The query names the
+foreign key explicitly (`profiles!properties_owner_id_fkey`). If you add
+another table joining those two, expect to do the same.
+
+### If your own listings vanish from search
+
+Check whether a test booking took them off the market:
+
+```sql
+select s.name, s.availability, b.status
+from spaces s left join bookings b on b.space_id = s.id
+where s.property_id in (select id from properties where owner_id = auth.uid());
+```
+
+`occupied` is the Stage 5 trigger working as designed. Completing or
+cancelling the booking puts the space back.
+
+## K — Trust without identity verification (Stage 6)
+
+- [ ] A listing missing cost, location or photos **cannot be published** — the
+      database refuses with a message saying what's missing
+- [ ] Filling those in lets it publish
+- [ ] A brand-new account can list 3 spaces a day, not 1 and not 20
+- [ ] The same description pasted under a different owner sets a duplicate flag
+- [ ] Three **different** people reporting a listing hides it; one person
+      reporting three times does not
+- [ ] A hidden listing is still visible to its owner
+
+### Fixed in this pass
+
+- **Removing a photo didn't stick.** Saving fell back to the existing images
+  whenever the list was empty, so deleting them all restored them. The form now
+  tracks whether the photos were touched; if they were, what's there is what
+  saves — and an emptied list falls back to the illustration, not to the
+  photographs you deleted.
+- **The area picker opened below the results.** The dialog used fixed
+  positioning but was rendered inside the sticky, scrolling filter panel, so it
+  positioned against that panel instead of the viewport. It's now portalled to
+  `<body>`.
+
+## L — Rent and payments (Stage 7)
+
+- [ ] Confirming a booking raises one invoice per month, due on the day the
+      month starts
+- [ ] The rent page carries an unmissable sandbox warning
+- [ ] A renter sees **Pay**; an owner sees **Waive**
+- [ ] Paying issues a receipt with a sequential number
+- [ ] The receipt says it was issued against a simulated payment
+- [ ] An invoice past its due date shows as Overdue without anyone setting it
+- [ ] A sale listing raises **no** rent schedule
+
+Database guards, all verified against Postgres:
+
+- [ ] A payment cannot be inserted as already successful
+- [ ] An invoice cannot be marked paid without a successful payment
+- [ ] A failed payment will not settle an invoice
+- [ ] An owner can still waive a month
+
+See `PAYMENTS.md` for what has to change to make the gateway real.
+
+## M — The review queue (Stage 8)
+
+Make yourself an admin first (see `SETUP.md`), then:
+
+- [ ] A **Review** link appears in the header for admins and nobody else
+- [ ] `/admin` typed directly by a non-admin shows a refusal, not the queue
+- [ ] The queue lists reported, hidden, duplicate-flagged and unreviewed
+      listings, most urgent first
+- [ ] Dismissing reports puts a hidden listing back up
+- [ ] Upholding reports keeps it down
+- [ ] "Not a duplicate" clears the flag
+- [ ] Reviewing an owner requires a note, and the note explains what was checked
+- [ ] **id-verified cannot be set** — the database refuses it outright
+
+Verified against Postgres:
+
+- [ ] An owner calling the admin functions directly is refused
+- [ ] Every action writes an audit row naming who did it
+- [ ] An admin cannot edit or delete a past audit row
+
+## N — Bangla listings
+
+- [ ] In Bangla, listing names read as Bangla — ফ্ল্যাট ৩A, দোকান ০১, গুদাম ০১
+- [ ] Descriptions are Bangla with Bengali numerals
+- [ ] Amenity chips, filter labels and the footer are all Bangla
+- [ ] Area names, property names and people's names stay as they are —
+      proper nouns, correctly
+- [ ] A listing **you** wrote is shown exactly as you wrote it in either mode
+
+## O — Visual pass
+
+- [ ] Cards lift on hover with a pointer, and do nothing on a touch screen
+- [ ] Results fade up in sequence, and the sequence stops after seven cards
+- [ ] Modals rise from the bottom on a phone, centre on a desktop
+- [ ] Buttons shrink slightly on press
+- [ ] Turning on "reduce motion" in the OS removes all of it
+- [ ] Photos fade in over a shimmer rather than popping
+- [ ] A broken image falls back to the illustration, not a broken icon
+- [ ] Mobile cards carry two chips, not five
+- [ ] No horizontal scroll on any page at 390px
+
+### Photographs on demo listings
+
+`src/data/photos.ts` holds `PHOTO_MODE`. It ships as `"illustration"`.
+
+Switching it to `"photo"` uses the URLs in that file and puts a permanent
+"Illustrative — not this property" band over every one. **Do not switch it on
+with the placeholder URLs** — the placeholder service returns random
+landscapes and objects, which looks worse than the illustration and makes a
+property app look careless. Replace them with curated Unsplash property
+photographs first; the file explains how.
+
 ## Known gaps at this stage
 
 Bookings, payments, reviews, maintenance requests and the admin panel have
