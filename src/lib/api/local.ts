@@ -517,6 +517,38 @@ export const localRepository: Repository = {
     throw new Error("Moderation needs the database. This build has no accounts.");
   },
 
+  /* ── Listing fees ───────────────────────────────────────────────── */
+
+  async listingFee(category: string): Promise<number> {
+    const prices: Record<string, number> = {"living": 200, "business": 500, "storage": 400, "parking": 100, "land": 500};
+    return settle(prices[category] ?? 200);
+  },
+
+  async listingAllowance(propertyId: string): Promise<{ used: number; hasPlan: boolean }> {
+    const data = read();
+    const month = new Date().toISOString().slice(0, 7);
+    const used = data.spaces.filter(
+      (s) => s.propertyId === propertyId && !s.synthetic && (s.publishedAt ?? "").startsWith(month),
+    ).length;
+
+    return settle({ used, hasPlan: false });
+  },
+
+  async payListingFee(spaceId: string): Promise<void> {
+    const data = read();
+    const space = data.spaces.find((s) => s.id === spaceId);
+    if (space) {
+      space.listingFeePaid = true;
+      space.publishedAt = new Date().toISOString();
+      write(data);
+    }
+    return settle(undefined);
+  },
+
+  async buyPropertyPlan(): Promise<void> {
+    return settle(undefined);
+  },
+
   /* ── Rent ───────────────────────────────────────────────────────── */
 
   async invoices(): Promise<RentInvoice[]> {

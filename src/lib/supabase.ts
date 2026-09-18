@@ -85,6 +85,13 @@ export interface SpaceRow {
   property_id: string;
   name: string;
   name_bn: string | null;
+  listing_fee_paid: boolean | null;
+  published_at: string | null;
+  sponsored_until: string | null;
+  sponsor_name: string | null;
+  partition_count: number | null;
+  shares_bathroom: boolean | null;
+  shares_kitchen: boolean | null;
   description_bn: string | null;
   category: SpaceCategory;
   space_type: string;
@@ -173,6 +180,13 @@ export function toSpace(row: SpaceRow): Space {
     propertyId: row.property_id,
     name: row.name,
     status: row.status,
+    listingFeePaid: row.listing_fee_paid ?? false,
+    publishedAt: row.published_at,
+    sponsoredUntil: row.sponsored_until,
+    sponsorName: row.sponsor_name,
+    partitionCount: row.partition_count,
+    sharesBathroom: row.shares_bathroom,
+    sharesKitchen: row.shares_kitchen,
     category: row.category,
     spaceType: row.space_type as SpaceType,
     transaction: row.transaction,

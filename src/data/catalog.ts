@@ -53,7 +53,7 @@ export const CATEGORY_STYLE: Record<
 };
 
 export const TYPES_BY_CATEGORY: Record<SpaceCategory, SpaceType[]> = {
-  living: ["apartment", "room", "shared-room", "sublet", "house", "tin-shed"],
+  living: ["apartment", "room", "shared-room", "partition-room", "sublet", "house", "tin-shed"],
   business: ["shop", "office"],
   storage: ["godown"],
   parking: ["garage", "parking-slot"],

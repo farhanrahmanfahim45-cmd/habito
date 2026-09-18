@@ -116,6 +116,9 @@ Manrope for everything else.
 - **Stage 6 (done)** — trust without identity verification: tiers that state
   what was actually checked, a completeness gate on publishing, posting rate
   limits, duplicate detection and report-based hiding. See `MODERATION.md`.
+- **Listing fees (done)** — a per-category fee before a listing publishes,
+  three free listings per property per month, a yearly plan beyond that,
+  sponsored placement labelled as paid, and partition rooms.
 - **Stage 7 (done)** — rent ledger, invoices, receipts and payment guards. The
   gateway step is simulated and labelled; `PAYMENTS.md` has the contract for
   making it real.

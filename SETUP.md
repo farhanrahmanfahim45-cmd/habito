@@ -97,6 +97,11 @@ properties, plus a bounding-box lookup for the map.
 `supabase/migrations/0011_extend_rent.sql` lets an owner add more months to a
 rent schedule that has run out.
 
+### Run the stage 12 migration
+
+`supabase/migrations/0012_listing_fees.sql` adds listing prices, the publish
+gate, property plans, sponsored placement and partition rooms.
+
 ### Load the seed listings
 
 Open another query, paste `supabase/seed.sql`, and run it. That's 96 owners,

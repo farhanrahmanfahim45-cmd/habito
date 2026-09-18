@@ -33,7 +33,6 @@ const NAV = [
   { to: "/search", key: "nav.search" },
   { to: "/portfolio", key: "nav.portfolio" },
   { to: "/bookings", key: "nav.bookings" },
-  { to: "/rent", key: "nav.rent" },
 ] as const;
 
 export function Header() {

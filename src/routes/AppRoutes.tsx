@@ -14,7 +14,6 @@ import Profile from "@/pages/Profile";
 import Auth from "@/pages/Auth";
 import Messages from "@/pages/Messages";
 import Bookings from "@/pages/Bookings";
-import Rent from "@/pages/Rent";
 import Admin from "@/pages/Admin";
 import Settings from "@/pages/Settings";
 import NotFound from "@/pages/NotFound";
@@ -64,14 +63,6 @@ export function AppRoutes() {
         element={
           <Guard allow={["renter", "owner", "admin"]}>
             <Bookings />
-          </Guard>
-        }
-      />
-      <Route
-        path="/rent"
-        element={
-          <Guard allow={["renter", "owner", "admin"]}>
-            <Rent />
           </Guard>
         }
       />

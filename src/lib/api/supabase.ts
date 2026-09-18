@@ -557,6 +557,96 @@ export const supabaseRepository: Repository = {
     if (error) fail("Could not clear that flag", error);
   },
 
+  /* ── Listing fees ─────────────────────────────────────────────────── */
+
+  async listingFee(category: string): Promise<number> {
+    const { data } = await client()
+      .from("listing_prices")
+      .select("amount")
+      .eq("category", category)
+      .maybeSingle();
+
+    return (data as { amount: number } | null)?.amount ?? 200;
+  },
+
+  async listingAllowance(propertyId: string): Promise<{ used: number; hasPlan: boolean }> {
+    const [{ data: used }, { data: plan }] = await Promise.all([
+      client().rpc("listings_this_month", { target: propertyId }),
+      client().rpc("property_has_plan", { target: propertyId }),
+    ]);
+
+    return { used: Number(used ?? 0), hasPlan: Boolean(plan) };
+  },
+
+  async payListingFee(spaceId: string, amount: number): Promise<void> {
+    const userId = await requireUser("pay a listing fee");
+
+    const { data, error } = await client()
+      .from("payments")
+      .insert({
+        user_id: userId,
+        amount,
+        kind: "listing",
+        space_id: spaceId,
+        gateway: "sandbox",
+        status: "pending",
+        simulated: true,
+      })
+      .select("id")
+      .single();
+
+    if (error) fail("Could not start that payment", error);
+
+    // Stands in for the gateway callback, exactly as the rent sandbox did.
+    const { error: settleError } = await client()
+      .from("payments")
+      .update({ status: "successful", reference: `SANDBOX-${Date.now()}` })
+      .eq("id", (data as { id: string }).id);
+
+    if (settleError) fail("That payment did not go through", settleError);
+  },
+
+  async buyPropertyPlan(propertyId: string, amount: number): Promise<void> {
+    const userId = await requireUser("buy a plan");
+
+    const ends = new Date();
+    ends.setFullYear(ends.getFullYear() + 1);
+
+    const { data, error } = await client()
+      .from("property_plans")
+      .insert({
+        property_id: propertyId,
+        owner_id: userId,
+        ends_on: ends.toISOString().slice(0, 10),
+        amount,
+      })
+      .select("id")
+      .single();
+
+    if (error) fail("Could not start that plan", error);
+
+    const { data: payment } = await client()
+      .from("payments")
+      .insert({
+        user_id: userId,
+        amount,
+        kind: "plan",
+        plan_id: (data as { id: string }).id,
+        gateway: "sandbox",
+        status: "pending",
+        simulated: true,
+      })
+      .select("id")
+      .single();
+
+    if (payment) {
+      await client()
+        .from("payments")
+        .update({ status: "successful", reference: `SANDBOX-${Date.now()}` })
+        .eq("id", (payment as { id: string }).id);
+    }
+  },
+
   /* ── Rent ─────────────────────────────────────────────────────────── */
 
   async invoices(): Promise<RentInvoice[]> {

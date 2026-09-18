@@ -68,6 +68,9 @@ export default function ListSpace() {
   const [photos, setPhotos] = useState<SpaceImage[]>([]);
   // Null until the owner drags the marker; the area centre is used meanwhile.
   const [pin, setPin] = useState<[number, number] | null>(null);
+  const [fee, setFee] = useState<number | null>(null);
+  const [allowance, setAllowance] = useState<{ used: number; hasPlan: boolean } | null>(null);
+  const [paying, setPaying] = useState(false);
   // Whether the owner touched the photos at all. Without this, removing every
   // photo is indistinguishable from not opening the step, and the old images
   // come straight back on save.
@@ -83,6 +86,19 @@ export default function ListSpace() {
   const category = CATEGORY_OF_TYPE[spaceType];
   /** The chosen area's centre, used as the pin's starting point. */
   const selectedArea = AREAS.find((a) => a.name === area);
+
+  // What it costs to publish this, and how much of the free allowance is left.
+  useEffect(() => {
+    void db.listingFee(category).then(setFee);
+  }, [category]);
+
+  useEffect(() => {
+    if (propertyId === "new") {
+      setAllowance({ used: 0, hasPlan: false });
+      return;
+    }
+    void db.listingAllowance(propertyId).then(setAllowance);
+  }, [propertyId]);
 
   // Fetched by id rather than taken from the browsing list, because an
   // archived space is deliberately absent from that list.
@@ -185,6 +201,12 @@ export default function ListSpace() {
     navigate(`/space/${existing.id}`);
   };
 
+  /**
+   * Publishing is where the fee is taken.
+   *
+   * The space is created first and paid for second, so a failed payment leaves
+   * a draft the owner can return to rather than losing everything they typed.
+   */
   const publish = async () => {
     setSaving(true);
     const areaMeta = AREAS.find((a) => a.name === area)!;
@@ -660,6 +682,60 @@ export default function ListSpace() {
 
           {step === 6 && (
             <Step title={t("list.review")}>
+              {/* The fee, and what it buys. Shown before the summary so it is
+                  never a surprise at the moment of pressing publish. */}
+              {!editing && fee !== null && allowance !== null && (
+                <div className="mb-5 rounded-card bg-aqua-50 p-4 ring-1 ring-aqua-200">
+                  {allowance.used < 3 || allowance.hasPlan ? (
+                    <>
+                      <p className="font-display font-bold text-aqua-700">{t("fee.title")}</p>
+                      <p className="mt-1 text-sm leading-relaxed text-ink-soft">{t("fee.body")}</p>
+                      <div className="mt-3 flex flex-wrap items-baseline justify-between gap-2">
+                        <span className="text-sm text-muted">{t("fee.amount")}</span>
+                        <span className="font-display text-xl font-extrabold tnum text-ink">
+                          {money(fee)}
+                        </span>
+                      </div>
+                      {!allowance.hasPlan && (
+                        <p className="mt-1 text-xs text-muted">
+                          {t("fee.free", { used: allowance.used + 1 })}
+                        </p>
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      <p className="font-display font-bold text-warn-700">
+                        {t("fee.allowanceUsed")}
+                      </p>
+                      <p className="mt-1 text-sm leading-relaxed text-ink-soft">
+                        {t("fee.allowanceBody")}
+                      </p>
+                      <p className="mt-2 font-semibold tnum text-ink">{t("fee.planPrice")}</p>
+                      <Button
+                        size="sm"
+                        variant="secondary"
+                        className="mt-3"
+                        disabled={paying}
+                        onClick={async () => {
+                          setPaying(true);
+                          try {
+                            await db.buyPropertyPlan(propertyId, 5000);
+                            setAllowance(await db.listingAllowance(propertyId));
+                            notify(t("fee.paid"));
+                          } finally {
+                            setPaying(false);
+                          }
+                        }}
+                      >
+                        {t("fee.buyPlan")}
+                      </Button>
+                    </>
+                  )}
+
+                  <p className="mt-3 text-xs leading-relaxed text-warn-700">{t("fee.sandbox")}</p>
+                </div>
+              )}
+
               <dl className="divide-y divide-hairline rounded-2xl bg-ivory ring-1 ring-hairline">
                 <Review label="Space" value={`${name || SPACE_TYPE_LABEL[spaceType]} · ${SPACE_TYPE_LABEL[spaceType]}`} />
                 <Review
@@ -713,7 +789,9 @@ export default function ListSpace() {
                   ? t("action.publishing")
                   : editing
                     ? t("action.saveChanges")
-                    : t("action.publish")}
+                    : !editing && fee !== null && allowance !== null && allowance.used < 3
+                      ? t("fee.pay")
+                      : t("action.publish")}
               </Button>
             )}
           </div>

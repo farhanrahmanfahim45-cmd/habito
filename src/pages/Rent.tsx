@@ -1,3 +1,13 @@
+/*
+ * Rent ledger and receipts.
+ *
+ * Withdrawn from the product: Habito charges for listings rather than taking
+ * a cut of rent, so this page is not reachable and is not in the navigation.
+ * The code, the migrations and the database guards are kept because they work
+ * and were tested, and because rent collection is a Year-2 route once a legal
+ * entity exists. Re-add the route in AppRoutes to bring it back.
+ */
+
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Receipt, Wallet, FlaskConical, Check, AlertCircle, CalendarPlus } from "lucide-react";

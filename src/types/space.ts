@@ -17,6 +17,7 @@ export type SpaceType =
   | "apartment"
   | "room"
   | "shared-room"
+  | "partition-room"
   | "sublet"
   | "house"
   | "tin-shed"
@@ -189,6 +190,16 @@ export interface Space {
   descriptionBn?: string | null;
   /** Archived spaces leave search but keep their conversations. */
   status: ListingStatus;
+  /** A listing goes live only once its fee is paid. */
+  listingFeePaid?: boolean;
+  publishedAt?: string | null;
+  /** Paid placement. Anything with this set is labelled as sponsored. */
+  sponsoredUntil?: string | null;
+  sponsorName?: string | null;
+  /** Partition rooms: a room divided and let separately. */
+  partitionCount?: number | null;
+  sharesBathroom?: boolean | null;
+  sharesKitchen?: boolean | null;
   category: SpaceCategory;
   spaceType: SpaceType;
   transaction: TransactionType;
@@ -458,6 +469,7 @@ export const SPACE_TYPE_LABEL: Record<SpaceType, string> = {
   apartment: "Apartment",
   room: "Room",
   "shared-room": "Shared room",
+  "partition-room": "Partition room",
   sublet: "Sublet",
   house: "House",
   "tin-shed": "Tin-shed house",
@@ -475,6 +487,7 @@ export const CATEGORY_OF_TYPE: Record<SpaceType, SpaceCategory> = {
   apartment: "living",
   room: "living",
   "shared-room": "living",
+  "partition-room": "living",
   sublet: "living",
   house: "living",
   "tin-shed": "living",

@@ -62,6 +62,14 @@ export interface Repository {
   resolveReports(spaceId: string, dismiss: boolean, note?: string): Promise<void>;
   clearDuplicate(spaceId: string, note?: string): Promise<void>;
 
+  /* Listing fees */
+  listingFee(category: string): Promise<number>;
+  /** How many of this property's 3 free monthly listings are used. */
+  listingAllowance(propertyId: string): Promise<{ used: number; hasPlan: boolean }>;
+  /** Simulated: raises a listing payment and settles it, as a gateway would. */
+  payListingFee(spaceId: string, amount: number): Promise<void>;
+  buyPropertyPlan(propertyId: string, amount: number): Promise<void>;
+
   /* Rent */
   invoices(): Promise<RentInvoice[]>;
   /**

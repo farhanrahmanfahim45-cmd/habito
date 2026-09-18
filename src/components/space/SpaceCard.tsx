@@ -178,6 +178,17 @@ export function SpaceCard({
               {t("transaction.forSale")}
             </span>
           )}
+          {/* Paid placement says so. An advertisement that looks like a result
+              is exactly what makes a listing site untrustworthy, and being
+              trustworthy is the whole argument here. */}
+          {space.sponsoredUntil && (
+            <span
+              title={t("sponsored.explain")}
+              className="rounded bg-sun/60 px-1.5 py-0.5 text-xs font-semibold text-sun-ink"
+            >
+              {t("sponsored.label")}
+            </span>
+          )}
           {/* Availability only when it is not the expected "free" — a badge
               that appears on nine cards in ten carries no information. */}
           {space.availability.status !== "available" && (
