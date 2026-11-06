@@ -32,6 +32,12 @@ let channelSeq = 0;
 
 const SPACE_COLUMNS = "*";
 const PROPERTY_COLUMNS = "*";
+/**
+ * The public face of an owner — exactly what `toOwner` reads. Never `*`:
+ * phone and email are not readable by API roles (0013_privacy_admin.sql), so a
+ * wildcard would fail, and it would leak them if that ever changed.
+ */
+const OWNER_COLUMNS = "id, name, role, avatar_tone, created_at, response_rate, response_time_hours, verification";
 
 function fail(context: string, error: { message: string } | null): never {
   throw new Error(`${context}: ${error?.message ?? "unknown error"}`);
@@ -56,7 +62,7 @@ async function loadListings(filter?: { spaceId?: string }): Promise<SpaceListing
     .select(
       // Named explicitly: property_managers adds a second properties→profiles
       // path, and PostgREST will not guess between them.
-      `${SPACE_COLUMNS}, properties!inner(${PROPERTY_COLUMNS}, profiles!properties_owner_id_fkey!inner(*))`,
+      `${SPACE_COLUMNS}, properties!inner(${PROPERTY_COLUMNS}, profiles!properties_owner_id_fkey!inner(${OWNER_COLUMNS}))`,
     )
     .eq("status", "published");
 
@@ -126,9 +132,9 @@ export const supabaseRepository: Repository = {
   },
 
   async owner(ownerId: string): Promise<Owner | null> {
-    const { data, error } = await client().from("profiles").select("*").eq("id", ownerId).maybeSingle();
+    const { data, error } = await client().from("profiles").select(OWNER_COLUMNS).eq("id", ownerId).maybeSingle();
     if (error) fail("Could not load owner", error);
-    return data ? toOwner(data as ProfileRow) : null;
+    return data ? toOwner(data as unknown as ProfileRow) : null;
   },
 
   /* ── Owner writes ─────────────────────────────────────────────────────── */

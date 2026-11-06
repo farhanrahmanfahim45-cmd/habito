@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { CalendarCheck, Phone, Check, X, Clock, Ban } from "lucide-react";
+import { CalendarCheck, Phone, Check, X, Clock, Ban, MessagesSquare } from "lucide-react";
 import { db } from "@/lib/api";
 import { useI18n } from "@/i18n";
 import { PageHeader } from "@/components/layout/PageHeader";
@@ -273,23 +273,44 @@ function BookingCard({
             </p>
           )}
 
-          {/* Contact details, only once accepted */}
-          {b.phoneShared ? (
-            <p className="mt-3 inline-flex items-center gap-2 rounded-xl bg-ok-100 px-3 py-2 text-sm font-semibold text-ok-600">
-              <Phone size={14} aria-hidden />
-              {b.youAreOwner ? b.renterPhone : b.ownerPhone}
-              <span className="font-normal opacity-80">
-                {t("booking.phoneNow", { name: b.youAreOwner ? b.renterName : b.ownerName })}
-              </span>
-            </p>
-          ) : (
-            b.status === "requested" && (
-              <p className="mt-3 inline-flex items-center gap-2 text-xs text-muted">
-                <Clock size={13} aria-hidden />
-                {t("booking.phoneLater")}
-              </p>
-            )
-          )}
+          {/* Contact: through Messages until the booking is confirmed. The
+              database only fills in numbers at confirmation; checking the
+              status here as well keeps an old row from showing one early. */}
+          {(() => {
+            const otherPhone = b.youAreOwner ? b.renterPhone : b.ownerPhone;
+            const otherName = b.youAreOwner ? b.renterName : b.ownerName;
+            const confirmed = b.status === "confirmed" || b.status === "completed";
+
+            if (confirmed && b.phoneShared && otherPhone) {
+              return (
+                <p className="mt-3 inline-flex items-center gap-2 rounded-xl bg-ok-100 px-3 py-2 text-sm font-semibold text-ok-600">
+                  <Phone size={14} aria-hidden />
+                  {otherPhone}
+                  <span className="font-normal opacity-80">{t("booking.phoneNow", { name: otherName })}</span>
+                </p>
+              );
+            }
+
+            if (b.status === "rejected" || b.status === "cancelled") return null;
+
+            return (
+              <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1">
+                <Link
+                  to="/messages"
+                  className="inline-flex items-center gap-2 rounded-xl bg-aqua-100 px-3 py-2 text-sm font-semibold text-aqua-700 hover:bg-aqua-100/70"
+                >
+                  <MessagesSquare size={14} aria-hidden />
+                  {t("booking.contactViaMessages")}
+                </Link>
+                {!confirmed && (
+                  <span className="inline-flex items-center gap-2 text-xs text-muted">
+                    <Clock size={13} aria-hidden />
+                    {t("booking.phoneLater")}
+                  </span>
+                )}
+              </div>
+            );
+          })()}
 
           {/* What each side can do from here */}
           <div className="mt-4 flex flex-wrap gap-2">

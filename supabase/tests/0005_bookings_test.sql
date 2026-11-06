@@ -1,7 +1,7 @@
 begin;
 create extension if not exists pgtap;
 
-select plan(19);
+select plan(25);
 
 -- ============================================================================
 -- Fixtures: owner, two renters, and a third-party user
@@ -120,16 +120,17 @@ select lives_ok(
   'Owner can accept a requested booking'
 );
 
+-- P0-01: numbers are exchanged at confirmation, not at acceptance.
 select is(
   (select phone_shared from bookings where id = '00000000-0000-0000-0000-000000000601'),
-  true,
-  'Accepting a booking sets phone_shared = true'
+  false,
+  'Accepting a booking does NOT share phone numbers'
 );
 
 select is(
   (select renter_phone from bookings where id = '00000000-0000-0000-0000-000000000601'),
-  '01722222222',
-  'Accepting a booking copies the renter phone number from profiles'
+  null,
+  'Accepting a booking does NOT copy the renter phone number'
 );
 
 select is(
@@ -138,10 +139,57 @@ select is(
   'Accepting a booking does NOT take the space off the market'
 );
 
+-- Owner also accepts 602, then Renter Two tries to confirm it themselves.
+select lives_ok(
+  $$ update bookings set status = 'accepted' where id = '00000000-0000-0000-0000-000000000602' $$,
+  'Owner can accept a second requested booking'
+);
+
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-000000000103', true);
+select set_config('request.jwt.claims', '{"sub":"00000000-0000-0000-0000-000000000103","role":"authenticated"}', true);
+
+select throws_ok(
+  $$ update bookings set status = 'confirmed' where id = '00000000-0000-0000-0000-000000000602' $$,
+  '42501',
+  'Only the owner can confirm a booking.',
+  'A renter cannot confirm a booking to unlock the owner''s phone number'
+);
+
+update bookings set owner_phone = '01999999999', phone_shared = true
+ where id = '00000000-0000-0000-0000-000000000602';
+
+select is(
+  (select phone_shared::text || coalesce(owner_phone, '<null>') from bookings where id = '00000000-0000-0000-0000-000000000602'),
+  'false<null>',
+  'A participant cannot write the contact columns directly'
+);
+
+-- Back to Owner One
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-000000000101', true);
+select set_config('request.jwt.claims', '{"sub":"00000000-0000-0000-0000-000000000101","role":"authenticated"}', true);
+
 -- ============================================================================
 -- 4. Confirming takes the space off the market and declines competing requests
 -- ============================================================================
 update bookings set status = 'confirmed' where id = '00000000-0000-0000-0000-000000000601';
+
+select is(
+  (select phone_shared from bookings where id = '00000000-0000-0000-0000-000000000601'),
+  true,
+  'Confirming a booking sets phone_shared = true'
+);
+
+select is(
+  (select renter_phone from bookings where id = '00000000-0000-0000-0000-000000000601'),
+  '01722222222',
+  'Confirming a booking copies the renter phone number from profiles'
+);
+
+select is(
+  (select owner_phone from bookings where id = '00000000-0000-0000-0000-000000000601'),
+  '01711111111',
+  'Confirming a booking copies the owner phone number from profiles'
+);
 
 select is(
   (select availability from spaces where id = '00000000-0000-0000-0000-000000000501'),

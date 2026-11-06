@@ -398,8 +398,10 @@ export const localRepository: Repository = {
           amount: b.amount,
           message: b.message,
           phoneShared: b.phoneShared,
-          renterPhone: b.phoneShared ? "01700000000" : null,
-          ownerPhone: b.phoneShared ? "01800000000" : null,
+          // Demo mode has no real people, so there is no real number to show —
+          // and a made-up one might belong to someone. Contact goes via Messages.
+          renterPhone: null,
+          ownerPhone: null,
           declineReason: b.declineReason,
           createdAt: b.createdAt,
           decidedAt: b.decidedAt,
@@ -453,10 +455,12 @@ export const localRepository: Repository = {
     if (reason !== undefined) booking.declineReason = reason;
 
     if (status === "accepted") {
-      booking.phoneShared = true;
       booking.decidedAt = new Date().toISOString();
     }
     if (status === "rejected") booking.decidedAt = new Date().toISOString();
+
+    // Mirror the database: contact is shared only once a booking is confirmed.
+    if (status === "confirmed") booking.phoneShared = true;
 
     // Mirror the database: confirming raises the rent schedule.
     if (status === "confirmed") {

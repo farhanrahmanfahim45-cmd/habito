@@ -65,10 +65,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const loadProfile = useCallback(async (userId: string) => {
     if (!supabase) return;
-    const { data, error } = await supabase.from("profiles").select("*").eq("id", userId).maybeSingle();
+    // Phone and email are not readable from the profiles table directly
+    // (0013_privacy_admin.sql); this function returns the caller's own row only.
+    const { data, error } = await supabase.rpc("get_my_profile").maybeSingle();
     // The profile is created by a database trigger. On the very first sign-in
     // it can lag by a moment, so a miss here isn't an error.
-    if (!error && data) setAccount(toAccount(data as ProfileRow));
+    if (!error && data && (data as ProfileRow).id === userId) setAccount(toAccount(data as ProfileRow));
   }, []);
 
   useEffect(() => {
@@ -127,34 +129,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (error) throw new Error(error.message);
   }, []);
 
+  // Writes don't ask for the row back: returning it would need read access to
+  // phone/email on the table, which nobody has. Re-read through get_my_profile.
   const updateProfile = useCallback(
     async (patch: Partial<Pick<Account, "name" | "phone">>) => {
       if (!supabase || !account) return;
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from("profiles")
         .update({ name: patch.name, phone: patch.phone })
-        .eq("id", account.id)
-        .select()
-        .single();
+        .eq("id", account.id);
 
       if (error) throw new Error(error.message);
-      setAccount(toAccount(data as ProfileRow));
+      await loadProfile(account.id);
     },
-    [account],
+    [account, loadProfile],
   );
 
   const enableOwnerTools = useCallback(async () => {
     if (!supabase || !account) return;
-    const { data, error } = await supabase
-      .from("profiles")
-      .update({ can_own: true })
-      .eq("id", account.id)
-      .select()
-      .single();
+    const { error } = await supabase.from("profiles").update({ can_own: true }).eq("id", account.id);
 
     if (error) throw new Error(error.message);
-    setAccount(toAccount(data as ProfileRow));
-  }, [account]);
+    await loadProfile(account.id);
+  }, [account, loadProfile]);
 
   const refreshAccount = useCallback(async () => {
     if (session?.user) await loadProfile(session.user.id);

@@ -238,12 +238,12 @@ Call log:
         - textbox "Message" [ref=e273]: Hi, I'm interested in this space. Is it still available?
       - generic [ref=e274]:
         - generic [ref=e275]: When you'd move in
-        - textbox "When you'd move in" [ref=e276]: 2026-11-25
+        - textbox "When you'd move in" [ref=e276]: 2026-11-27
       - generic [ref=e277]:
         - paragraph [ref=e278]: Sent with your inquiry
         - list [ref=e279]:
           - listitem [ref=e280]: Budget ৳6,000–৳14,000
-          - listitem [ref=e281]: Moving 25 November 2026
+          - listitem [ref=e281]: Moving 27 November 2026
         - paragraph [ref=e282]: Your phone number isn't shared until you choose to.
     - generic [ref=e284]:
       - button "Cancel" [ref=e285]
