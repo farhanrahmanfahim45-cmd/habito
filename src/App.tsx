@@ -1,5 +1,6 @@
 import { BrowserRouter } from "react-router-dom";
 import { AppShell } from "@/components/layout/AppShell";
+import { PrototypeNotice } from "@/components/layout/PrototypeNotice";
 import { AppRoutes } from "@/routes/AppRoutes";
 import { AuthProvider } from "@/hooks/useAuth";
 import { I18nProvider } from "@/i18n";
@@ -17,6 +18,7 @@ export default function App() {
             <ToastProvider>
               <ScrollToTop />
               <FirstRun />
+              <PrototypeNotice />
               <AppShell>
                 <AppRoutes />
               </AppShell>

@@ -56,8 +56,10 @@ export function Footer() {
 
       <div className="border-t border-hairline">
         <div className="container-page flex flex-col gap-2 py-5 text-xs text-muted sm:flex-row sm:items-center sm:justify-between">
-          <p>Prototype built for the Innovation to Impact initiative, Independent University, Bangladesh.</p>
-          <p>All seed data is synthetic. No real identity or ownership verification is performed.</p>
+          <p>{t("footer.credit")}</p>
+          <p>
+            <strong className="font-semibold text-ink-soft">{t("prototype.notice")}</strong> {t("prototype.detail")}
+          </p>
         </div>
       </div>
     </footer>

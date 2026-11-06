@@ -20,8 +20,8 @@ export const en = {
   "nav.chats": "Chats",
   "nav.browse": "Browse",
 
-  "prototype.notice": "Prototype.",
-  "prototype.detail": "Listings, owners and images are synthetic seed data and do not represent real availability.",
+  "prototype.notice": "This app includes synthetic demo data.",
+  "prototype.detail": "Listings marked DEMO are invented for testing and are not real properties. Listings marked LISTED BY OWNER were added by their owners, but Habito has not yet verified them.",
 
   // Actions
   "action.signIn": "Sign in",
@@ -672,6 +672,7 @@ export const en = {
   "footer.blurb": "Habito makes every kind of usable space discoverable \u2014 homes, rooms, shops, offices, storage, parking and land, across Bangladesh.",
   "footer.findHeading": "Find a space",
   "footer.ownerHeading": "For owners",
+  "footer.credit": "Prototype built for the Innovation to Impact initiative, Independent University, Bangladesh.",
   "photo.illustrative": "Illustrative \u2014 not this property",
   "booking.howLong": "Rent schedule",
   "booking.span3": "3 months",

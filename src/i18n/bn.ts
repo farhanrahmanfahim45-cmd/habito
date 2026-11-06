@@ -25,8 +25,8 @@ export const bn: Record<keyof typeof en, string> = {
   "nav.chats": "মেসেজ",
   "nav.browse": "ব্রাউজ",
 
-  "prototype.notice": "প্রোটোটাইপ।",
-  "prototype.detail": "এখানকার বিজ্ঞাপন, মালিক ও ছবি সব নমুনা — সত্যিকারের ভাড়ার তালিকা নয়।",
+  "prototype.notice": "এই অ্যাপে কৃত্রিম ডেমো তথ্য রয়েছে।",
+  "prototype.detail": "DEMO চিহ্নিত তালিকাগুলো পরীক্ষার জন্য তৈরি এবং এগুলো প্রকৃত সম্পত্তি নয়। LISTED BY OWNER চিহ্নিত তালিকাগুলো মালিকরা যুক্ত করেছেন, তবে Habito এখনও সেগুলো যাচাই করেনি।",
 
   "action.signIn": "সাইন ইন",
   "action.signOut": "সাইন আউট",
@@ -655,6 +655,7 @@ export const bn: Record<keyof typeof en, string> = {
   "footer.blurb": "হ্যাবিটোতে সব ধরনের ব্যবহারযোগ্য জায়গা খুঁজে পাওয়া যায় — বাসা, রুম, দোকান, অফিস, গুদাম, পার্কিং ও জমি, সারা দেশে।",
   "footer.findHeading": "জায়গা খুঁজুন",
   "footer.ownerHeading": "মালিকদের জন্য",
+  "footer.credit": "ইন্ডিপেন্ডেন্ট ইউনিভার্সিটি, বাংলাদেশের ইনোভেশন টু ইমপ্যাক্ট উদ্যোগের জন্য নির্মিত প্রোটোটাইপ।",
   "photo.illustrative": "নমুনা ছবি — এই জায়গার নয়",
   "booking.howLong": "ভাড়ার হিসাব",
   "booking.span3": "৩ মাস",
