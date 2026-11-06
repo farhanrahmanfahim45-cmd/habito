@@ -41,7 +41,7 @@ test.describe(
       const modal = page.getByRole("dialog");
       await expect(modal).toBeVisible();
       await expect(
-        modal.getByText(/Phone numbers are exchanged only if the owner accepts/i),
+        modal.getByText(/Phone numbers are shared only once a booking is confirmed/i),
       ).toBeVisible();
 
       await modal.getByLabel("Message").fill("Looking forward to renting this space.");
@@ -49,6 +49,7 @@ test.describe(
 
       await expect(page).toHaveURL(/\/bookings$/);
       await expect(page.getByText("Requested")).toBeVisible();
+      await expect(page.getByRole("link", { name: "Contact via Messages" }).first()).toBeVisible();
     });
 
     test("[J.5-J.16] Two-account booking lifecycle: accept reveals phone, confirm marks space occupied and declines others, complete frees space", async ({

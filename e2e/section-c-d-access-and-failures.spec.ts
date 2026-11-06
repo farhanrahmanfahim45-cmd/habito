@@ -31,11 +31,12 @@ test.describe("Section C & D — Access control and failure states", { tag: ["@s
     await expect(page.getByRole("button", { name: /Create account/i })).toBeDisabled();
   });
 
-  test("[C.admin-demo] Opening /admin in demo mode is refused", async ({ page }) => {
+  test("[C.admin-demo] Opening /admin as a non-admin redirects away and hides the Review nav item", async ({ page }) => {
     test.skip(Boolean(STAGING_ACCOUNTS.baseUrl), "Demo-mode guard check.");
 
     await page.goto("/admin");
-    await expect(page.getByRole("heading", { name: "Not available in this build." })).toBeVisible();
+    await expect(page).toHaveURL(/\/$/);
+    await expect(page.locator("header").getByRole("link", { name: "Review" })).toHaveCount(0);
   });
 
   test("[C.1] Signed out on a Supabase-connected build, opening /portfolio redirects to /signin", async ({

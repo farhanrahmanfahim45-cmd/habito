@@ -13,19 +13,12 @@ export function Guard({ allow, children }: { allow: AccountRole[]; children: Rea
   const location = useLocation();
 
   // Moderation is the exception to everything below: it always needs a real
-  // admin account. Without a database there is nothing to moderate and no way
-  // to be an admin, so the page is simply unavailable.
+  // admin account. Anyone else — including a build with no database at all —
+  // is sent home.
   const adminOnly = allow.length === 1 && allow[0] === "admin";
 
   if (adminOnly && !configured) {
-    return (
-      <div className="container-page max-w-md py-24 text-center">
-        <h1 className="font-display text-2xl font-bold text-ink">Not available in this build.</h1>
-        <p className="mt-2 text-sm leading-relaxed text-muted">
-          Moderation needs the database and an administrator account. This build has neither.
-        </p>
-      </div>
-    );
+    return <Navigate to="/" replace />;
   }
 
   // Everything else: without a database there are no accounts, so guards would
@@ -54,6 +47,7 @@ export function Guard({ allow, children }: { allow: AccountRole[]; children: Rea
   const permitted = allow.includes(account.role) || (allow.includes("owner") && account.canOwn);
 
   if (!permitted) {
+    if (adminOnly) return <Navigate to="/" replace />;
     return (
       <div className="container-page max-w-md py-24 text-center">
         <h1 className="font-display text-2xl font-bold text-ink">That page isn't for this account.</h1>
